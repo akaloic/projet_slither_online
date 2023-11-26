@@ -1,3 +1,5 @@
+package com.example.projetcpoo;
+
 import javafx.scene.input.MouseEvent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -24,10 +26,12 @@ public class GameController {
 
         snakeUpdateTimeline.play();
 
-        gameView.setOnMouseMoved(event -> handleMouseMoved(event.getX(), event.getY()));
+        gameView.getCanvas().addEventHandler(MouseEvent.MOUSE_MOVED, this::handleMouseMoved);
     }
 
-    private void handleMouseMoved(double x, double y) {
+    private void handleMouseMoved(MouseEvent event) {
+        double x = event.getX();
+        double y = event.getY();
         serpent.setHeadPosition(x, y);
         updateGame();
         updateView();

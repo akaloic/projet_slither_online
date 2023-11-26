@@ -1,3 +1,5 @@
+package com.example.projetcpoo;
+
 public class SerpentPart {
     private double x;
     private double y;

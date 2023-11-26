@@ -1,3 +1,5 @@
+package com.example.projetcpoo;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.canvas.Canvas;
 

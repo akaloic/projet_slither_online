@@ -1,3 +1,5 @@
+package com.example.projetcpoo;
+
 import javafx.animation.AnimationTimer;
 
 public class GameBoucle extends AnimationTimer {
