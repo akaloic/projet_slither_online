@@ -4,6 +4,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
+import javafx.scene.input.*;
 
 public class GameController {
     private Serpent serpent;
@@ -27,6 +28,8 @@ public class GameController {
         snakeUpdateTimeline.play();
 
         gameView.getCanvas().addEventHandler(MouseEvent.MOUSE_MOVED, this::handleMouseMoved);
+        //ajouter l'evenement pour que le serpent bouge meme sans bouger la souris
+        
     }
 
     private void handleMouseMoved(MouseEvent event) {

@@ -12,9 +12,10 @@ public class GameView {
         this.canvas = graphicsContext.getCanvas();
     }
 
-    public void drawSnake(Serpent serpent) {
-        for (int i = 0; i < serpent.getSegments().size(); i++) {
-            graphicsContext.fillOval(segment.getX(), segment.getY(), 10, 10);
+    public void drawSnake(Serpent serpent){
+        graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        for (int i = 0; i < serpent.getTaille(); i++) {
+            graphicsContext.fillOval(serpent.getSegments().get(i).getX(), serpent.getSegments().get(i).getY(), 10, 10);
         }
     }
 

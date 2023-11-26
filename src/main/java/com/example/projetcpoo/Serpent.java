@@ -11,7 +11,7 @@ public class Serpent {
     private Serpent() {
         segments = new ArrayList<SerpentPart>();
         segments.add(new SerpentPart(100, 100));
-        vitesse = 1;
+        vitesse = 2;
         taille = 1;
     }
 
@@ -22,26 +22,26 @@ public class Serpent {
     public List<SerpentPart> getSegments() {
         return segments;
     }
+    public int getTaille() {
+        return taille;
+    }
 
     public void setHeadPosition(double x, double y) {
         SerpentPart head = segments.get(0);
         double distanceX = x - head.getX();
         double distanceY = y - head.getY();
-        double distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
 
-        if (distance > 1) {
-            double angle = Math.atan2(distanceY, distanceX);
+        double distance;
+        double movementX;
+        double movementY;
 
-            double movementX = Math.cos(angle) * vitesse;
-            double movementY = Math.sin(angle) * vitesse;
+        distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+        movementX = distanceX / distance;
+        movementY = distanceY / distance;
 
-            // S'assurer que le point ne dépasse pas la position de la souris
-            movementX = Math.min(movementX, Math.abs(distanceX)) * Math.signum(distanceX);
-            movementY = Math.min(movementY, Math.abs(distanceY)) * Math.signum(distanceY);
-
-            head.setX(head.getX() + movementX);
-            head.setY(head.getY() + movementY);
-        }
+        head.setX(head.getX() + (movementX * vitesse));
+        head.setY(head.getY() + (movementY * vitesse));
+          
     }
 
 
