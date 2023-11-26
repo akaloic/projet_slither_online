@@ -12,8 +12,8 @@ public class Main extends Application{
     }
     @Override
     public void start(Stage primaryStage){
-        Serpent serpent = new Serpent();
-        GameView gameView = new GameView(new Canvas(600, 400).getGraphicsContext2D());
+        Serpent serpent = Serpent.cree_serpent();
+        GameView gameView = new GameView(new Canvas(800, 800).getGraphicsContext2D());
         GameController gameController = new GameController(serpent, gameView);
 
         
@@ -21,7 +21,7 @@ public class Main extends Application{
         root.getChildren().add(gameView.getCanvas());
 
         // Configurez la scène
-        Scene scene = new Scene(root, 600, 400);
+        Scene scene = new Scene(root, 800, 800);
 
         // Ajoutez la scène à la fenêtre principale
         primaryStage.setTitle("Snake");

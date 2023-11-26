@@ -13,7 +13,7 @@ public class GameView {
     }
 
     public void drawSnake(Serpent serpent) {
-        for (SerpentPart segment : serpent.getSegments()) {
+        for (int i = 0; i < serpent.getSegments().size(); i++) {
             graphicsContext.fillOval(segment.getX(), segment.getY(), 10, 10);
         }
     }
