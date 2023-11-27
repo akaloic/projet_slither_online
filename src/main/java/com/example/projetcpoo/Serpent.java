@@ -2,6 +2,7 @@ package com.example.projetcpoo;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Point2D;
 
 public class Serpent {
     private ArrayList<SerpentPart> segments;
@@ -15,21 +16,22 @@ public class Serpent {
         taille = 1;
     }
 
-    public static Serpent cree_serpent(){
+    public static Serpent cree_serpent() {
         return new Serpent();
     }
 
     public List<SerpentPart> getSegments() {
         return segments;
     }
+
     public int getTaille() {
         return taille;
     }
 
-    public void setHeadPosition(double x, double y) {
+    public void setHeadPosition(Point2D position) {
         SerpentPart head = segments.get(0);
-        double distanceX = x - head.getX();
-        double distanceY = y - head.getY();
+        double distanceX = position.getX() - head.getX();
+        double distanceY = position.getY() - head.getY();
 
         double distance;
         double movementX;
@@ -41,9 +43,7 @@ public class Serpent {
 
         head.setX(head.getX() + (movementX * vitesse));
         head.setY(head.getY() + (movementY * vitesse));
-          
     }
-
 
     public void setHeadPosition2(double x, double y) {
         SerpentPart head = segments.get(0);
