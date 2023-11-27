@@ -11,6 +11,8 @@ public class GameController {
     private GameView gameView;
     private Timeline snakeUpdateTimeline;
     private GameBoucle gameBoucle;
+    private double x;
+    private double y;
 
     public GameController(Serpent serpent, GameView gameView) {
         this.serpent = serpent;
@@ -18,30 +20,29 @@ public class GameController {
 
         gameBoucle = new GameBoucle(this);
         gameBoucle.start();
-        
+
         snakeUpdateTimeline = new Timeline(
-            new KeyFrame(Duration.ZERO, event -> updateGame()),
-            new KeyFrame(Duration.seconds(0.1))  // on peut chnager la vitesse de rafraichissement
+                new KeyFrame(Duration.ZERO, event -> updateGame()),
+                new KeyFrame(Duration.seconds(0.1)) // on peut chnager la vitesse de rafraichissement
         );
         snakeUpdateTimeline.setCycleCount(Timeline.INDEFINITE);
 
         snakeUpdateTimeline.play();
 
         gameView.getCanvas().addEventHandler(MouseEvent.MOUSE_MOVED, this::handleMouseMoved);
-        //ajouter l'evenement pour que le serpent bouge meme sans bouger la souris
-        
+        // ajouter l'evenement pour que le serpent bouge meme sans bouger la souris
+
     }
 
     private void handleMouseMoved(MouseEvent event) {
-        double x = event.getX();
-        double y = event.getY();
-        serpent.setHeadPosition(x, y);
-        updateGame();
-        updateView();
+        x = event.getX();
+        y = event.getY();
         // appeller les autre methode pour tout afficher des que la tete bouge
     }
-    
+
     public void updateGame() {
+        serpent.setHeadPosition(x, y);
+        updateView();
         // Mettre à jour le modèle (position du serpent, etc)
     }
 
