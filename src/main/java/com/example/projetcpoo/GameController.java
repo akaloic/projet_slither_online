@@ -3,47 +3,72 @@ package com.example.projetcpoo;
 import javafx.scene.input.MouseEvent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.Point2D;
 import javafx.util.Duration;
+import javafx.scene.input.*;
 
 public class GameController {
-    private Serpent serpent;
+    private Modele modele;
     private GameView gameView;
     private Timeline snakeUpdateTimeline;
     private GameBoucle gameBoucle;
+    private Point2D positionSouris;
+    private boolean jeuFinis = false;
 
-    public GameController(Serpent serpent, GameView gameView) {
-        this.serpent = serpent;
+    public GameController(Modele modele, GameView gameView) {
+        this.modele = new Modele();
         this.gameView = gameView;
+        this.positionSouris = null;
 
         gameBoucle = new GameBoucle(this);
         gameBoucle.start();
-        
+
         snakeUpdateTimeline = new Timeline(
-            new KeyFrame(Duration.ZERO, event -> updateGame()),
-            new KeyFrame(Duration.seconds(0.1))  // on peut chnager la vitesse de rafraichissement
+                new KeyFrame(Duration.ZERO, event -> updateGame()),
+                new KeyFrame(Duration.seconds(0.1)) // on peut chnager la vitesse de rafraichissement
         );
         snakeUpdateTimeline.setCycleCount(Timeline.INDEFINITE);
 
         snakeUpdateTimeline.play();
 
         gameView.getCanvas().addEventHandler(MouseEvent.MOUSE_MOVED, this::handleMouseMoved);
+        // ajouter l'evenement pour que le serpent bouge meme sans bouger la souris
+
+    }
+
+    public Point2D getPositionSouris() {
+        return new Point2D(positionSouris.getX(), positionSouris.getY());
     }
 
     private void handleMouseMoved(MouseEvent event) {
-        double x = event.getX();
-        double y = event.getY();
-        serpent.setHeadPosition(x, y);
-        updateGame();
-        updateView();
-        // appeller les autre methode pour tout afficher des que la tete bouge
+        positionSouris = new Point2D(event.getX(), event.getY());
     }
-    
+
     public void updateGame() {
-        // Mettre à jour le modèle (position du serpent, etc)
+        if (!jeuFinis) {
+            if (positionSouris != null) {
+                modele.getSerpentJoueur().setHeadPosition(getPositionSouris());
+            }
+            updateView();
+
+            // if (snake.getPosition().equals(food.getPosition())) {
+            // snake.grow();
+            // food.reposition();
+            // }
+
+            // if (snake.checkCollision()) {
+            // jeuFinis = true;
+            // }
+
+            // redrawGame();
+            // } else {
+            // showGameOver();
+        }
     }
 
     public void updateView() {
-        gameView.drawSnake(serpent);
+        gameView.updateModele(modele);
+        gameView.draw();
     }
 
     // Autres méthodes pour gérer les entrées, les collisions, etc.

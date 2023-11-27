@@ -2,20 +2,24 @@ package com.example.projetcpoo;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 
 public class Serpent {
     private ArrayList<SerpentPart> segments;
     private int taille;
     private double vitesse;
+    private Color couleur;
 
     private Serpent() {
         segments = new ArrayList<SerpentPart>();
-        segments.add(new SerpentPart(100, 100));
-        vitesse = 1;
+        segments.add(new SerpentPart(Main.SCREENLENGTH.getWidth() / 2, Main.SCREENLENGTH.getHeight() / 2));
+        vitesse = 2;
         taille = 1;
+        couleur = new Color(Math.random(), Math.random(), Math.random(), 0.5 + Math.random() * 0.5);
     }
 
-    public static Serpent cree_serpent(){
+    public static Serpent cree_serpent() {
         return new Serpent();
     }
 
@@ -23,27 +27,30 @@ public class Serpent {
         return segments;
     }
 
-    public void setHeadPosition(double x, double y) {
-        SerpentPart head = segments.get(0);
-        double distanceX = x - head.getX();
-        double distanceY = y - head.getY();
-        double distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
-
-        if (distance > 1) {
-            double angle = Math.atan2(distanceY, distanceX);
-
-            double movementX = Math.cos(angle) * vitesse;
-            double movementY = Math.sin(angle) * vitesse;
-
-            // S'assurer que le point ne dépasse pas la position de la souris
-            movementX = Math.min(movementX, Math.abs(distanceX)) * Math.signum(distanceX);
-            movementY = Math.min(movementY, Math.abs(distanceY)) * Math.signum(distanceY);
-
-            head.setX(head.getX() + movementX);
-            head.setY(head.getY() + movementY);
-        }
+    public int getTaille() {
+        return taille;
     }
 
+    public Color getCouleur() {
+        return new Color(couleur.getRed(), couleur.getGreen(), couleur.getBlue(), couleur.getOpacity());
+    }
+
+    public void setHeadPosition(Point2D position) {
+        SerpentPart head = segments.get(0);
+        double distanceX = position.getX() - head.getX();
+        double distanceY = position.getY() - head.getY();
+
+        double distance;
+        double movementX;
+        double movementY;
+
+        distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+        movementX = distanceX / distance;
+        movementY = distanceY / distance;
+
+        head.setX(head.getX() + (movementX * vitesse));
+        head.setY(head.getY() + (movementY * vitesse));
+    }
 
     public void setHeadPosition2(double x, double y) {
         SerpentPart head = segments.get(0);
