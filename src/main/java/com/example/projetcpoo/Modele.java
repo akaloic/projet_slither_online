@@ -1,5 +1,7 @@
 package com.example.projetcpoo;
 
+import javafx.geometry.Point2D;
+
 public class Modele {
     private Serpent serpentJoueur;
     private Food[] food;
@@ -22,10 +24,6 @@ public class Modele {
 
     public Serpent getSerpentJoueur() {
         return serpentJoueur;
-    }
-
-    public void setSerpentJoueur(Serpent serpentJoueur) {
-        this.serpentJoueur = serpentJoueur;
     }
 
     public Food[] getFood() {

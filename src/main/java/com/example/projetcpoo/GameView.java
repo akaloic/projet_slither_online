@@ -1,6 +1,7 @@
 package com.example.projetcpoo;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.canvas.Canvas;
 
 public class GameView {
@@ -21,20 +22,28 @@ public class GameView {
 
     private void drawSnake() {
         Serpent serpent = modele.getSerpentJoueur();
+        graphicsContext.setFill(serpent.getCouleur());
+        graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (int i = 0; i < serpent.getTaille(); i++) {
-            graphicsContext.fillRect(serpent.getSegments().get(i).getX(), serpent.getSegments().get(i).getY(), 10, 10);
+            graphicsContext.fillOval(serpent.getSegments().get(i).getX(), serpent.getSegments().get(i).getY(),
+                    SerpentPart.SNAKEPARTSIZE, SerpentPart.SNAKEPARTSIZE);
         }
     }
 
     private void drawFood() {
         Food[] food = modele.getFood();
         for (int i = 0; i < food.length; i++) {
-            graphicsContext.fillOval(food[i].getX(), food[i].getY(), 10, 10);
+            graphicsContext.setFill(food[i].getCouleur());
+            graphicsContext.fillOval(food[i].getX(), food[i].getY(), Food.FOODSIZE, Food.FOODSIZE);
         }
     }
 
     public Canvas getCanvas() {
         return canvas;
+    }
+
+    public void updateModele(Modele modele) {
+        this.modele = modele;
     }
 
     // Ajouter d autre methode pour le reste du jeu

@@ -13,7 +13,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    public static Rectangle2D SCREENLENGTH = Screen.getPrimary().getBounds();
+    public static final Rectangle2D SCREENLENGTH = Screen.getPrimary().getBounds();
 
     @Override
     public void start(Stage primaryStage) {

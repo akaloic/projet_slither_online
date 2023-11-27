@@ -3,17 +3,20 @@ package com.example.projetcpoo;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 
 public class Serpent {
     private ArrayList<SerpentPart> segments;
     private int taille;
     private double vitesse;
+    private Color couleur;
 
     private Serpent() {
         segments = new ArrayList<SerpentPart>();
-        segments.add(new SerpentPart(100, 100));
+        segments.add(new SerpentPart(Main.SCREENLENGTH.getWidth() / 2, Main.SCREENLENGTH.getHeight() / 2));
         vitesse = 2;
         taille = 1;
+        couleur = new Color(Math.random(), Math.random(), Math.random(), 0.5 + Math.random() * 0.5);
     }
 
     public static Serpent cree_serpent() {
@@ -26,6 +29,10 @@ public class Serpent {
 
     public int getTaille() {
         return taille;
+    }
+
+    public Color getCouleur() {
+        return new Color(couleur.getRed(), couleur.getGreen(), couleur.getBlue(), couleur.getOpacity());
     }
 
     public void setHeadPosition(Point2D position) {

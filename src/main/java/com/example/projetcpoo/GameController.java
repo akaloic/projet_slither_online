@@ -18,7 +18,7 @@ public class GameController {
     public GameController(Modele modele, GameView gameView) {
         this.modele = new Modele();
         this.gameView = gameView;
-        this.positionSouris = new Point2D(0, 0);
+        this.positionSouris = null;
 
         gameBoucle = new GameBoucle(this);
         gameBoucle.start();
@@ -36,18 +36,19 @@ public class GameController {
 
     }
 
-    private void handleMouseMoved(MouseEvent event) {
-        positionSouris = new Point2D(event.getX(), event.getY());
-    }
-
     public Point2D getPositionSouris() {
         return new Point2D(positionSouris.getX(), positionSouris.getY());
     }
 
+    private void handleMouseMoved(MouseEvent event) {
+        positionSouris = new Point2D(event.getX(), event.getY());
+    }
+
     public void updateGame() {
         if (!jeuFinis) {
-
-            modele.getSerpentJoueur().setHeadPosition(getPositionSouris());
+            if (positionSouris != null) {
+                modele.getSerpentJoueur().setHeadPosition(getPositionSouris());
+            }
             updateView();
 
             // if (snake.getPosition().equals(food.getPosition())) {
@@ -66,6 +67,7 @@ public class GameController {
     }
 
     public void updateView() {
+        gameView.updateModele(modele);
         gameView.draw();
     }
 
