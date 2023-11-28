@@ -1,6 +1,9 @@
 package com.example.projetcpoo;
 
 import javafx.scene.input.MouseEvent;
+
+import com.example.projetcpoo.Modele.Modele;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Point2D;

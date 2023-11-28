@@ -2,6 +2,9 @@ package com.example.projetcpoo;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
+import com.example.projetcpoo.Modele.Modele;
+
 import javafx.scene.canvas.Canvas;
 
 public class GameView {

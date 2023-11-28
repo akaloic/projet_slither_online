@@ -1,4 +1,9 @@
-package com.example.projetcpoo;
+package com.example.projetcpoo.Modele;
+
+import com.example.projetcpoo.Food;
+import com.example.projetcpoo.Serpent;
+
+import com.example.projetcpoo.Main;
 
 import javafx.geometry.Point2D;
 

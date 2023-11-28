@@ -1,6 +1,6 @@
 package com.example.projetcpoo;
 
-import com.example.projetcpoo.Modele;
+import com.example.projetcpoo.Modele.Modele;
 
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
