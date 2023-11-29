@@ -12,7 +12,6 @@ public class GameBoucle extends AnimationTimer {
     @Override
     public void handle(long now) {
         gameController.updateGame();
-        gameController.updateView();
     }
     public void start() {
         super.start();

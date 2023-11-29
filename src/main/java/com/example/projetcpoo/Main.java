@@ -17,7 +17,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        
         Modele modele = new Modele();
+        
 
         Canvas canvas = new Canvas(SCREENLENGTH.getWidth(), SCREENLENGTH.getHeight());
         GraphicsContext gc = canvas.getGraphicsContext2D();

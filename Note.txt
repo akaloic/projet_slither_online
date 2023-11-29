@@ -4,3 +4,4 @@
         <accessrule kind="accessible" pattern="com/sun/javafx/**"/>
     </accessrules>
 </classpathentry>
+

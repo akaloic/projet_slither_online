@@ -2,4 +2,4 @@
 .vscode
 .gradle/
 .gradle/*
-build/
+build/*
