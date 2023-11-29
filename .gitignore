@@ -1,5 +1,4 @@
 .DS_Store
 .vscode
 .gradle/
-.gradle/*
-build/*
+build/
