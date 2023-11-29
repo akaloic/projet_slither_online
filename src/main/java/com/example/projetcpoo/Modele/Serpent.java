@@ -17,7 +17,8 @@ public class Serpent {
         this.segments.add(new SerpentPart(Main.SCREENLENGTH.getWidth() / 2, Main.SCREENLENGTH.getHeight() / 2));
         this.vitesse = 2;
         this.couleur = new Color(Math.random(), Math.random(), Math.random(), 0.5 + Math.random() * 0.5);
-        this.skin = new Image("file:src/main/resources/slither/Skin serpent/" + ((int) (Math.random() * 4)) + ".png");
+        this.skin = new Image(
+                "file:src/main/resources/slither/Skin serpent/" + ((int) (Math.random() * 4) + 1) + ".png");
     }
 
     public static Serpent cree_serpent() {
