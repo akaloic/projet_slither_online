@@ -30,12 +30,19 @@ public class Serpent {
     public int getTaille() {
         return taille;
     }
+    public void setTaille(int taille) {
+        this.taille = taille;
+        segments.add(new SerpentPart(segments.get(segments.size()-1).getX(), segments.get(segments.size()-1).getY()));
+    }
 
     public Color getCouleur() {
         return new Color(couleur.getRed(), couleur.getGreen(), couleur.getBlue(), couleur.getOpacity());
     }
 
     public void setHeadPosition(Point2D position) {
+
+        
+
         SerpentPart head = segments.get(0);
         double distanceX = position.getX() - head.getX();
         double distanceY = position.getY() - head.getY();
@@ -50,15 +57,37 @@ public class Serpent {
 
         head.setX(head.getX() + (movementX * vitesse));
         head.setY(head.getY() + (movementY * vitesse));
+
+        setBody();
     }
 
-    public void setHeadPosition2(double x, double y) {
-        SerpentPart head = segments.get(0);
-        double oldX = head.getX();
-        double oldY = head.getY();
-        double pente = (y - oldY) / (x - oldX);
-        head.setX(oldX + 1);
-        head.setY(oldY + pente);
+    public double getHeadPositionX() {
+        return segments.get(0).getX();
+    }
+    public double getHeadPositionY() {
+        return segments.get(0).getY();
+    }
+    
+    private void setBody() {
+        //faire suivre le corps de la tete
+        for (int i = 1; i < segments.size(); i++) {
+            SerpentPart current = segments.get(i);
+            SerpentPart previous = segments.get(i - 1);
+
+            double distanceX = previous.getX() - current.getX();
+            double distanceY = previous.getY() - current.getY();
+
+            double distance;
+            double movementX;
+            double movementY;
+
+            distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+            movementX = distanceX / distance;
+            movementY = distanceY / distance;
+
+            current.setX(current.getX() + ((movementX) * vitesse));
+            current.setY(current.getY() + ((movementY) * vitesse));
+        }
     }
 
     // Ajouter methode pour les colisions, la mort etc

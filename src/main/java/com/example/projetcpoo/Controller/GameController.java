@@ -13,7 +13,6 @@ import javafx.scene.input.*;
 public class GameController {
     private Modele modele;
     private GameView gameView;
-    private Timeline snakeUpdateTimeline;
     private GameBoucle gameBoucle;
     private Point2D positionSouris;
     private boolean jeuFinis = false;
@@ -26,16 +25,7 @@ public class GameController {
         gameBoucle = new GameBoucle(this);
         gameBoucle.start();
 
-        snakeUpdateTimeline = new Timeline(
-                new KeyFrame(Duration.ZERO, event -> updateGame()),
-                new KeyFrame(Duration.seconds(0.1)) // on peut chnager la vitesse de rafraichissement
-        );
-        snakeUpdateTimeline.setCycleCount(Timeline.INDEFINITE);
-
-        snakeUpdateTimeline.play();
-
         gameView.getCanvas().addEventHandler(MouseEvent.MOUSE_MOVED, this::handleMouseMoved);
-        // ajouter l'evenement pour que le serpent bouge meme sans bouger la souris
 
     }
 
@@ -52,7 +42,15 @@ public class GameController {
             if (positionSouris != null) {
                 modele.getSerpentJoueur().setHeadPosition(getPositionSouris());
             }
-            updateView();
+
+            gameView.updateModele(modele);
+            gameView.getView().draw();
+            
+            
+
+            modele.setPositionifOutofBands();
+            //à verifier qd on aura le deplacement du serpent au centre
+
 
             // if (snake.getPosition().equals(food.getPosition())) {
             // snake.grow();
@@ -68,11 +66,7 @@ public class GameController {
             // showGameOver();
         }
     }
-
-    public void updateView() {
-        gameView.updateModele(modele);
-        gameView.draw();
-    }
+    
 
     // Autres méthodes pour gérer les entrées, les collisions, etc.
 }

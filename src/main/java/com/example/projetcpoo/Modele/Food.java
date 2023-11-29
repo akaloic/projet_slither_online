@@ -15,6 +15,11 @@ public class Food {
         this.couleur = new Color(Math.random(), Math.random(), Math.random(), 0.5 + Math.random() * 0.5);
     }
 
+    public void reposition() {
+        this.x = Math.random() * Main.SCREENLENGTH.getWidth();
+        this.y = Math.random() * Main.SCREENLENGTH.getHeight();
+    }
+
     public double getX() {
         return this.x;
     }
