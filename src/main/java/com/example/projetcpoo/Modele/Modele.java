@@ -8,7 +8,7 @@ import com.example.projetcpoo.Main;
 
 import javafx.geometry.Point2D;
 
-public class Modele{
+public class Modele {
     private Serpent serpentJoueur;
     private Food[] food;
     private int score;
@@ -32,13 +32,13 @@ public class Modele{
 
     private boolean[][] generateSol() {
         boolean[][] sol = new boolean[(int) Main.SCREENLENGTH.getWidth()][(int) Main.SCREENLENGTH.getHeight()];
-        for(Food f : food){
-            sol[(int)f.getX()][(int)f.getY()] = true;
+        for (Food f : food) {
+            sol[(int) f.getX()][(int) f.getY()] = true;
         }
         return sol;
     }
 
-    public void setPositionifOutofBands(){
+    public void setPositionifOutofBands() {
         if (getSerpentJoueur().getHeadPositionX() > Main.SCREENLENGTH.getWidth()) {
             getSerpentJoueur().getSegments().get(0).setX(0);
         } else if (getSerpentJoueur().getHeadPositionX() < 0) {
@@ -50,18 +50,20 @@ public class Modele{
         }
     }
 
-    public void updateFoodNSol(){
-        for(int i = 0; i < food.length; i++){
-            if(food[i].getX() <= serpentJoueur.getHeadPositionX()+SerpentPart.SNAKEPARTSIZE && food[i].getX() >= serpentJoueur.getHeadPositionX() && food[i].getY() <= serpentJoueur.getHeadPositionY()+SerpentPart.SNAKEPARTSIZE && food[i].getY() >= serpentJoueur.getHeadPositionY()){
-                sol[(int)food[i].getX()][(int)food[i].getY()] = false;
+    public void updateFoodNSol() {
+        for (int i = 0; i < food.length; i++) {
+            if (food[i].getX() <= serpentJoueur.getHeadPositionX() + SerpentPart.SNAKEPARTSIZE
+                    && food[i].getX() >= serpentJoueur.getHeadPositionX()
+                    && food[i].getY() <= serpentJoueur.getHeadPositionY() + SerpentPart.SNAKEPARTSIZE
+                    && food[i].getY() >= serpentJoueur.getHeadPositionY()) {
+                sol[(int) food[i].getX()][(int) food[i].getY()] = false;
                 food[i].reposition();
                 score++;
-                serpentJoueur.setTaille(serpentJoueur.getTaille()+1);
-                sol[(int)food[i].getX()][(int)food[i].getY()] = true;
+                serpentJoueur.addNewPart();
+                sol[(int) food[i].getX()][(int) food[i].getY()] = true;
             }
         }
     }
-
 
     public Serpent getSerpentJoueur() {
         return serpentJoueur;

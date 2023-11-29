@@ -1,7 +1,7 @@
 package com.example.projetcpoo;
 
 public class SerpentPart {
-    public static final double SNAKEPARTSIZE = Main.SCREENLENGTH.getWidth() / 100;
+    public static final double SNAKEPARTSIZE = Main.SCREENLENGTH.getWidth() / 30;
     private double x;
     private double y;
 

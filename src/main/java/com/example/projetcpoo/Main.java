@@ -17,9 +17,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        
+
         Modele modele = new Modele();
-        
 
         Canvas canvas = new Canvas(SCREENLENGTH.getWidth(), SCREENLENGTH.getHeight());
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -37,16 +36,6 @@ public class Main extends Application {
         primaryStage.setTitle("Snake");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        // Configurez le GameLoop pour les mises à jour régulières
-        GameBoucle gameBoucle = new GameBoucle(gameController);
-        gameBoucle.start();
-
-        // Ajoutez un gestionnaire pour arrêter le GameLoop lorsque la fenêtre est
-        // fermée
-        primaryStage.setOnCloseRequest(event -> {
-            gameBoucle.stop();
-        });
     }
 
     public static void main(String[] args) {
