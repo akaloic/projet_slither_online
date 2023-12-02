@@ -22,7 +22,7 @@ public class GameView extends StackPane {
         this.modele = modele;
         this.parent = parent;
 
-        this.setStyle("-fx-background-color: #808080;");
+        this.setStyle("-fx-background-color: #FFFAF0;");
         this.getChildren().add(canvas);
     }
 

@@ -26,7 +26,7 @@ tasks.withType(JavaCompile) {
 
 application {
     mainModule = 'com.slither.cpooprojet'
-    mainClass = 'com.slither.cpooprojet.HelloApplication'
+    mainClass = 'com.slither.cpooprojet.Main'
 }
 
 javafx {
