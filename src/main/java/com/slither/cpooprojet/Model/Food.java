@@ -4,11 +4,11 @@ import javafx.scene.paint.Color;
 
 import com.slither.cpooprojet.View.View;
 
-public class Food {
-    private double x;
-    private double y;
+public non-sealed class Food implements Decalage {
     public static final double FOODSIZE = View.SCREENHEIGHT / (100 * 4);
 
+    private double x;
+    private double y;
     private Color couleur;
 
     public Food(double x, double y) {
@@ -22,6 +22,13 @@ public class Food {
         this.y = Math.random() * View.SCREENHEIGHT;
     }
 
+    @Override
+    public void decallement(double x, double y) {
+        this.x += x;
+        this.y += y;
+    }
+
+    // ----------------- GETTERS / SETTERS ----------------- //
     public double getX() {
         return this.x;
     }
@@ -33,4 +40,6 @@ public class Food {
     public Color getCouleur() {
         return this.couleur;
     }
+    // ----------------------------------------------------- //
+
 }
