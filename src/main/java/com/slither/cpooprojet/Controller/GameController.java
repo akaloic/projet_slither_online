@@ -16,6 +16,9 @@ public class GameController {
     private Point2D positionSouris;
     private boolean jeuFinis = false;
     private boolean mousePressed = false;
+    private boolean pause = false;
+    private double lastUpdateTime = 0;
+    private final double RETIRE_INTERVAL = 0.3;
 
     public GameController(Modele modele, GameView gameView) {
         this.modele = new Modele();
@@ -25,7 +28,7 @@ public class GameController {
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                updateGame();
+                updateGame(now / 1_000_000_000.0);
             }
         };
         gameLoop.start();
@@ -33,6 +36,19 @@ public class GameController {
         gameView.getCanvas().addEventHandler(MouseEvent.MOUSE_MOVED, this::handleMouseMoved);
         gameView.getCanvas().setOnMousePressed(event -> this.acceleration(event));
         gameView.getCanvas().setOnMouseReleased(event -> this.deceleration());
+        gameView.getCanvas().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.P) {
+                if (!pause) {
+                    gameLoop.stop();
+                    gameView.ajtPause();
+                    pause = true;
+                } else {
+                    gameLoop.start();
+                    gameView.retirePause();
+                    pause = false;
+                }
+            }
+        });
 
     }
 
@@ -47,7 +63,7 @@ public class GameController {
     private void acceleration(MouseEvent event) {
         if (modele.getSerpentJoueur().getSegments().size() > 1) {
             Snake snake = modele.getSerpentJoueur();
-            snake.setVitesse(snake.getVitesse() * 5);
+            snake.setVitesse(snake.getVitesse() * 3);
             mousePressed = true;
         }
     }
@@ -55,20 +71,21 @@ public class GameController {
     private void deceleration() {
         if (mousePressed) {
             Snake snake = modele.getSerpentJoueur();
-            snake.setVitesse(snake.getVitesse() / 5);
+            snake.setVitesse(snake.getVitesse() / 3);
             mousePressed = false;
         }
     }
 
-    public void updateGame() {
+    public void updateGame(double currentTime) {
         if (!jeuFinis) {
             if (positionSouris != null) {
                 if (modele.getSerpentJoueur().getSegments().size() <= 1) {
                     deceleration();
                     mousePressed = false;
                 }
-                if (mousePressed) {
+                if (mousePressed && (currentTime - lastUpdateTime) > RETIRE_INTERVAL) {
                     modele.getSerpentJoueur().retirePart();
+                    lastUpdateTime = currentTime;
                 }
 
                 modele.getSerpentJoueur().setHeadPosition(positionSouris);
@@ -101,14 +118,4 @@ public class GameController {
             // showGameOver();
         }
     }
-
-    private void setupPauseFunctionality() {
-        gameView.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.P) {
-                System.out.println("Pause");
-            }
-        });
-    }
-
-    // Autres méthodes pour gérer les entrées, les collisions, etc.
 }

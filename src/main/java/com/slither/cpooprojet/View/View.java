@@ -22,6 +22,7 @@ public class View extends StackPane {
     }
 
     public void showAccueil() {
+        this.getChildren().clear();
         Accueil accueil = new Accueil(this);
         stage.setScene(new Scene(accueil, SCREENWIDTH, SCREENWIDTH));
         stage.show();

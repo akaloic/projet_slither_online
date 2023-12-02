@@ -21,7 +21,7 @@ public class Accueil extends StackPane {
         titre.setTranslateY(-100);
 
         Button start = new Button("Start");
-        start.setStyle("-fx-background-color: #000000; -fx-text-fill: #ffffff; -fx-font-size: 20px;");
+        start.setStyle("-fx-background-color: #DCDCDC; -fx-text-fill: #ffffff; -fx-font-size: 20px;");
         start.setTranslateY(100);
         start.setOnMouseClicked(e -> {
             parent.showGameView();
