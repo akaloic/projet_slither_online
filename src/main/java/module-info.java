@@ -1,8 +1,10 @@
-module com.example.projetcpoo {
+module com.slither.cpooprojet {
     requires javafx.controls;
     requires javafx.fxml;
 
-    opens com.example.projetcpoo to javafx.fxml;
 
-    exports com.example.projetcpoo;
+    opens com.slither.cpooprojet to javafx.fxml;
+    exports com.slither.cpooprojet;
+    exports com.slither.cpooprojet.View;
+    opens com.slither.cpooprojet.View to javafx.fxml;
 }
