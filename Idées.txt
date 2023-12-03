@@ -5,3 +5,4 @@
     </accessrules>
 </classpathentry>
 
+Pour maj, les positions des partis du serpent sauf la tete on peut utiliser forEach(Consumer<E>)
