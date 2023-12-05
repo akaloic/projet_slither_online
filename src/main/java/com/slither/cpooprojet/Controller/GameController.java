@@ -2,6 +2,7 @@ package com.slither.cpooprojet.Controller;
 
 import com.slither.cpooprojet.Model.Modele;
 import com.slither.cpooprojet.Model.Snake;
+import com.slither.cpooprojet.Model.SnakeIA;
 import com.slither.cpooprojet.View.GameView;
 import com.slither.cpooprojet.View.View;
 
@@ -15,7 +16,7 @@ public class GameController {
     private AnimationTimer gameLoop;
     private Point2D positionSouris;
     private boolean jeuFinis = false;
-    private boolean acceleration = false;
+    private boolean spacePressed = false;
     private boolean pause = false;
     private double lastUpdateTime = 0;
     private final double RETIRE_INTERVAL = 0.3;
@@ -34,12 +35,10 @@ public class GameController {
         gameLoop.start();
 
         gameView.getCanvas().addEventHandler(MouseEvent.MOUSE_MOVED, this::handleMouseMoved);
-        // gameView.getCanvas().setOnacceleration(event -> this.acceleration(event));
-        // gameView.getCanvas().setOnMouseReleased(event -> this.deceleration());
         gameView.getCanvas().setOnKeyPressed(event -> {
             switch (event.getCode()) {
                 case SPACE:
-                    if (!acceleration) {
+                    if (!spacePressed) {
                         acceleration();
                     }
                     break;
@@ -61,9 +60,9 @@ public class GameController {
         gameView.getCanvas().setOnKeyReleased(event -> {
             switch (event.getCode()) {
                 case SPACE:
-                    if (acceleration) {
+                    if (spacePressed) {
                         deceleration();
-                        acceleration = false;
+                        spacePressed = false;
                     } else {
                         acceleration();
                     }
@@ -82,33 +81,44 @@ public class GameController {
         positionSouris = new Point2D(event.getX(), event.getY());
     }
 
-    private void acceleration() {
+    private void acceleration() { // pour le joueur, ici c'est à faire manuellemnt mais pour l'IA c'est
+                                  // automatique
         if (modele.getSerpentJoueur().getSegments().size() > 1) {
-            Snake snake = modele.getSerpentJoueur();
-            snake.setVitesse(snake.getVitesse() * 3);
-            acceleration = true;
+            modele.getSerpentJoueur().acceleration();
+            spacePressed = true;
         }
     }
 
-    private void deceleration() {
-        if (acceleration) {
-            Snake snake = modele.getSerpentJoueur();
-            snake.setVitesse(snake.getVitesse() / 3);
-            acceleration = false;
+    private void deceleration() { // pour le joueur, ici c'est à faire manuellemnt mais pour l'IA c'est
+                                  // automatique
+        if (spacePressed) {
+            modele.getSerpentJoueur().deceleration();
+            spacePressed = false;
         }
     }
 
     public void updateGame(double currentTime) {
         if (!jeuFinis) {
+
+            modele.updateIA();
+
             if (positionSouris != null) {
                 if (modele.getSerpentJoueur().getSegments().size() <= 1) {
                     deceleration();
-                    acceleration = false;
+                    spacePressed = false;
                 }
-                if (acceleration && (currentTime - lastUpdateTime) > RETIRE_INTERVAL) {
+
+                if (spacePressed && (currentTime - lastUpdateTime) > RETIRE_INTERVAL) {
                     modele.getSerpentJoueur().retirePart();
                     lastUpdateTime = currentTime;
                 }
+
+                modele.getAllSnake().forEach(snake -> {
+                    if (snake.isAccelerated() && (currentTime - lastUpdateTime) > RETIRE_INTERVAL) {
+                        snake.retirePart();
+                        lastUpdateTime = currentTime;
+                    }
+                });
 
                 modele.getSerpentJoueur().setHeadPosition(positionSouris);
 
@@ -119,25 +129,23 @@ public class GameController {
                 modele.updateObjetJeu(xGap, yGap);
             }
 
+            for (int i = 0; i < modele.getAllSnake().size(); i++) {
+                Snake snake = modele.checkCollision(modele.getAllSnake().get(i));
+                if (snake != null) {
+                    if (snake instanceof SnakeIA) {
+                        modele.replace_snake_by_food(snake);
+                        modele.getAllSnake().remove(snake);
+                    } else {
+                        jeuFinis = true; // serpent du joueuer
+                    }
+                }
+            }
+
             gameView.setModele(modele);
             gameView.draw();
-
-            // modele.setPositionifOutofBands();
-            // faire ça
-            // à verifier qd on aura le deplacement du serpent au centre
-
-            // if (snake.getPosition().equals(food.getPosition())) {
-            // snake.grow();
-            // food.reposition();
-            // }
-
-            // if (snake.checkCollision()) {
-            // jeuFinis = true;
-            // }
-
-            // redrawGame();
-            // } else {
-            // showGameOver();
+        } else {
+            gameLoop.stop();
+            gameView.showAccueil();
         }
     }
 }

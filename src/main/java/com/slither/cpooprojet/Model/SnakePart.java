@@ -2,17 +2,23 @@ package com.slither.cpooprojet.Model;
 
 import com.slither.cpooprojet.View.View;
 
+import javafx.scene.shape.Circle;
+
 // possibilité de le remplacer simplement par un record
 
 public class SnakePart {
 
     public static final double SNAKEPARTSIZE = View.SCREENWIDTH / 30;
+    public static final double SNAKEPART_GAP = SNAKEPARTSIZE / 3;
     private double x;
     private double y;
+    private Circle cercle;
 
     public SnakePart(double x, double y) {
         this.x = x;
         this.y = y;
+        this.cercle = new Circle(x, y, SNAKEPARTSIZE);
+
     }
 
     // ----------------- GETTERS / SETTERS ----------------- //
@@ -30,6 +36,14 @@ public class SnakePart {
 
     public void setY(double y) {
         this.y = y;
+    }
+
+    public Circle getCercle() {
+        return cercle;
+    }
+
+    public void setCercle(Circle cercle) {
+        this.cercle = cercle;
     }
     // ----------------------------------------------------- //
 }
