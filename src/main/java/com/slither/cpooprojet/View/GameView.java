@@ -38,7 +38,7 @@ public class GameView extends StackPane {
     }
 
     private void addBackground() {
-        Image image = new Image("file:src/main/java/com/slither/cpooprojet/View/ressources/background.png");
+        Image image = new Image("file:src/main/resources/slither/background.jpg");
         graphicsContext.drawImage(image, 0, 0, View.SCREENWIDTH, View.SCREENHEIGHT);
     }
 
@@ -52,6 +52,7 @@ public class GameView extends StackPane {
         Image skin = serpent.getSkin();
 
         graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        // addBackground();
 
         for (int i = 1; i < serpent.getTaille(); i++) {
             graphicsContext.setFill(serpent.getCouleur());

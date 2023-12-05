@@ -15,7 +15,7 @@ public class GameController {
     private AnimationTimer gameLoop;
     private Point2D positionSouris;
     private boolean jeuFinis = false;
-    private boolean mousePressed = false;
+    private boolean acceleration = false;
     private boolean pause = false;
     private double lastUpdateTime = 0;
     private final double RETIRE_INTERVAL = 0.3;
@@ -34,22 +34,44 @@ public class GameController {
         gameLoop.start();
 
         gameView.getCanvas().addEventHandler(MouseEvent.MOUSE_MOVED, this::handleMouseMoved);
-        gameView.getCanvas().setOnMousePressed(event -> this.acceleration(event));
-        gameView.getCanvas().setOnMouseReleased(event -> this.deceleration());
+        // gameView.getCanvas().setOnacceleration(event -> this.acceleration(event));
+        // gameView.getCanvas().setOnMouseReleased(event -> this.deceleration());
         gameView.getCanvas().setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.P) {
-                if (!pause) {
-                    gameLoop.stop();
-                    gameView.ajtPause();
-                    pause = true;
-                } else {
-                    gameLoop.start();
-                    gameView.retirePause();
-                    pause = false;
-                }
+            switch (event.getCode()) {
+                case SPACE:
+                    if (!acceleration) {
+                        acceleration();
+                    }
+                    break;
+                case P:
+                    if (!pause) {
+                        gameLoop.stop();
+                        gameView.ajtPause();
+                        pause = true;
+                    } else {
+                        gameLoop.start();
+                        gameView.retirePause();
+                        pause = false;
+                    }
+                    break;
+                default:
+                    break;
             }
         });
-
+        gameView.getCanvas().setOnKeyReleased(event -> {
+            switch (event.getCode()) {
+                case SPACE:
+                    if (acceleration) {
+                        deceleration();
+                        acceleration = false;
+                    } else {
+                        acceleration();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
     }
 
     public Point2D getPositionSouris() {
@@ -60,19 +82,19 @@ public class GameController {
         positionSouris = new Point2D(event.getX(), event.getY());
     }
 
-    private void acceleration(MouseEvent event) {
+    private void acceleration() {
         if (modele.getSerpentJoueur().getSegments().size() > 1) {
             Snake snake = modele.getSerpentJoueur();
             snake.setVitesse(snake.getVitesse() * 3);
-            mousePressed = true;
+            acceleration = true;
         }
     }
 
     private void deceleration() {
-        if (mousePressed) {
+        if (acceleration) {
             Snake snake = modele.getSerpentJoueur();
             snake.setVitesse(snake.getVitesse() / 3);
-            mousePressed = false;
+            acceleration = false;
         }
     }
 
@@ -81,9 +103,9 @@ public class GameController {
             if (positionSouris != null) {
                 if (modele.getSerpentJoueur().getSegments().size() <= 1) {
                     deceleration();
-                    mousePressed = false;
+                    acceleration = false;
                 }
-                if (mousePressed && (currentTime - lastUpdateTime) > RETIRE_INTERVAL) {
+                if (acceleration && (currentTime - lastUpdateTime) > RETIRE_INTERVAL) {
                     modele.getSerpentJoueur().retirePart();
                     lastUpdateTime = currentTime;
                 }

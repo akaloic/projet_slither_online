@@ -24,14 +24,16 @@ public class View extends StackPane {
     public void showAccueil() {
         this.getChildren().clear();
         Accueil accueil = new Accueil(this);
-        stage.setScene(new Scene(accueil, SCREENWIDTH, SCREENWIDTH));
+        stage.setScene(new Scene(accueil, Screen.getPrimary().getBounds().getWidth(),
+                Screen.getPrimary().getBounds().getHeight()));
         stage.show();
     }
 
     public void showGameView() {
         Modele modele = new Modele();
         GameView gameView = new GameView(this, modele);
-        stage.setScene(new Scene(gameView, SCREENWIDTH, SCREENWIDTH));
+        stage.setScene(new Scene(gameView, Screen.getPrimary().getBounds().getWidth(),
+                Screen.getPrimary().getBounds().getHeight()));
         new GameController(modele, gameView);
     }
 }

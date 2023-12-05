@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 import com.slither.cpooprojet.View.View;
 
 public non-sealed class Food implements Decalage {
-    public static final double FOODSIZE = View.SCREENHEIGHT / (100 * 4);
+    public static final double FOODSIZE = View.SCREENHEIGHT / 50;
 
     private double x;
     private double y;
