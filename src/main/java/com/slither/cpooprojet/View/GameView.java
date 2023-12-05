@@ -43,15 +43,21 @@ public class GameView extends StackPane {
     }
 
     public void draw() {
-        drawSnake();
+        drawAllSnake();
         drawFood();
     }
 
-    private void drawSnake() {
-        Snake serpent = modele.getSerpentJoueur();
+    private void drawAllSnake() {
+        graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        ArrayList<Snake> allSnake = modele.getAllSnake();
+        for (int i = 0; i < allSnake.size(); i++) {
+            drawSnake(allSnake.get(i));
+        }
+    }
+
+    private void drawSnake(Snake serpent) {
         Image skin = serpent.getSkin();
 
-        graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         // addBackground();
 
         for (int i = 1; i < serpent.getTaille(); i++) {

@@ -1,5 +1,6 @@
 package com.slither.cpooprojet.Model;
 
+import com.slither.cpooprojet.Main;
 import com.slither.cpooprojet.View.View;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public non-sealed class Snake implements Decalage {
     private double vitesse;
     private final Color couleur;
     private final Image skin;
+    private boolean isIA;
 
     private Snake() {
         this.segments = new ArrayList<SnakePart>();
@@ -25,6 +27,20 @@ public non-sealed class Snake implements Decalage {
         for (int i = 0; i < 10; i++) {
             addNewPart();
         }
+    }
+
+    public static Snake cree_joueur_serpent() {
+        Snake joueur = new Snake();
+        joueur.isIA = false;
+        return joueur;
+    }
+
+    public static Snake creer_ia_serpent() {
+        Snake ia = new Snake();
+        ia.segments.get(0).setX(Math.random() * View.SCREENWIDTH);
+        ia.segments.get(0).setY(Math.random() * View.SCREENHEIGHT);
+        ia.isIA = true;
+        return ia;
     }
 
     public void addNewPart() {
@@ -78,10 +94,6 @@ public non-sealed class Snake implements Decalage {
         } else {
             return false;
         }
-    }
-
-    public static Snake cree_serpent() {
-        return new Snake();
     }
 
     // ----------------- GETTERS / SETTERS ----------------- //

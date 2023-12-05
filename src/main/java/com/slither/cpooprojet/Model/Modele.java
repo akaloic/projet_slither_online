@@ -7,24 +7,40 @@ import com.slither.cpooprojet.View.View;
 public class Modele {
     private Snake serpentJoueur;
     private ArrayList<Food> foodList;
-    private ArrayList<Snake> serpentsList;
+    private ArrayList<Snake> IAsnake;
+    private ArrayList<Snake> allSnake;
     private boolean[][] sol;
     private ArrayList<Decalage> objetJeu;
 
     public Modele() {
-        this.serpentJoueur = Snake.cree_serpent();
+        this.serpentJoueur = Snake.cree_joueur_serpent();
         this.foodList = generateFoods();
         this.sol = generateSol();
-        this.serpentsList = new ArrayList<Snake>();
-        this.serpentsList.add(serpentJoueur);
+        this.IAsnake = generateIAsnake();
+        this.allSnake = allSnake();
         this.objetJeu = init();
+    }
+
+    private ArrayList<Snake> allSnake() {
+        ArrayList<Snake> allSnake = new ArrayList<Snake>();
+        allSnake.addAll(IAsnake);
+        allSnake.add(serpentJoueur);
+        return allSnake;
     }
 
     private ArrayList<Decalage> init() {
         ArrayList<Decalage> objetJeu = new ArrayList<Decalage>();
         objetJeu.addAll(foodList);
-        objetJeu.addAll(serpentsList);
+        objetJeu.addAll(allSnake);
         return objetJeu;
+    }
+
+    private ArrayList<Snake> generateIAsnake() {
+        ArrayList<Snake> IAsnake = new ArrayList<Snake>();
+        for (int i = 0; i < 10; i++) {
+            IAsnake.add(Snake.creer_ia_serpent());
+        }
+        return IAsnake;
     }
 
     private ArrayList<Food> generateFoods() {
@@ -82,6 +98,14 @@ public class Modele {
 
     public ArrayList<Food> getFoodList() {
         return foodList;
+    }
+
+    public ArrayList<Snake> getIAsnake() {
+        return IAsnake;
+    }
+
+    public ArrayList<Snake> getAllSnake() {
+        return allSnake;
     }
 
     public boolean[][] getSol() {
