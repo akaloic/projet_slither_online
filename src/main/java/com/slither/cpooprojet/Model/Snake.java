@@ -22,7 +22,7 @@ public sealed class Snake implements Decalage permits SnakeIA {
         this.vitesse = 2;
         this.couleur = new Color(Math.random(), Math.random(), Math.random(), 0.5 + Math.random() * 0.5);
         this.skin = new Image(
-                "file:src/main/resources/slither/Skin serpent/" + ((int) (Math.random() * 4) + 1) + ".png");
+                "file:src/main/resources/slither/Skin serpent/" + ((int) (Math.random() * 9) + 1) + ".png");
     }
 
     protected ArrayList<SnakePart> init() {
