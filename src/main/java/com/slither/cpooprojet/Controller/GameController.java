@@ -135,6 +135,7 @@ public class GameController {
                     if (snake instanceof SnakeIA) {
                         modele.replace_snake_by_food(snake);
                         modele.getAllSnake().remove(snake);
+                        modele.add_snake_ia();
                     } else {
                         jeuFinis = true; // serpent du joueuer
                     }

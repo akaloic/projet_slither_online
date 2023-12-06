@@ -117,7 +117,8 @@ public class Modele {
                     snake.deceleration();
                     Point2D point = closer_in_zone(zone);
                     if (point != null) {
-                        snake.setHeadPosition(point);;
+                        snake.setHeadPosition(point);
+                        ;
                     } else {
                         snake.setHeadPosition(new Point2D(snake.getHeadPositionX() + 5,
                                 snake.getHeadPositionY() + 5));
@@ -170,16 +171,45 @@ public class Modele {
     }
 
     public Snake checkCollision(Snake snake) {
-        for (int i = 1; i < allSnake.size(); i++) {
-            if (snake != allSnake.get(i)) {
-                for (int j = 0; j < allSnake.get(i).getTaille(); j++) {
-                    if (snake.getHead().getCercle().intersects(allSnake.get(i).getSegments().get(j).getCercle().getBoundsInLocal())) {
-                        return snake;
+        Circle headCircle = snake.getHead().getCercle();
+
+        for (int i = 0; i < allSnake.size(); i++) {
+            Snake snakeX = allSnake.get(i);
+
+            if (snake != snakeX) {
+                if (isCloseEnough(snake, snakeX)) {
+                    for (SnakePart part : snakeX.getSegments()) {
+                        if (headCircle.intersects(part.getCercle().getBoundsInLocal())) {
+                            return snake;
+                        }
                     }
                 }
             }
         }
+
         return null;
+    }
+
+    // private boolean isCloseEnough(Snake a, Snake b) {
+    // SnakePart head1 = a.getHead();
+    // SnakePart head2 = b.getHead();
+
+    // double distanceX = head1.getX() - head2.getX();
+    // double distanceY = head1.getY() - head2.getY();
+
+    // double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+    // return distance < SnakePart.SNAKEPARTSIZE * 5;
+    // }
+    private boolean isCloseEnough(Snake snake1, Snake snake2) {
+        // Exemple: Utiliser le rayon de la tête plus la longueur du corps comme
+        // distance approximative
+        double distance = snake1.getHead().getCercle().getRadius() + snake1.getTaille() +
+                snake2.getHead().getCercle().getRadius() + snake2.getTaille();
+        double dx = snake1.getHead().getX() - snake2.getHead().getX();
+        double dy = snake1.getHead().getY() - snake2.getHead().getY();
+        return (dx * dx + dy * dy) <= (distance * distance);
+
     }
 
     public void replace_snake_by_food(Snake snake) {
@@ -196,6 +226,12 @@ public class Modele {
             IAsnake.remove(snake);
         }
         allSnake.remove(snake);
+        majObjetJeu();
+    }
+
+    public void add_snake_ia() {
+        IAsnake.add(SnakeIA.cree_ia_serpent());
+        allSnake.add(IAsnake.get(IAsnake.size() - 1));
         majObjetJeu();
     }
 
