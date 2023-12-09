@@ -1,6 +1,7 @@
 package com.slither.cpooprojet.Model;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import com.slither.cpooprojet.View.View;
 
@@ -103,33 +104,74 @@ public class Modele {
         return zone.contains(head);
     }
 
+    // public void updateIA() {
+    //     IAsnake.forEach(snake -> {
+    //         if (snake.getSegments().size() > 1) {
+    //             Rectangle2D zone = snake.getZone();
+    //             if (player_in_zone(zone, serpentJoueur)) {
+    //                 double fuirX = snake.getHeadPositionX() - serpentJoueur.getHeadPositionX();
+    //                 double fuirY = snake.getHeadPositionY() - serpentJoueur.getHeadPositionY();
+    //                 snake.setHeadPosition(new Point2D(snake.getHeadPositionX() + fuirX,
+    //                         snake.getHeadPositionY() + fuirY));
+    //                 snake.acceleration();
+    //             } else {
+    //                 snake.deceleration();
+    //                 Point2D point = closer_in_zone(zone);
+    //                 if (point != null) {
+    //                     snake.setHeadPosition(point);
+    //                     ;
+    //                 } else {
+    //                     snake.setHeadPosition(new Point2D(snake.getHeadPositionX() + 5,
+    //                             snake.getHeadPositionY() + 5));
+    //                 }
+    //             }
+    //         } else {
+    //             snake.setHeadPosition(new Point2D(Math.random() * View.SCREENWIDTH, Math.random() * View.SCREENHEIGHT));
+    //         }
+    //     });
+    //     majObjetJeu();
+    // }
+
     public void updateIA() {
-        IAsnake.forEach(snake -> {
-            if (snake.getSegments().size() > 1) {
-                Rectangle2D zone = snake.getZone();
-                if (player_in_zone(zone, serpentJoueur)) {
-                    double fuirX = snake.getHeadPositionX() - serpentJoueur.getHeadPositionX();
-                    double fuirY = snake.getHeadPositionY() - serpentJoueur.getHeadPositionY();
-                    snake.setHeadPosition(new Point2D(snake.getHeadPositionX() + fuirX,
-                            snake.getHeadPositionY() + fuirY));
-                    snake.acceleration();
-                } else {
-                    snake.deceleration();
-                    Point2D point = closer_in_zone(zone);
-                    if (point != null) {
-                        snake.setHeadPosition(point);
-                        ;
-                    } else {
-                        snake.setHeadPosition(new Point2D(snake.getHeadPositionX() + 5,
-                                snake.getHeadPositionY() + 5));
-                    }
-                }
-            } else {
-                snake.setHeadPosition(new Point2D(Math.random() * View.SCREENWIDTH, Math.random() * View.SCREENHEIGHT));
-            }
-        });
+        IAsnake.forEach(this::updateSnakeBehaviour);
+        // pour l'instant les IA fuient juste le joueuer
         majObjetJeu();
     }
+    
+    private void updateSnakeBehaviour(Snake snake) {
+        if (snake.getSegments().size() > 1) {
+            Rectangle2D zone = snake.getZone();
+            if (player_in_zone(zone, serpentJoueur)) {
+                moveSnakeAwayFromPlayer(snake);
+                snake.acceleration();
+            } else {
+                snake.deceleration();
+                moveSnakeTowardPointOrRandomly(snake, zone);
+            }
+        } else {
+            setRandomHeadPosition(snake);
+        }
+    }
+    
+    private void moveSnakeAwayFromPlayer(Snake snake) {
+        double fuirX = snake.getHeadPositionX() - serpentJoueur.getHeadPositionX();
+        double fuirY = snake.getHeadPositionY() - serpentJoueur.getHeadPositionY();
+        snake.setHeadPosition(new Point2D(snake.getHeadPositionX() + fuirX, snake.getHeadPositionY() + fuirY));
+    }
+    
+    private void moveSnakeTowardPointOrRandomly(Snake snake, Rectangle2D zone) {
+        Point2D point = closer_in_zone(zone);
+        if (point != null) {
+            snake.setHeadPosition(point);
+        } else {
+            snake.setHeadPosition(new Point2D(snake.getHeadPositionX() + 5, snake.getHeadPositionY() + 5));
+        }
+    }
+    
+    private void setRandomHeadPosition(Snake snake) {
+        snake.setHeadPosition(new Point2D(Math.random() * View.SCREENWIDTH, Math.random() * View.SCREENHEIGHT));
+    }
+    
 
     public void updateObjetJeu(double xGap, double yGap) {
         objetJeu.forEach(element -> {
@@ -170,25 +212,37 @@ public class Modele {
         majObjetJeu();
     }
 
-    public Snake checkCollision(Snake snake) {
+    public Optional<Snake> checkCollision(Snake snake) {
         Circle headCircle = snake.getHead().getCercle();
-
-        for (int i = 0; i < allSnake.size(); i++) {
-            Snake snakeX = allSnake.get(i);
-
-            if (snake != snakeX) {
-                if (isCloseEnough(snake, snakeX)) {
-                    for (SnakePart part : snakeX.getSegments()) {
-                        if (headCircle.intersects(part.getCercle().getBoundsInLocal())) {
-                            return snake;
-                        }
-                    }
-                }
-            }
-        }
-
-        return null;
+    
+        return allSnake.stream()
+            .filter(snakeX -> snake != snakeX && isCloseEnough(snake, snakeX))
+            .flatMap(snakeX -> snakeX.getSegments().stream())
+            .filter(part -> headCircle.intersects(part.getCercle().getBoundsInLocal()))
+            .findFirst()
+            .map(part -> snake);
     }
+    
+
+    // public Snake checkCollision(Snake snake) {
+    //     Circle headCircle = snake.getHead().getCercle();
+
+    //     for (int i = 0; i < allSnake.size(); i++) {
+    //         Snake snakeX = allSnake.get(i);
+
+    //         if (snake != snakeX) {
+    //             if (isCloseEnough(snake, snakeX)) {
+    //                 for (SnakePart part : snakeX.getSegments()) {
+    //                     if (headCircle.intersects(part.getCercle().getBoundsInLocal())) {
+    //                         return snake;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     return null;
+    // }
 
     // private boolean isCloseEnough(Snake a, Snake b) {
     // SnakePart head1 = a.getHead();
@@ -209,7 +263,6 @@ public class Modele {
         double dx = snake1.getHead().getX() - snake2.getHead().getX();
         double dy = snake1.getHead().getY() - snake2.getHead().getY();
         return (dx * dx + dy * dy) <= (distance * distance);
-
     }
 
     public void replace_snake_by_food(Snake snake) {
