@@ -1,7 +1,6 @@
 package com.slither.cpooprojet.Controller;
 
 import com.slither.cpooprojet.Model.Modele;
-import com.slither.cpooprojet.Model.Snake;
 import com.slither.cpooprojet.Model.SnakeIA;
 import com.slither.cpooprojet.View.GameView;
 import com.slither.cpooprojet.View.View;
@@ -9,6 +8,8 @@ import com.slither.cpooprojet.View.View;
 import javafx.geometry.Point2D;
 import javafx.scene.input.*;
 import javafx.animation.AnimationTimer;
+
+import java.util.Optional;
 
 public class GameController {
     private Modele modele;
@@ -102,7 +103,7 @@ public class GameController {
 
             modele.updateIA();
 
-            if (positionSouris != null) {
+            if (positionSouris != null) { // -> potentiel Optionnel<Point2D>
                 if (modele.getSerpentJoueur().getSegments().size() <= 1) {
                     deceleration();
                     spacePressed = false;
@@ -129,18 +130,32 @@ public class GameController {
                 modele.updateObjetJeu(xGap, yGap);
             }
 
-            for (int i = 0; i < modele.getAllSnake().size(); i++) {
-                Snake snake = modele.checkCollision(modele.getAllSnake().get(i));
-                if (snake != null) {
-                    if (snake instanceof SnakeIA) {
-                        modele.replace_snake_by_food(snake);
-                        modele.getAllSnake().remove(snake);
-                        modele.add_snake_ia();
-                    } else {
-                        jeuFinis = true; // serpent du joueuer
-                    }
-                }
-            }
+            modele.getAllSnake().stream()
+                    .map(snake -> modele.checkCollision(snake))
+                    .filter(snake -> snake.isPresent())
+                    .map(snake -> snake.get())
+                    .forEach(snake -> {
+                        if (snake instanceof SnakeIA) {
+                            modele.replace_snake_by_food(snake);
+                            modele.getAllSnake().remove(snake);
+                            modele.add_snake_ia();
+                        } else {
+                            jeuFinis = true; // serpent du joueur
+                        }
+                    });
+
+            // for (int i = 0; i < modele.getAllSnake().size(); i++) {
+            // Snake snake = modele.checkCollision(modele.getAllSnake().get(i));
+            // if (snake != null) {
+            // if (snake instanceof SnakeIA) {
+            // modele.replace_snake_by_food(snake);
+            // modele.getAllSnake().remove(snake);
+            // modele.add_snake_ia();
+            // } else {
+            // jeuFinis = true; // serpent du joueuer
+            // }
+            // }
+            // }
 
             gameView.setModele(modele);
             gameView.draw();
