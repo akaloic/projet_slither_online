@@ -14,7 +14,7 @@ public non-sealed class SnakeIA extends Snake {
         super();
         this.segments = init();
         this.isIA = true;
-        this.zone = new Rectangle2D(getHeadPositionX() - 100, getHeadPositionY() - 100, 200, 200);
+        this.zone = new Rectangle2D(getHeadPositionX() - View.SCREENWIDTH / 2, getHeadPositionY() - View.SCREENHEIGHT / 2, View.SCREENWIDTH, View.SCREENHEIGHT);
     }
 
     @Override

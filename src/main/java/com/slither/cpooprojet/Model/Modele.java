@@ -133,11 +133,19 @@ public class Modele {
     // }
 
     public void updateIA() {
-        IAsnake.forEach(this::updateSnakeBehaviour);
+        IAsnake.forEach(snakeia -> updateSnakeBehaviour(snakeia));
         // pour l'instant les IA fuient juste le joueuer
         majObjetJeu();
     }
     
+    /**
+     * Le comportement d'un serpent IA est le suivant :
+     * - si le joueur est dans la zone du serpent, le serpent fuit le joueur
+     * - sinon, le serpent se déplace vers la nourriture la plus proche dans sa zone
+     * 
+     * @brief updateSnakeBehaviour, met à jour le comportement d'un serpent IA
+     * @param snake
+     */
     private void updateSnakeBehaviour(Snake snake) {
         if (snake.getSegments().size() > 1) {
             Rectangle2D zone = snake.getZone();
@@ -179,12 +187,13 @@ public class Modele {
         });
     }
 
-    /*
-     * @brief update_food_field_i
+    /**
+     * A utiliser en complément de méthode : 'update_food_field'
      * 
+     * @brief update_food_field_i, met à jour le terrain de nourriture pour un
+     *        serpent donné
      * @param snake
-     * 
-     * @return snake, retourne le serpent avec les nouvelles parties s'il a mangé
+     * @return snake mis à jour dans le cas où il a mangé de la nourriture sinon rien
      */
     private Snake update_food_field_i(Snake snake) {
         for (int i = 0; i < foodList.size(); i++) {
@@ -201,22 +210,29 @@ public class Modele {
                 }
             }
         }
-        majObjetJeu();
         return snake;
     }
 
+    /**
+     * @brief update_food_field, met à jour le terrain de nourriture pour tous les serpents, cad vérifie si un serpent a mangé de la nourriture
+     */
     public void update_food_field() {
         allSnake.forEach(snake -> {
-            snake = update_food_field_i(snake);
+            update_food_field_i(snake);
         });
         majObjetJeu();
     }
 
+    /**
+     * @brief checkCollision, vérifie si un serpent est en collision avec un autre serpent parmi tous les autres serpents dans objetJeu
+     * @param snake
+     * @return le serpent en collision avec snake, sinon rien
+     */
     public Optional<Snake> checkCollision(Snake snake) {
         Circle headCircle = snake.getHead().getCercle();
     
         return allSnake.stream()
-            .filter(snakeX -> snake != snakeX && isCloseEnough(snake, snakeX))
+            .filter(snakeX -> snake != snakeX && isCloseEnough(snake, snakeX))      // renvoie un stream avec les serpents "isCloseEnough" de snake et different de snake
             .flatMap(snakeX -> snakeX.getSegments().stream())
             .filter(part -> headCircle.intersects(part.getCercle().getBoundsInLocal()))
             .findFirst()
@@ -255,9 +271,14 @@ public class Modele {
 
     // return distance < SnakePart.SNAKEPARTSIZE * 5;
     // }
+
+    /**
+     * @brief isCloseEnough, vérifie si deux serpents sont assez proches l'un de l'autre pour être en collision
+     * @param snake1
+     * @param snake2
+     * @return true si les deux serpents sont assez proches l'un de l'autre pour être en collision, sinon false
+     */
     private boolean isCloseEnough(Snake snake1, Snake snake2) {
-        // Exemple: Utiliser le rayon de la tête plus la longueur du corps comme
-        // distance approximative
         double distance = snake1.getHead().getCercle().getRadius() + snake1.getTaille() +
                 snake2.getHead().getCercle().getRadius() + snake2.getTaille();
         double dx = snake1.getHead().getX() - snake2.getHead().getX();
@@ -265,6 +286,10 @@ public class Modele {
         return (dx * dx + dy * dy) <= (distance * distance);
     }
 
+    /**
+     * @brief replace_snake_by_food, remplace un serpent par de la nourriture
+     * @param snake
+     */
     public void replace_snake_by_food(Snake snake) {
         for (int i = 0; i < snake.getTaille(); i++) {
             int x = (int) snake.getSegments().get(i).getX();
