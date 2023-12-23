@@ -98,8 +98,34 @@ public class GameController {
         }
     }
 
+    private boolean isOut(){
+        double posmaxX = gameView.getView().SCREENWIDTH;                                       //à modifier avec la taille de la scene
+        double posmaxY = gameView.getView().SCREENHEIGHT;
+        double posSerpX = modele.getSerpentJoueur().getHeadPositionX();
+        double posSerpY = modele.getSerpentJoueur().getHeadPositionY();
+
+        System.out.println(posmaxX+" "+posmaxY+" "+posSerpX+" "+posSerpY);                      //trouver quelle attribut à la position X et Y
+        if(posSerpX< 0 || posSerpX > posmaxX || posSerpY<0 || posSerpY> posmaxY){
+            return true;
+        }
+        else return false;
+    }
+
     public void updateGame(double currentTime) {
         if (!jeuFinis) {
+            System.out.println(isOut());
+            if(isOut()){
+                double newX;
+                double newY;
+                if(modele.getSerpentJoueur().getHeadPositionX()<0) newX = gameView.getView().SCREENWIDTH;
+                else if(modele.getSerpentJoueur().getHeadPositionX()>gameView.getView().SCREENWIDTH) newX = 0;
+                else newX = modele.getSerpentJoueur().getHeadPositionX();
+
+                if(modele.getSerpentJoueur().getHeadPositionY()<0) newY = gameView.getView().SCREENHEIGHT;
+                else if(modele.getSerpentJoueur().getHeadPositionY()>gameView.getView().SCREENHEIGHT) newY = 0;
+                else newY = modele.getSerpentJoueur().getHeadPositionY();
+                modele.getSerpentJoueur().resetPositionMap(newX,newY);
+            }
 
             modele.updateIA();
 
@@ -145,6 +171,7 @@ public class GameController {
                             jeuFinis = true;    // sinon c'est le serpent du joueur, donc le jeu est fini
                         }
                     });
+
 
             // for (int i = 0; i < modele.getAllSnake().size(); i++) {
             // Snake snake = modele.checkCollision(modele.getAllSnake().get(i));

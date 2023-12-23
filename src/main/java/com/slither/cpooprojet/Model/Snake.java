@@ -107,6 +107,9 @@ public sealed class Snake implements Decalage permits SnakeIA {
             }
         }
     }
+    public void resetPositionMap(double newX,double newY){
+        setHeadPosition(new Point2D(newX,newY));
+    }
 
     @Override
     public void decallement(double x, double y) {

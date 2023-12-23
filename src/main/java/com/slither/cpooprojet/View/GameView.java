@@ -75,7 +75,6 @@ public class GameView extends StackPane {
         }
 
         graphicsContext.save();
-
         graphicsContext.beginPath();
         graphicsContext.arc(serpent.getHeadPositionX() + SnakePart.SNAKEPARTSIZE / 2,
                 serpent.getHeadPositionY() + SnakePart.SNAKEPARTSIZE / 2,
@@ -147,6 +146,10 @@ public class GameView extends StackPane {
 
     public void setModele(Modele modele) {
         this.modele = modele;
+    }
+
+    public View getView(){
+        return this.parent;
     }
     // --------------------------------
 
