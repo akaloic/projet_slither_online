@@ -136,9 +136,11 @@ public class GameController {
                     .map(snake -> snake.get())        // renvoie un stream avec les serpents en collision en convertissant l'Optional<Snake> en Snake
                     .forEach(snake -> {         // pour chaque serpent en collision
                         if (snake instanceof SnakeIA) {     // si c'est un serpent IA :
-                            modele.replace_snake_by_food(snake);        // on le remplace par de la nourriture
-                            modele.getAllSnake().remove(snake);         // on le supprime de la liste des serpents
-                            modele.add_snake_ia();                      // on ajoute un nouveau serpent IA
+                            synchronized(snake){
+                                modele.replace_snake_by_food(snake);        // on le remplace par de la nourriture
+                                modele.getAllSnake().remove(snake);         // on le supprime de la liste des serpents
+                                modele.add_snake_ia();                      // on ajoute un nouveau serpent IA
+                            }
                         } else {
                             jeuFinis = true;    // sinon c'est le serpent du joueur, donc le jeu est fini
                         }
