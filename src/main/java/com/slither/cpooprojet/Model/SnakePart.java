@@ -8,7 +8,7 @@ import javafx.scene.shape.Circle;
 
 public class SnakePart {
 
-    public static final double SNAKEPARTSIZE = View.SCREENWIDTH / 30;
+    public static final double SNAKEPARTSIZE = View.SCREENWIDTH / 20;
     public static final double SNAKEPART_GAP = SNAKEPARTSIZE / 3;
     private double x;
     private double y;

@@ -24,7 +24,7 @@ public sealed class Snake implements Decalage permits SnakeIA {
         this.vitesse = 2;
         this.couleur = new Color(Math.random(), Math.random(), Math.random(), 0.5 + Math.random() * 0.5);
         this.skin = new Image(
-                "file:src/main/resources/slither/Skin serpent/" + ((int) (Math.random() * 9) + 1) + ".png");
+                "file:src/main/resources/slither/Skin serpent/" + (int) (Math.random() * 12) + ".png");
         this.zone = new Rectangle2D(getHeadPositionX() - 100, getHeadPositionY() - 100, 200, 200);
 
     }
