@@ -2,6 +2,7 @@ package com.slither.cpooprojet.Controller;
 
 import com.slither.cpooprojet.Model.Modele;
 import com.slither.cpooprojet.Model.SnakeIA;
+import com.slither.cpooprojet.Model.Snake;
 import com.slither.cpooprojet.View.GameView;
 import com.slither.cpooprojet.View.View;
 
@@ -10,6 +11,8 @@ import javafx.scene.input.*;
 import javafx.animation.AnimationTimer;
 
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameController {
     private Modele modele;
@@ -98,13 +101,12 @@ public class GameController {
         }
     }
 
-    private boolean isOut(){
+    private boolean isOut(double x, double y){
         double posmaxX = gameView.getView().SCREENWIDTH;                                       //à modifier avec la taille de la scene
         double posmaxY = gameView.getView().SCREENHEIGHT;
-        double posSerpX = modele.getSerpentJoueur().getHeadPositionX();
-        double posSerpY = modele.getSerpentJoueur().getHeadPositionY();
+        double posSerpX = x;
+        double posSerpY = y;
 
-        System.out.println(posmaxX+" "+posmaxY+" "+posSerpX+" "+posSerpY);                      //trouver quelle attribut à la position X et Y
         if(posSerpX< 0 || posSerpX > posmaxX || posSerpY<0 || posSerpY> posmaxY){
             return true;
         }
@@ -113,20 +115,6 @@ public class GameController {
 
     public void updateGame(double currentTime) {
         if (!jeuFinis) {
-            System.out.println(isOut());
-            if(isOut()){
-                double newX;
-                double newY;
-                if(modele.getSerpentJoueur().getHeadPositionX()<0) newX = gameView.getView().SCREENWIDTH;
-                else if(modele.getSerpentJoueur().getHeadPositionX()>gameView.getView().SCREENWIDTH) newX = 0;
-                else newX = modele.getSerpentJoueur().getHeadPositionX();
-
-                if(modele.getSerpentJoueur().getHeadPositionY()<0) newY = gameView.getView().SCREENHEIGHT;
-                else if(modele.getSerpentJoueur().getHeadPositionY()>gameView.getView().SCREENHEIGHT) newY = 0;
-                else newY = modele.getSerpentJoueur().getHeadPositionY();
-                modele.getSerpentJoueur().resetPositionMap(newX,newY);
-            }
-
             modele.updateIA();
 
             if (positionSouris != null) { // -> potentiel Optionnel<Point2D>
@@ -151,26 +139,42 @@ public class GameController {
 
                 double xSnake = modele.getSerpentJoueur().getHeadPositionX();
                 double ySnake = modele.getSerpentJoueur().getHeadPositionY();
+                System.out.println("xSnake : " + xSnake + " ySnake : " + ySnake);
+                // if(isOut(xSnake,ySnake)){                                                            //pas ici que on a la pos du serpent??ou????
+                //     double newX;
+                //     double newY;
+                //     if(xSnake<0) newX = gameView.getView().SCREENWIDTH;
+                //     else if(xSnake>gameView.getView().SCREENWIDTH) newX = 0;
+                //     else newX = xSnake;
+
+                //     if(ySnake<0) newY = gameView.getView().SCREENHEIGHT;
+                //     else if(ySnake>gameView.getView().SCREENHEIGHT) newY = 0;
+                //     else newY = ySnake;
+
+                //     modele.getSerpentJoueur().resetPositionMap(newX,newY);
+                //     xSnake = modele.getSerpentJoueur().getHeadPositionX();
+                //     ySnake = modele.getSerpentJoueur().getHeadPositionY();
+                //     System.out.println("xSnakeodif : " + xSnake + " ySnakeModif : " + ySnake);
+                // }
                 double xGap = View.SCREENWIDTH / 2 - xSnake;
                 double yGap = View.SCREENHEIGHT / 2 - ySnake;
                 modele.updateObjetJeu(xGap, yGap);
             }
 
-            modele.getAllSnake().stream()
+                modele.getAllSnake().stream()
                     .map(snake -> modele.checkCollision(snake))     // renvoie un Optional<Snake> indiquant si le serpent donné est en collision
-                    .filter(snake -> snake.isPresent())     // renvoie un stream avec les serpents en collision
-                    .map(snake -> snake.get())        // renvoie un stream avec les serpents en collision en convertissant l'Optional<Snake> en Snake
+                    .filter(Optional::isPresent)     // renvoie un stream avec les serpents en collision
+                    .map(Optional::get)        // renvoie un stream avec les serpents en collision en convertissant l'Optional<Snake> en Snake
                     .forEach(snake -> {         // pour chaque serpent en collision
                         if (snake instanceof SnakeIA) {     // si c'est un serpent IA :
-                            synchronized(snake){
-                                modele.replace_snake_by_food(snake);        // on le remplace par de la nourriture
-                                modele.getAllSnake().remove(snake);         // on le supprime de la liste des serpents
-                                modele.add_snake_ia();                      // on ajoute un nouveau serpent IA
-                            }
+                            modele.replace_snake_by_food(snake);        // on le remplace par de la nourriture
+                            modele.getAllSnake().remove(snake);         // on le supprime de la liste des serpents
+                            modele.add_snake_ia();                      // on ajoute un nouveau serpent IA
                         } else {
                             jeuFinis = true;    // sinon c'est le serpent du joueur, donc le jeu est fini
                         }
-                    });
+                });
+
 
 
             // for (int i = 0; i < modele.getAllSnake().size(); i++) {

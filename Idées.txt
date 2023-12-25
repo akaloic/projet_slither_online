@@ -6,6 +6,6 @@
 </classpathentry>
 
 Pour maj, les positions des partis du serpent sauf la tete on peut utiliser forEach(Consumer<E>)
-faire que le serpent ce teleporte pour map infini
+faire que le serpent ce teleporte pour map infini (carre 9*9 de map)
 position de camera (dezoomer) pour pouvoir voir tout le serpent.
 dans gamecontroller ligne 163 modifier pour ne pas avoir de concurence
