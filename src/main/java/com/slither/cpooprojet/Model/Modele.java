@@ -16,6 +16,8 @@ public class Modele {
     private ArrayList<Food> foodList;
     private boolean[][] field;
     private ArrayList<Decalage> objetJeu;
+    private static double posXTotal;
+    private static double posYTotal;
 
     public Modele() {
         this.foodList = generateFoods();
@@ -24,6 +26,8 @@ public class Modele {
         this.IAsnake = generateIAsnake();
         this.allSnake = allSnake();
         this.objetJeu = init();
+        this.posXTotal = serpentJoueur.getHeadPositionX();
+        this.posYTotal = serpentJoueur.getHeadPositionY();
     }
 
     private ArrayList<Snake> allSnake() {
@@ -183,6 +187,10 @@ public class Modele {
 
     public void updateObjetJeu(double xGap, double yGap) {
         objetJeu.forEach(element -> {
+            if(!(element instanceof SnakeIA) && (element instanceof Snake)){            // si c'est le serpent du joueur
+                setPosXTotal(xGap);
+                setPosYTotal(yGap);
+            }
             element.decallement(xGap, yGap);
         });
     }
@@ -336,6 +344,22 @@ public class Modele {
 
     public ArrayList<Decalage> getObjetJeu() {
         return objetJeu;
+    }
+
+    public static double getPosXTotal() {
+        return posXTotal;
+    }
+
+    public static double getPosYTotal() {
+        return posYTotal;
+    }
+
+    public static void setPosXTotal(double posXTotal) {
+        Modele.posXTotal += posXTotal;
+    }
+
+    public static void setPosYTotal(double posYTotal) {
+        Modele.posYTotal += posYTotal;
     }
     // -------------------------------------------------------------- //
 
