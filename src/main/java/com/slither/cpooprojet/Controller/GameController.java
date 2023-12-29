@@ -143,23 +143,23 @@ public class GameController {
                 double yGap;                        //modifie le déplacement plus ou moins fort entre chaque update en Y
                 if(isOut()){
                     if(modele.getPosXTotal()<0){
-                        xGap = View.SCREENWIDTH - xSnake;
+                        
                     }else if(modele.getPosXTotal()>gameView.getView().SCREENWIDTH){
-                        xGap = 0 - xSnake;
-                    }else xGap = 0;
+                        
+                    }else ;
 
                     if(modele.getPosYTotal()<0){
-                        yGap = View.SCREENHEIGHT - ySnake;
+                        
                     }else if(modele.getPosYTotal()>gameView.getView().SCREENHEIGHT){
-                        yGap = 0 - ySnake;
-                    }else yGap = 0;
+                        
+                    }else ;
 
 
 
-                }else{
+                }//else{
                     xGap = View.SCREENWIDTH / 2 - xSnake;
                     yGap = View.SCREENHEIGHT / 2 - ySnake;
-                }
+                //}
 
                 modele.updateObjetJeu(xGap, yGap);
                 
