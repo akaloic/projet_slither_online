@@ -139,23 +139,28 @@ public class GameController {
 
                 double xSnake = modele.getSerpentJoueur().getHeadPositionX();
                 double ySnake = modele.getSerpentJoueur().getHeadPositionY();
-                // if(isOut(xSnake,ySnake)){                                                            //pas ici que on a la pos du serpent??ou????
-                //     double newX;
-                //     double newY;
-                //     if(xSnake<0) newX = gameView.getView().SCREENWIDTH;
-                //     else if(xSnake>gameView.getView().SCREENWIDTH) newX = 0;
-                //     else newX = xSnake;
+                double xGap;                        //modifie le déplacement plus ou moins fort entre chaque update en X
+                double yGap;                        //modifie le déplacement plus ou moins fort entre chaque update en Y
+                if(isOut()){
+                    if(modele.getPosXTotal()<0){
+                        xGap = View.SCREENWIDTH - xSnake;
+                    }else if(modele.getPosXTotal()>gameView.getView().SCREENWIDTH){
+                        xGap = 0 - xSnake;
+                    }else xGap = 0;
 
-                //     if(ySnake<0) newY = gameView.getView().SCREENHEIGHT;
-                //     else if(ySnake>gameView.getView().SCREENHEIGHT) newY = 0;
-                //     else newY = ySnake;
+                    if(modele.getPosYTotal()<0){
+                        yGap = View.SCREENHEIGHT - ySnake;
+                    }else if(modele.getPosYTotal()>gameView.getView().SCREENHEIGHT){
+                        yGap = 0 - ySnake;
+                    }else yGap = 0;
 
-                //     modele.getSerpentJoueur().resetPositionMap(newX,newY);
-                //     xSnake = modele.getSerpentJoueur().getHeadPositionX();
-                //     ySnake = modele.getSerpentJoueur().getHeadPositionY();
-                // }
-                double xGap = View.SCREENWIDTH / 2 - xSnake;
-                double yGap = View.SCREENHEIGHT / 2 - ySnake;
+
+
+                }else{
+                    xGap = View.SCREENWIDTH / 2 - xSnake;
+                    yGap = View.SCREENHEIGHT / 2 - ySnake;
+                }
+
                 modele.updateObjetJeu(xGap, yGap);
                 
             }
@@ -171,6 +176,21 @@ public class GameController {
             //         }
             //     }
             // });
+
+
+                    // double newX;
+                    // double newY;
+                    // if(xSnake<0) newX = gameView.getView().SCREENWIDTH;
+                    // else if(xSnake>gameView.getView().SCREENWIDTH) newX = 0;
+                    // else newX = xSnake;
+
+                    // if(ySnake<0) newY = gameView.getView().SCREENHEIGHT;
+                    // else if(ySnake>gameView.getView().SCREENHEIGHT) newY = 0;
+                    // else newY = ySnake;
+
+                    // modele.getSerpentJoueur().resetPositionMap(newX,newY);
+                    // xSnake = modele.getSerpentJoueur().getHeadPositionX();
+                    // ySnake = modele.getSerpentJoueur().getHeadPositionY();
             
 
                 // modele.getAllSnake().stream()

@@ -187,11 +187,11 @@ public class Modele {
 
     public void updateObjetJeu(double xGap, double yGap) {
         objetJeu.forEach(element -> {
+            element.decallement(xGap, yGap);
             if(!(element instanceof SnakeIA) && (element instanceof Snake)){            // si c'est le serpent du joueur
                 setPosXTotal(xGap);
                 setPosYTotal(yGap);
             }
-            element.decallement(xGap, yGap);
         });
     }
 
