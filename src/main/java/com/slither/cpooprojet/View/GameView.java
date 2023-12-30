@@ -48,9 +48,17 @@ public class GameView extends StackPane {
     public void draw() {
         graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        drawAllSnake();
-        drawFood();
-        drawField(modele.getSerpentJoueur().getHeadPositionX(), modele.getSerpentJoueur().getHeadPositionY());
+        //drawAllSnake();
+        //drawFood();
+        for(int i=-1; i<2; i++){
+            double transpositionX = i*View.SCREENWIDTH;
+            for(int j=-1; j<2; j++){
+                double transpositionY = j*View.SCREENHEIGHT;
+                drawAllSnake(transpositionX, transpositionY);
+                drawFood(transpositionX, transpositionY);
+            }
+        }
+        //drawField(modele.getSerpentJoueur().getHeadPositionX(), modele.getSerpentJoueur().getHeadPositionY());
     }
 
     private void drawField(double x, double y) {
@@ -71,7 +79,7 @@ public class GameView extends StackPane {
         }
     }
 
-    private void drawAllSnake() {
+    private void drawAllSnake(double transpositionX, double transpositionY) {
         ArrayList<Snake> allSnake = modele.getAllSnake();
         for (int i = 0; i < allSnake.size(); i++) {
             // if (allSnake.get(i) instanceof SnakeIA) {
@@ -81,43 +89,43 @@ public class GameView extends StackPane {
             // snakeIA.getZone().getMinY(), snakeIA.getZone().getWidth(),
             // snakeIA.getZone().getHeight());
             // }
-            drawSnake(allSnake.get(i));
+            drawSnake(allSnake.get(i), transpositionX, transpositionY);
         }
     }
 
-    private void drawSnake(Snake serpent) {
+    private void drawSnake(Snake serpent,double transpositionX, double transpositionY) {
         Image skin = serpent.getSkin();
 
         // addBackground();
 
         for (int i = 1; i < serpent.getTaille(); i++) {
             graphicsContext.setFill(serpent.getCouleur());
-            graphicsContext.fillOval(serpent.getSegments().get(i).getX(), serpent.getSegments().get(i).getY(),
+            graphicsContext.fillOval(serpent.getSegments().get(i).getX()+transpositionX, serpent.getSegments().get(i).getY()+transpositionY,
                     SnakePart.SNAKEPARTSIZE, SnakePart.SNAKEPARTSIZE);
         }
 
         graphicsContext.save();
         graphicsContext.beginPath();
-        graphicsContext.arc(serpent.getHeadPositionX() + SnakePart.SNAKEPARTSIZE / 2,
-                serpent.getHeadPositionY() + SnakePart.SNAKEPARTSIZE / 2,
+        graphicsContext.arc(serpent.getHeadPositionX() + SnakePart.SNAKEPARTSIZE / 2+transpositionX,
+                serpent.getHeadPositionY() + SnakePart.SNAKEPARTSIZE / 2+transpositionY,
                 SnakePart.SNAKEPARTSIZE / 2,
                 SnakePart.SNAKEPARTSIZE / 2,
                 0, 360);
         graphicsContext.closePath();
         graphicsContext.clip();
 
-        graphicsContext.drawImage(skin, serpent.getHeadPositionX(), serpent.getHeadPositionY(),
+        graphicsContext.drawImage(skin, serpent.getHeadPositionX()+transpositionX, serpent.getHeadPositionY()+transpositionY,
                 SnakePart.SNAKEPARTSIZE, SnakePart.SNAKEPARTSIZE);
 
         graphicsContext.restore();
     }
 
-    private void drawFood() {
+    private void drawFood(double transpositionX, double transpositionY) {
         modele.update_food_tab_food();
         ArrayList<Food> foodList = modele.getFoodList();
         for (int i = 0; i < foodList.size(); i++) {
             graphicsContext.setFill(foodList.get(i).getCouleur());
-            graphicsContext.fillOval(foodList.get(i).getX(), foodList.get(i).getY(), Food.FOODSIZE, Food.FOODSIZE);
+            graphicsContext.fillOval(foodList.get(i).getX()+transpositionX, foodList.get(i).getY()+transpositionY, Food.FOODSIZE, Food.FOODSIZE);
         }
     }
 

@@ -50,7 +50,7 @@ public class Modele {
 
     private ArrayList<SnakeIA> generateIAsnake() {
         ArrayList<SnakeIA> IAsnake = new ArrayList<SnakeIA>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             IAsnake.add(SnakeIA.cree_ia_serpent());
         }
         return IAsnake;
