@@ -69,6 +69,14 @@ public sealed class Snake implements Decalage permits SnakeIA {
         });
     }
 
+    public void teleportation(Point2D position) {
+        SnakePart head = getHead();
+        double distanceX = position.getX() - head.getX();
+        double distanceY = position.getY() - head.getY();
+
+        decallement(distanceX, distanceY);
+    }
+
     public void setHeadPosition(Point2D position) {
         SnakePart head = getHead();
 

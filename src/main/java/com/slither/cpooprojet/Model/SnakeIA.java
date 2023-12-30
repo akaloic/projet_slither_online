@@ -1,6 +1,5 @@
 package com.slither.cpooprojet.Model;
 
-import com.slither.cpooprojet.Main;
 import com.slither.cpooprojet.View.View;
 
 import java.util.ArrayList;
@@ -17,8 +16,8 @@ public non-sealed class SnakeIA extends Snake {
         super();
         this.segments = init();
         this.isIA = true;
-        this.directionX = Math.random() * 2 - 1;
-        this.directionY = Math.random() * 2 - 1;
+        this.directionX = initDirection();
+        this.directionY =   initDirection();
         this.zone = new Rectangle2D(getHeadPositionX() - View.SCREENWIDTH / 2,
                 getHeadPositionY() - View.SCREENHEIGHT / 2, View.SCREENWIDTH, View.SCREENHEIGHT);
     }
@@ -43,7 +42,7 @@ public non-sealed class SnakeIA extends Snake {
         super.setHeadPosition(position);
         zone = new Rectangle2D(getHeadPositionX() - 100, getHeadPositionY() - 100, 200, 200);
     }
-    
+
     public static SnakeIA cree_ia_serpent() {
         return new SnakeIA();
     }
@@ -83,15 +82,20 @@ public non-sealed class SnakeIA extends Snake {
         double x = snake.getHeadPositionX() + directionX;
         double y = snake.getHeadPositionY() + directionY;
         if (x < Carre3x3.TOTALFIELD.getMinX() || x > Carre3x3.TOTALFIELD.getMaxX()) {
-            directionX = -directionX;
+            directionX = -directionX; 
             x = snake.getHeadPositionX() + directionX;
         }
+    
         if (y < Carre3x3.TOTALFIELD.getMinY() || y > Carre3x3.TOTALFIELD.getMaxY()) {
-            directionY = -directionY;
+            directionY = -directionY; 
             y = snake.getHeadPositionY() + directionY;
         }
-
+        
         snake.setHeadPosition(new Point2D(x, y));
+    }
+
+    private double initDirection(){
+        return Math.random() * 2 - 1;
     }
 
     private void moveSnakeTowardPointOrRandomly(Snake snake, Rectangle2D zone, ArrayList<Food> foodList) {

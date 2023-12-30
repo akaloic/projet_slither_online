@@ -12,15 +12,15 @@ public class Carre3x3 {
     public Carre3x3() {
         fields = new ArrayList<Field>();
 
-        this.fields.add(new Field(new Rectangle2D(-View.SCREENWIDTH, -View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)));
-        this.fields.add(new Field(new Rectangle2D(0, -View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)));
-        this.fields.add(new Field(new Rectangle2D(View.SCREENWIDTH, -View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)));
-        this.fields.add(new Field(new Rectangle2D(-View.SCREENWIDTH, 0, View.SCREENWIDTH, View.SCREENHEIGHT)));
-        this.fields.add(new Field(new Rectangle2D(0, 0, View.SCREENWIDTH, View.SCREENHEIGHT)));
-        this.fields.add(new Field(new Rectangle2D(View.SCREENWIDTH, 0, View.SCREENWIDTH, View.SCREENHEIGHT)));
-        this.fields.add(new Field(new Rectangle2D(-View.SCREENWIDTH, View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)));
-        this.fields.add(new Field(new Rectangle2D(0, View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)));
-        this.fields.add(new Field(new Rectangle2D(View.SCREENWIDTH, View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)));
+        this.fields.add(new Field(new Rectangle2D(-View.SCREENWIDTH, -View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)));    // (0, 0)
+        this.fields.add(new Field(new Rectangle2D(0, -View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)));    // (1, 0)
+        this.fields.add(new Field(new Rectangle2D(View.SCREENWIDTH, -View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)));   // (2, 0)
+        this.fields.add(new Field(new Rectangle2D(-View.SCREENWIDTH, 0, View.SCREENWIDTH, View.SCREENHEIGHT)));   // (0, 1)
+        this.fields.add(new Field(new Rectangle2D(0, 0, View.SCREENWIDTH, View.SCREENHEIGHT)));  // (1, 1) -> centre
+        this.fields.add(new Field(new Rectangle2D(View.SCREENWIDTH, 0, View.SCREENWIDTH, View.SCREENHEIGHT)));  // (2, 1)
+        this.fields.add(new Field(new Rectangle2D(-View.SCREENWIDTH, View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT))); // (0, 2)
+        this.fields.add(new Field(new Rectangle2D(0, View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)));  // (1, 2)
+        this.fields.add(new Field(new Rectangle2D(View.SCREENWIDTH, View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)));  // (2, 2)
 
     }
 
@@ -67,7 +67,22 @@ public class Carre3x3 {
         return null;
     }
 
+    /**
+     * 0 : (0, 0)
+     * 1 : (1, 0)
+     * 2 : (2, 0)
+     * 3 : (0, 1)
+     * 4 : (1, 1) -> centre
+     * 5 : (2, 1)
+     * 6 : (0, 2)
+     * 7 : (1, 2)
+     * 8 : (2, 2)
+     */
     public ArrayList<Field> getFields() {
         return fields;
+    }
+
+    public Field getCentre() {
+        return fields.get(4);
     }
 }

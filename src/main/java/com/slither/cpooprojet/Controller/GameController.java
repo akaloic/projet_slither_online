@@ -2,16 +2,17 @@ package com.slither.cpooprojet.Controller;
 
 import com.slither.cpooprojet.Model.Modele;
 import com.slither.cpooprojet.Model.SnakeIA;
+import com.slither.cpooprojet.Model.Carre3x3.Field;
 import com.slither.cpooprojet.Model.Snake;
 import com.slither.cpooprojet.View.GameView;
 import com.slither.cpooprojet.View.View;
 
 import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.input.*;
 import javafx.animation.AnimationTimer;
 
 import java.util.Optional;
-
 
 public class GameController {
     private Modele modele;
@@ -100,18 +101,6 @@ public class GameController {
         }
     }
 
-    private boolean isOut(){
-        double posmaxX = gameView.getView().SCREENWIDTH;                                       //à modifier avec la taille de la scene
-        double posmaxY = gameView.getView().SCREENHEIGHT;
-        double posSerpX = modele.getPosXTotal();
-        double posSerpY = modele.getPosYTotal();
-
-        if(posSerpX< 0 || posSerpX > posmaxX || posSerpY<0 || posSerpY> posmaxY){
-            return true;
-        }
-        else return false;
-    }
-
     public void updateGame(double currentTime) {
         if (!jeuFinis) {
             modele.updateIA();
@@ -133,80 +122,87 @@ public class GameController {
                         lastUpdateTime = currentTime;
                     }
                 });
-
+                
                 modele.getSerpentJoueur().setHeadPosition(positionSouris);
 
                 double xSnake = modele.getSerpentJoueur().getHeadPositionX();
                 double ySnake = modele.getSerpentJoueur().getHeadPositionY();
-                double xGap;                        //modifie le déplacement plus ou moins fort entre chaque update en X
-                double yGap;                        //modifie le déplacement plus ou moins fort entre chaque update en Y
-                if(isOut()){
-                    if(modele.getPosXTotal()<0){
-                        
-                    }else if(modele.getPosXTotal()>gameView.getView().SCREENWIDTH){
-                        
-                    }else ;
 
-                    if(modele.getPosYTotal()<0){
-                        
-                    }else if(modele.getPosYTotal()>gameView.getView().SCREENHEIGHT){
-                        
-                    }else ;
+                if (!modele.getCarre3x3().getCentre().getRect().contains(xSnake, ySnake)) {     // on pourra preciser par la suite avec oval
+                    Rectangle2D center = modele.getCarre3x3().getCentre().getRect();
+                    Point2D newPoint = null;
 
+                    if (xSnake < center.getMinX()) {
+                        newPoint = new Point2D(center.getMaxX(), ySnake);
+                    } else if (xSnake > center.getMaxX()) {
+                        newPoint = new Point2D(center.getMinX(), ySnake);
+                    }
+                    
+                    if (ySnake < center.getMinY()) {
+                        newPoint = new Point2D(xSnake, center.getMaxY());
+                    } else if (ySnake > center.getMaxY()) {
+                        System.err.println("ySnake : " + ySnake + " " + center.getMinY() + " " + center.getMaxY());
+                        newPoint = new Point2D(xSnake, center.getMinY());
+                    }
 
+                    if (newPoint != null) {
+                        modele.teleportationHeadPlayer(newPoint);
+                    }
+                }
 
-                }//else{
-                    xGap = View.SCREENWIDTH / 2 - xSnake;
-                    yGap = View.SCREENHEIGHT / 2 - ySnake;
-                //}
+                double xGap; // modifie le déplacement plus ou moins fort entre chaque update en X
+                double yGap; // modifie le déplacement plus ou moins fort entre chaque update en Y
+
+                xGap = View.SCREENWIDTH / 2 - xSnake;
+                yGap = View.SCREENHEIGHT / 2 - ySnake;
 
                 modele.updateObjetJeu(xGap, yGap);
-                
+
             }
 
             // modele.getAllSnake().forEach(snake -> {
-            //     if(modele.checkCollision(snake) != null){
-            //         if (snake instanceof SnakeIA) {
-            //             modele.replace_snake_by_food(snake);
-            //             modele.getAllSnake().remove(snake);
-            //             modele.add_snake_ia();
-            //         } else {
-            //             jeuFinis = true;    // sinon c'est le serpent du joueur, donc le jeu est fini
-            //         }
-            //     }
+            // if(modele.checkCollision(snake) != null){
+            // if (snake instanceof SnakeIA) {
+            // modele.replace_snake_by_food(snake);
+            // modele.getAllSnake().remove(snake);
+            // modele.add_snake_ia();
+            // } else {
+            // jeuFinis = true; // sinon c'est le serpent du joueur, donc le jeu est fini
+            // }
+            // }
             // });
 
+            // double newX;
+            // double newY;
+            // if(xSnake<0) newX = gameView.getView().SCREENWIDTH;
+            // else if(xSnake>gameView.getView().SCREENWIDTH) newX = 0;
+            // else newX = xSnake;
 
-                    // double newX;
-                    // double newY;
-                    // if(xSnake<0) newX = gameView.getView().SCREENWIDTH;
-                    // else if(xSnake>gameView.getView().SCREENWIDTH) newX = 0;
-                    // else newX = xSnake;
+            // if(ySnake<0) newY = gameView.getView().SCREENHEIGHT;
+            // else if(ySnake>gameView.getView().SCREENHEIGHT) newY = 0;
+            // else newY = ySnake;
 
-                    // if(ySnake<0) newY = gameView.getView().SCREENHEIGHT;
-                    // else if(ySnake>gameView.getView().SCREENHEIGHT) newY = 0;
-                    // else newY = ySnake;
+            // modele.getSerpentJoueur().resetPositionMap(newX,newY);
+            // xSnake = modele.getSerpentJoueur().getHeadPositionX();
+            // ySnake = modele.getSerpentJoueur().getHeadPositionY();
 
-                    // modele.getSerpentJoueur().resetPositionMap(newX,newY);
-                    // xSnake = modele.getSerpentJoueur().getHeadPositionX();
-                    // ySnake = modele.getSerpentJoueur().getHeadPositionY();
-            
-
-                // modele.getAllSnake().stream()
-                //     .map(snake -> modele.checkCollision(snake))     // renvoie un Optional<Snake> indiquant si le serpent donné est en collision
-                //     .filter(Optional::isPresent)     // renvoie un stream avec les serpents en collision
-                //     .map(Optional::get)        // renvoie un stream avec les serpents en collision en convertissant l'Optional<Snake> en Snake
-                //     .forEach(snake -> {         // pour chaque serpent en collision
-                //         if (snake instanceof SnakeIA) {     // si c'est un serpent IA :
-                //             modele.replace_snake_by_food(snake);        // on le remplace par de la nourriture
-                //             modele.getAllSnake().remove(snake);         // on le supprime de la liste des serpents
-                //             modele.add_snake_ia();                      // on ajoute un nouveau serpent IA
-                //         } else {
-                //             jeuFinis = true;    // sinon c'est le serpent du joueur, donc le jeu est fini
-                //         }
-                // });
-
-
+            // modele.getAllSnake().stream()
+            // .map(snake -> modele.checkCollision(snake)) // renvoie un Optional<Snake>
+            // indiquant si le serpent donné est en collision
+            // .filter(Optional::isPresent) // renvoie un stream avec les serpents en
+            // collision
+            // .map(Optional::get) // renvoie un stream avec les serpents en collision en
+            // convertissant l'Optional<Snake> en Snake
+            // .forEach(snake -> { // pour chaque serpent en collision
+            // if (snake instanceof SnakeIA) { // si c'est un serpent IA :
+            // modele.replace_snake_by_food(snake); // on le remplace par de la nourriture
+            // modele.getAllSnake().remove(snake); // on le supprime de la liste des
+            // serpents
+            // modele.add_snake_ia(); // on ajoute un nouveau serpent IA
+            // } else {
+            // jeuFinis = true; // sinon c'est le serpent du joueur, donc le jeu est fini
+            // }
+            // });
 
             for (int i = 0; i < modele.getAllSnake().size(); i++) {
                 Optional<Snake> snake = modele.checkCollision(modele.getAllSnake().get(i));

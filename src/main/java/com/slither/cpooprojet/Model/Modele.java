@@ -3,6 +3,7 @@ package com.slither.cpooprojet.Model;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.slither.cpooprojet.Model.Carre3x3.Field;
 import com.slither.cpooprojet.View.View;
 
 import javafx.geometry.Point2D;
@@ -77,6 +78,20 @@ public class Modele {
         objetJeu = init();
     }
 
+    public void teleportationHeadPlayer(Point2D position) {
+        serpentJoueur.teleportation(position);
+        updateAllExeptFields(position.getX() - serpentJoueur.getHeadPositionX(),
+                position.getY() - serpentJoueur.getHeadPositionY());
+    }
+
+    private void updateAllExeptFields(double xGap, double yGap) {
+        objetJeu.forEach(element -> {
+            if (!(element instanceof Field)) {
+                element.decallement(xGap, yGap);
+            }
+        });
+    }
+
     // public void setPositionifOutofBands() {
     // if (getSerpentJoueur().getHeadPositionX() > View.SCREENWIDTH) {
     // getSerpentJoueur().getSegments().get(0).setX(0);
@@ -126,10 +141,10 @@ public class Modele {
     public void updateObjetJeu(double xGap, double yGap) {
         objetJeu.forEach(element -> {
             element.decallement(xGap, yGap);
-            if (!(element instanceof SnakeIA) && (element instanceof Snake)) { // si c'est le serpent du joueur
-                setPosXTotal(xGap);
-                setPosYTotal(yGap);
-            }
+            // if (!(element instanceof SnakeIA) && (element instanceof Snake)) { // si c'est le serpent du joueur
+            //     setPosXTotal(xGap);
+            //     setPosYTotal(yGap);
+            // }
         });
     }
 
