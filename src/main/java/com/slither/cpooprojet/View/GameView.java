@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import com.slither.cpooprojet.Model.Food;
 import com.slither.cpooprojet.Model.Modele;
 import com.slither.cpooprojet.Model.Snake;
-import com.slither.cpooprojet.Model.SnakeIA;
 import com.slither.cpooprojet.Model.SnakePart;
+import com.slither.cpooprojet.Model.Carre3x3.Field;
 
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -40,24 +41,45 @@ public class GameView extends StackPane {
     }
 
     // private void addBackground() {
-    //     Image image = new Image("file:src/main/resources/slither/background.jpg");
-    //     graphicsContext.drawImage(image, 0, 0, View.SCREENWIDTH, View.SCREENHEIGHT);
+    // Image image = new Image("file:src/main/resources/slither/background.jpg");
+    // graphicsContext.drawImage(image, 0, 0, View.SCREENWIDTH, View.SCREENHEIGHT);
     // }
 
     public void draw() {
+        graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
         drawAllSnake();
         drawFood();
+        drawField(modele.getSerpentJoueur().getHeadPositionX(), modele.getSerpentJoueur().getHeadPositionY());
+    }
+
+    private void drawField(double x, double y) {
+        ArrayList<Field> field_list = modele.getCarre3x3().getFields();
+
+        for (Field field : field_list) {
+            boolean in_vision = field.getRect().intersects(x - View.SCREENWIDTH / 2, y - View.SCREENHEIGHT / 2,
+                    View.SCREENWIDTH, View.SCREENHEIGHT);
+
+            if (in_vision) {
+                Rectangle2D rect = field.getRect();
+                graphicsContext.setFill(new Color(1, 1, 1, 0));
+                graphicsContext.fillRect(rect.getMinX(), rect.getMinY(), View.SCREENWIDTH, View.SCREENHEIGHT);
+                graphicsContext.setStroke(Color.BLACK);
+                graphicsContext.setLineWidth(2);
+                graphicsContext.strokeRect(rect.getMinX(), rect.getMinY(), View.SCREENWIDTH, View.SCREENHEIGHT);
+            }
+        }
     }
 
     private void drawAllSnake() {
-        graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         ArrayList<Snake> allSnake = modele.getAllSnake();
         for (int i = 0; i < allSnake.size(); i++) {
             // if (allSnake.get(i) instanceof SnakeIA) {
-            //     SnakeIA snakeIA = (SnakeIA) allSnake.get(i);
-            //     graphicsContext.setFill(Color.BLUE);
-            //     graphicsContext.fillRect(snakeIA.getZone().getMinX(), snakeIA.getZone().getMinY(), snakeIA.getZone().getWidth(),
-            //             snakeIA.getZone().getHeight());
+            // SnakeIA snakeIA = (SnakeIA) allSnake.get(i);
+            // graphicsContext.setFill(Color.BLUE);
+            // graphicsContext.fillRect(snakeIA.getZone().getMinX(),
+            // snakeIA.getZone().getMinY(), snakeIA.getZone().getWidth(),
+            // snakeIA.getZone().getHeight());
             // }
             drawSnake(allSnake.get(i));
         }
@@ -91,7 +113,7 @@ public class GameView extends StackPane {
     }
 
     private void drawFood() {
-        modele.update_food_field();
+        modele.update_food_tab_food();
         ArrayList<Food> foodList = modele.getFoodList();
         for (int i = 0; i < foodList.size(); i++) {
             graphicsContext.setFill(foodList.get(i).getCouleur());
@@ -105,7 +127,7 @@ public class GameView extends StackPane {
                 SnakePart.SNAKEPARTSIZE);
     }
 
-    public void showAccueil(){
+    public void showAccueil() {
         parent.showAccueil();
     }
 
@@ -148,7 +170,7 @@ public class GameView extends StackPane {
         this.modele = modele;
     }
 
-    public View getView(){
+    public View getView() {
         return this.parent;
     }
     // --------------------------------

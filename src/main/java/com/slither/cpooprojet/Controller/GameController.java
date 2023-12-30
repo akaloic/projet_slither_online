@@ -11,8 +11,7 @@ import javafx.scene.input.*;
 import javafx.animation.AnimationTimer;
 
 import java.util.Optional;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class GameController {
     private Modele modele;
