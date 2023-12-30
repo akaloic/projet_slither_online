@@ -25,8 +25,8 @@ public non-sealed class SnakeIA extends Snake {
     @Override
     protected ArrayList<SnakePart> init() {
         segments = new ArrayList<SnakePart>();
-        segments.add(new SnakePart(Math.random() * Carre3x3.TOTALFIELD.getWidth() + Carre3x3.TOTALFIELD.getMinX(),
-                Math.random() * Carre3x3.TOTALFIELD.getHeight() + Carre3x3.TOTALFIELD.getMinY()));
+        segments.add(new SnakePart(Math.random() * (Carre3x3.TOTALFIELD.getWidth()/3),
+                Math.random() * (Carre3x3.TOTALFIELD.getHeight()/3)));
         for (int i = 0; i < 10; i++) {
             addNewPart();
         }

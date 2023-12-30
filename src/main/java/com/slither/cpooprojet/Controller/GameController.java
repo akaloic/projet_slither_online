@@ -125,30 +125,59 @@ public class GameController {
                 
                 modele.getSerpentJoueur().setHeadPosition(positionSouris);
 
+
+                for(Snake snake : modele.getAllSnake()){
+                    double xSnake = snake.getHeadPositionX();
+                    double ySnake = snake.getHeadPositionY();
+                    
+                    System.out.println(modele.getCarre3x3().getCentre().getRect().contains(xSnake, ySnake));
+                    if (!modele.getCarre3x3().getCentre().getRect().contains(xSnake, ySnake)) {     // on pourra preciser par la suite avec oval
+                        Rectangle2D center = modele.getCarre3x3().getCentre().getRect();
+                        Point2D newPoint = null;
+    
+                        if (xSnake < center.getMinX()) {
+                            newPoint = new Point2D(center.getMaxX(), ySnake);
+                        } else if (xSnake > center.getMaxX()) {
+                            newPoint = new Point2D(center.getMinX(), ySnake);
+                        }
+                        
+                        if (ySnake < center.getMinY()) {
+                            newPoint = new Point2D(xSnake, center.getMaxY());
+                        } else if (ySnake > center.getMaxY()) {
+                            newPoint = new Point2D(xSnake, center.getMinY());
+                        }
+                        if (newPoint != null) {
+                            if(snake instanceof SnakeIA){
+                                ((SnakeIA) snake).setHeadPosition(newPoint);
+                            }else{
+                                modele.teleportationHeadPlayer(newPoint);
+                            }
+                        }
+                    }
+                }
                 double xSnake = modele.getSerpentJoueur().getHeadPositionX();
                 double ySnake = modele.getSerpentJoueur().getHeadPositionY();
 
-                if (!modele.getCarre3x3().getCentre().getRect().contains(xSnake, ySnake)) {     // on pourra preciser par la suite avec oval
-                    Rectangle2D center = modele.getCarre3x3().getCentre().getRect();
-                    Point2D newPoint = null;
+                // if (!modele.getCarre3x3().getCentre().getRect().contains(xSnake, ySnake)) {     // on pourra preciser par la suite avec oval
+                //     Rectangle2D center = modele.getCarre3x3().getCentre().getRect();
+                //     Point2D newPoint = null;
 
-                    if (xSnake < center.getMinX()) {
-                        newPoint = new Point2D(center.getMaxX(), ySnake);
-                    } else if (xSnake > center.getMaxX()) {
-                        newPoint = new Point2D(center.getMinX(), ySnake);
-                    }
+                //     if (xSnake < center.getMinX()) {
+                //         newPoint = new Point2D(center.getMaxX(), ySnake);
+                //     } else if (xSnake > center.getMaxX()) {
+                //         newPoint = new Point2D(center.getMinX(), ySnake);
+                //     }
                     
-                    if (ySnake < center.getMinY()) {
-                        newPoint = new Point2D(xSnake, center.getMaxY());
-                    } else if (ySnake > center.getMaxY()) {
-                        System.err.println("ySnake : " + ySnake + " " + center.getMinY() + " " + center.getMaxY());
-                        newPoint = new Point2D(xSnake, center.getMinY());
-                    }
+                //     if (ySnake < center.getMinY()) {
+                //         newPoint = new Point2D(xSnake, center.getMaxY());
+                //     } else if (ySnake > center.getMaxY()) {
+                //         newPoint = new Point2D(xSnake, center.getMinY());
+                //     }
 
-                    if (newPoint != null) {
-                        modele.teleportationHeadPlayer(newPoint);
-                    }
-                }
+                //     if (newPoint != null) {
+                //         modele.teleportationHeadPlayer(newPoint);
+                //     }
+                // }
 
                 double xGap; // modifie le déplacement plus ou moins fort entre chaque update en X
                 double yGap; // modifie le déplacement plus ou moins fort entre chaque update en Y
