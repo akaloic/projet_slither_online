@@ -33,10 +33,7 @@ public class Carre3x3 {
 
         @Override
         public void decallement(double x, double y) {
-            System.out.println("anciennes positions : " + rect.getMinX() + " " + rect.getMinY());
             this.rect = new Rectangle2D(rect.getMinX() + x, rect.getMinY() + y, View.SCREENWIDTH, View.SCREENHEIGHT);
-            System.out.println("nouvelles positions : " + rect.getMinX() + " " + rect.getMinY());
-            System.out.println();
         }
 
         public Rectangle2D getRect() {
