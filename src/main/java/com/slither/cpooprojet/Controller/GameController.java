@@ -130,7 +130,6 @@ public class GameController {
                     double xSnake = snake.getHeadPositionX();
                     double ySnake = snake.getHeadPositionY();
                     
-                    System.out.println(modele.getCarre3x3().getCentre().getRect().contains(xSnake, ySnake));
                     if (!modele.getCarre3x3().getCentre().getRect().contains(xSnake, ySnake)) {     // on pourra preciser par la suite avec oval
                         Rectangle2D center = modele.getCarre3x3().getCentre().getRect();
                         Point2D newPoint = null;
@@ -148,13 +147,15 @@ public class GameController {
                         }
                         if (newPoint != null) {
                             if(snake instanceof SnakeIA){
-                                ((SnakeIA) snake).setHeadPosition(newPoint);
+                                modele.teleportationHeadIA(newPoint, (SnakeIA) snake);
                             }else{
                                 modele.teleportationHeadPlayer(newPoint);
                             }
                         }
                     }
                 }
+                //ajout de maj pour tous
+
                 double xSnake = modele.getSerpentJoueur().getHeadPositionX();
                 double ySnake = modele.getSerpentJoueur().getHeadPositionY();
 

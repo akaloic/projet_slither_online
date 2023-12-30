@@ -84,6 +84,12 @@ public class Modele {
                 position.getY() - serpentJoueur.getHeadPositionY());
     }
 
+    public void teleportationHeadIA(Point2D position, SnakeIA snake) {
+        snake.teleportation(position);
+        snake.decallement(position.getX() - snake.getHeadPositionX(),
+                position.getY() - snake.getHeadPositionY());
+    }
+
     private void updateAllExeptFields(double xGap, double yGap) {
         objetJeu.forEach(element -> {
             if (!(element instanceof Field)) {
@@ -91,6 +97,7 @@ public class Modele {
             }
         });
     }
+
 
     // public void setPositionifOutofBands() {
     // if (getSerpentJoueur().getHeadPositionX() > View.SCREENWIDTH) {
