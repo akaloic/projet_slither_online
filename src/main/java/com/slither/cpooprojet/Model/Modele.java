@@ -2,11 +2,14 @@ package com.slither.cpooprojet.Model;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Comparator;
+import java.util.TreeMap;
 
 import com.slither.cpooprojet.Model.Carre3x3.Field;
 import com.slither.cpooprojet.View.View;
 
 import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Circle;
 
 public class Modele {
@@ -72,7 +75,7 @@ public class Modele {
         return tab_food;
     }
     // -------------------------------------------------------------- //
-    
+
     private void majObjetJeu() {
         objetJeu.clear();
         objetJeu = init();
@@ -141,9 +144,10 @@ public class Modele {
     public void updateObjetJeu(double xGap, double yGap) {
         objetJeu.forEach(element -> {
             element.decallement(xGap, yGap);
-            // if (!(element instanceof SnakeIA) && (element instanceof Snake)) { // si c'est le serpent du joueur
-            //     setPosXTotal(xGap);
-            //     setPosYTotal(yGap);
+            // if (!(element instanceof SnakeIA) && (element instanceof Snake)) { // si
+            // c'est le serpent du joueur
+            // setPosXTotal(xGap);
+            // setPosYTotal(yGap);
             // }
         });
     }
@@ -188,21 +192,39 @@ public class Modele {
 
     /**
      * @brief checkCollision, vérifie si un serpent est en collision avec un autre
-     *        serpent parmi tous les autres serpents dans objetJeu
+     *        serpent parmi tous les autres serpents dans objetJeu. 
      * @param snake
      * @return le serpent en collision avec snake, sinon rien
      */
     public Optional<Snake> checkCollision(Snake snake) {
         Circle headCircle = snake.getHead().getCercle();
-
+    
         return allSnake.stream()
-                .filter(snakeX -> snake != snakeX && isCloseEnough(snake, snakeX)) // renvoie un stream avec les
-                                                                                   // serpents "isCloseEnough" de snake
-                                                                                   // et different de snake
-                .flatMap(snakeX -> snakeX.getSegments().stream())
-                .filter(part -> headCircle.intersects(part.getCercle().getBoundsInLocal()))
-                .findFirst()
-                .map(part -> snake);
+                       .filter(snakeX -> snake != snakeX && isCloseEnough(snake, snakeX, snakeX.getZone()))
+                       .flatMap(snakeX -> snakeX.getSegments().stream())
+                       .filter(part -> headCircle.intersects(part.getCercle().getBoundsInLocal()))
+                       .findFirst()
+                       .map(part -> snake);
+    }
+
+    private boolean isCloseEnough(Snake snake, Snake otherSnake, Rectangle2D zone) {
+        double minX = Double.MAX_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE;
+        double maxY = Double.MIN_VALUE;
+
+        for (SnakePart part : otherSnake.getSegments()) {
+            Circle partCircle = part.getCercle();
+            minX = Math.min(minX, partCircle.getCenterX() - partCircle.getRadius());
+            minY = Math.min(minY, partCircle.getCenterY() - partCircle.getRadius());
+            maxX = Math.max(maxX, partCircle.getCenterX() + partCircle.getRadius());
+            maxY = Math.max(maxY, partCircle.getCenterY() + partCircle.getRadius());
+        }
+
+        Rectangle2D otherSnakeBoundingBox = new Rectangle2D(minX, minY, maxX - minX, maxY - minY);
+
+        // Vérifier si les bounding boxes s'intersectent
+        return zone.intersects(otherSnakeBoundingBox);
     }
 
     // public Snake checkCollision(Snake snake) {
