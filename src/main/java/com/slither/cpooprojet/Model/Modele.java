@@ -2,8 +2,6 @@ package com.slither.cpooprojet.Model;
 
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.Comparator;
-import java.util.TreeMap;
 
 import com.slither.cpooprojet.Model.Carre3x3.Field;
 import com.slither.cpooprojet.View.View;
