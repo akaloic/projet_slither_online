@@ -54,8 +54,13 @@ public class GameView extends StackPane {
             double transpositionX = i*View.SCREENWIDTH;
             for(int j=-1; j<2; j++){
                 double transpositionY = j*View.SCREENHEIGHT;
-                drawAllSnake(transpositionX, transpositionY);
-                drawFood(transpositionX, transpositionY);
+                if(isInVue(transpositionX, transpositionY)){
+                    drawAllSnake(transpositionX, transpositionY);
+                    drawFood(transpositionX, transpositionY);
+                }else if(i==0 && j==0){
+                    drawAllSnake(transpositionX, transpositionY);
+                    drawFood(transpositionX, transpositionY);
+                }
             }
         }
         //drawField(modele.getSerpentJoueur().getHeadPositionX(), modele.getSerpentJoueur().getHeadPositionY());
@@ -137,6 +142,10 @@ public class GameView extends StackPane {
 
     public void showAccueil() {
         parent.showAccueil();
+    }
+
+    private boolean isInVue(double x, double y){
+        return !modele.getCarre3x3().getCentre().getRect().intersects(x+1, y+1, View.SCREENWIDTH, View.SCREENHEIGHT);
     }
 
     public void ajtPause() {
