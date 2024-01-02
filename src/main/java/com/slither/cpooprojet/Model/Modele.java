@@ -151,7 +151,7 @@ public class Modele {
      * @return snake mis à jour dans le cas où il a mangé de la nourriture sinon
      *         rien
      */
-    private Snake update_food_tab_food_i(Snake snake) {
+    private void update_food_tab_food_i(Snake snake) {
         for (int i = 0; i < foodList.size(); i++) {
             Point2D foodPoint = new Point2D(foodList.get(i).getX(), foodList.get(i).getY());
             Circle foodCircle = new Circle(foodPoint.getX(), foodPoint.getY(), Food.FOODSIZE / 2);
@@ -160,7 +160,6 @@ public class Modele {
                 snake.addNewPart();
             }
         }
-        return snake;
     }
 
     /**
