@@ -9,7 +9,7 @@ public non-sealed class Food implements Decalage {
 
     private double x;
     private double y;
-    private Color couleur;
+    private final Color couleur;
 
     public Food(double x, double y) {
         this.x = x;
