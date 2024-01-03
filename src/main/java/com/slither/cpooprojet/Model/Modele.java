@@ -15,7 +15,6 @@ public class Modele {
     private ArrayList<SnakeIA> IAsnake;
     private ArrayList<Snake> allSnake;
     private ArrayList<Food> foodList;
-    private boolean[][] tab_food;
     private ArrayList<Decalage> objetJeu;
     private static double posXTotal;
     private static double posYTotal;
@@ -23,7 +22,6 @@ public class Modele {
 
     public Modele() {
         this.foodList = generateFoods();
-        this.tab_food = generate_tab_food();
         this.serpentJoueur = Snake.cree_joueur_serpent();
         this.IAsnake = generateIAsnake();
         this.allSnake = allSnake();
@@ -63,14 +61,6 @@ public class Modele {
             foodList.add(new Food(Math.random() * View.SCREENWIDTH, Math.random() * View.SCREENHEIGHT));
         }
         return foodList;
-    }
-
-    private boolean[][] generate_tab_food() { // utiliser que pour l'instanciation
-        boolean[][] tab_food = new boolean[(int) View.SCREENWIDTH][(int) View.SCREENHEIGHT];
-        for (int i = 0; i < foodList.size(); i++) {
-            tab_food[(int) foodList.get(i).getX()][(int) foodList.get(i).getY()] = true;
-        }
-        return tab_food;
     }
     // -------------------------------------------------------------- //
 
@@ -149,11 +139,6 @@ public class Modele {
     public void updateObjetJeu(double xGap, double yGap) {
         objetJeu.forEach(element -> {
             element.decallement(xGap, yGap);
-            // if (!(element instanceof SnakeIA) && (element instanceof Snake)) { // si
-            // c'est le serpent du joueur
-            // setPosXTotal(xGap);
-            // setPosYTotal(yGap);
-            // }
         });
     }
 
@@ -166,22 +151,15 @@ public class Modele {
      * @return snake mis à jour dans le cas où il a mangé de la nourriture sinon
      *         rien
      */
-    private Snake update_food_tab_food_i(Snake snake) {
+    private void update_food_tab_food_i(Snake snake) {
         for (int i = 0; i < foodList.size(); i++) {
             Point2D foodPoint = new Point2D(foodList.get(i).getX(), foodList.get(i).getY());
             Circle foodCircle = new Circle(foodPoint.getX(), foodPoint.getY(), Food.FOODSIZE / 2);
             if (snake.getHead().getCercle().intersects(foodCircle.getBoundsInLocal())) {
-                int x = (int) foodList.get(i).getX();
-                int y = (int) foodList.get(i).getY();
-                if (x >= 0 && x < tab_food.length && y >= 0 && y < tab_food[x].length) {
-                    tab_food[x][y] = false;
-                    foodList.get(i).reposition();
-                    snake.addNewPart();
-                    tab_food[x][y] = true;
-                }
+                foodList.get(i).reposition();
+                snake.addNewPart();
             }
         }
-        return snake;
     }
 
     /**
@@ -228,7 +206,6 @@ public class Modele {
 
         Rectangle2D otherSnakeBoundingBox = new Rectangle2D(minX, minY, maxX - minX, maxY - minY);
 
-        // Vérifier si les bounding boxes s'intersectent
         return zone.intersects(otherSnakeBoundingBox);
     }
 
@@ -265,22 +242,6 @@ public class Modele {
     // }
 
     /**
-     * @brief isCloseEnough, vérifie si deux serpents sont assez proches l'un de
-     *        l'autre pour être en collision
-     * @param snake1
-     * @param snake2
-     * @return true si les deux serpents sont assez proches l'un de l'autre pour
-     *         être en collision, sinon false
-     */
-    private boolean isCloseEnough(Snake snake1, Snake snake2) {
-        double distance = snake1.getHead().getCercle().getRadius() + snake1.getTaille() +
-                snake2.getHead().getCercle().getRadius() + snake2.getTaille();
-        double dx = snake1.getHead().getX() - snake2.getHead().getX();
-        double dy = snake1.getHead().getY() - snake2.getHead().getY();
-        return (dx * dx + dy * dy) <= (distance * distance);
-    }
-
-    /**
      * @brief replace_snake_by_food, remplace un serpent par de la nourriture
      * @param snake
      */
@@ -288,10 +249,7 @@ public class Modele {
         for (int i = 0; i < snake.getTaille(); i++) {
             int x = (int) snake.getSegments().get(i).getX();
             int y = (int) snake.getSegments().get(i).getY();
-            if (x >= 0 && x < tab_food.length && y >= 0 && y < tab_food[x].length) {
-                tab_food[x][y] = false;
-                foodList.add(new Food(x, y));
-            }
+            foodList.add(new Food(x, y));
         }
 
         if (snake instanceof SnakeIA) {
@@ -322,10 +280,6 @@ public class Modele {
 
     public ArrayList<Snake> getAllSnake() {
         return allSnake;
-    }
-
-    public boolean[][] gettab_food() {
-        return tab_food;
     }
 
     public ArrayList<Decalage> getObjetJeu() {
