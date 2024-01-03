@@ -23,7 +23,7 @@ public class GameController {
     private boolean spacePressed = false;
     private boolean pause = false;
     private double lastUpdateTime = 0;
-    private final double RETIRE_INTERVAL = 0.3;
+    private final double RETIRE_INTERVAL = 0.5;
 
     public GameController(Modele modele, GameView gameView) {
         this.modele = new Modele();

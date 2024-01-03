@@ -206,7 +206,6 @@ public class Modele {
 
         Rectangle2D otherSnakeBoundingBox = new Rectangle2D(minX, minY, maxX - minX, maxY - minY);
 
-        // Vérifier si les bounding boxes s'intersectent
         return zone.intersects(otherSnakeBoundingBox);
     }
 
@@ -241,22 +240,6 @@ public class Modele {
 
     // return distance < SnakePart.SNAKEPARTSIZE * 5;
     // }
-
-    /**
-     * @brief isCloseEnough, vérifie si deux serpents sont assez proches l'un de
-     *        l'autre pour être en collision
-     * @param snake1
-     * @param snake2
-     * @return true si les deux serpents sont assez proches l'un de l'autre pour
-     *         être en collision, sinon false
-     */
-    private boolean isCloseEnough(Snake snake1, Snake snake2) {
-        double distance = snake1.getHead().getCercle().getRadius() + snake1.getTaille() +
-                snake2.getHead().getCercle().getRadius() + snake2.getTaille();
-        double dx = snake1.getHead().getX() - snake2.getHead().getX();
-        double dy = snake1.getHead().getY() - snake2.getHead().getY();
-        return (dx * dx + dy * dy) <= (distance * distance);
-    }
 
     /**
      * @brief replace_snake_by_food, remplace un serpent par de la nourriture
