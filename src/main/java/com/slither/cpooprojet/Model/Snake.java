@@ -50,14 +50,14 @@ public sealed class Snake implements Decalage permits SnakeIA {
 
     public void acceleration() {
         if (!acceleration && segments.size() > 1) {
-            vitesse *= 3;
+            vitesse *= 6;
             acceleration = true;
         }
     }
 
     public void deceleration() {
         if (acceleration) {
-            vitesse /= 3;
+            vitesse /= 6;
             acceleration = false;
         }
     }
@@ -115,6 +115,7 @@ public sealed class Snake implements Decalage permits SnakeIA {
             }
         }
     }
+    
     public void resetPositionMap(double newX,double newY){
         setHeadPosition(new Point2D(newX,newY));
     }
