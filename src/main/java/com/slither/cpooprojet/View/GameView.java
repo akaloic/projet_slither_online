@@ -31,8 +31,6 @@ public class GameView extends StackPane {
         this.modele = modele;
         this.parent = parent;
 
-        // addBackground();
-
         canvas.setFocusTraversable(true);
         canvas.requestFocus();
 

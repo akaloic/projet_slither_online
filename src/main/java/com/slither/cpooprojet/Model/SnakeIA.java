@@ -12,12 +12,12 @@ public non-sealed class SnakeIA extends Snake {
     private double directionX;
     private double directionY;
 
-    private SnakeIA() {
-        super();
+    private SnakeIA(int id) {
+        super(id);
         this.segments = init();
         this.isIA = true;
         this.directionX = initDirection();
-        this.directionY =   initDirection();
+        this.directionY = initDirection();
         this.zone = new Rectangle2D(getHeadPositionX() - View.SCREENWIDTH / 2,
                 getHeadPositionY() - View.SCREENHEIGHT / 2, View.SCREENWIDTH, View.SCREENHEIGHT);
     }
@@ -43,8 +43,8 @@ public non-sealed class SnakeIA extends Snake {
         zone = new Rectangle2D(getHeadPositionX() - 100, getHeadPositionY() - 100, 200, 200);
     }
 
-    public static SnakeIA cree_ia_serpent() {
-        return new SnakeIA();
+    public static SnakeIA cree_ia_serpent(int id) {
+        return new SnakeIA(id);
     }
 
     private void moveSnakeAwayFromPlayer(SnakeIA snake, Snake serpentJoueur) {

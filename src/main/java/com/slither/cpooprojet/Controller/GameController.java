@@ -2,7 +2,6 @@ package com.slither.cpooprojet.Controller;
 
 import com.slither.cpooprojet.Model.Modele;
 import com.slither.cpooprojet.Model.SnakeIA;
-import com.slither.cpooprojet.Model.Carre3x3.Field;
 import com.slither.cpooprojet.Model.Snake;
 import com.slither.cpooprojet.View.GameView;
 import com.slither.cpooprojet.View.View;
@@ -87,8 +86,8 @@ public class GameController {
 
     private void acceleration() { // pour le joueur, ici c'est à faire manuellemnt mais pour l'IA c'est
                                   // automatique
-        if (modele.getSerpentJoueur().getSegments().size() > 1) {
-            modele.getSerpentJoueur().acceleration();
+        if (modele.getMainSnake().getSegments().size() > 1) {
+            modele.getMainSnake().acceleration();
             spacePressed = true;
         }
     }
@@ -96,7 +95,7 @@ public class GameController {
     private void deceleration() { // pour le joueur, ici c'est à faire manuellemnt mais pour l'IA c'est
                                   // automatique
         if (spacePressed) {
-            modele.getSerpentJoueur().deceleration();
+            modele.getMainSnake().deceleration();
             spacePressed = false;
         }
     }
@@ -106,13 +105,13 @@ public class GameController {
             modele.updateIA();
 
             if (positionSouris != null) { // -> potentiel Optionnel<Point2D>
-                if (modele.getSerpentJoueur().getSegments().size() <= 1) {
+                if (modele.getMainSnake().getSegments().size() <= 1) {
                     deceleration();
                     spacePressed = false;
                 }
 
                 if (spacePressed && (currentTime - lastUpdateTime) > RETIRE_INTERVAL) {
-                    modele.getSerpentJoueur().retirePart();
+                    modele.getMainSnake().retirePart();
                     lastUpdateTime = currentTime;
                 }
 
@@ -123,7 +122,7 @@ public class GameController {
                     }
                 });
                 
-                modele.getSerpentJoueur().setHeadPosition(positionSouris);
+                modele.getMainSnake().setHeadPosition(positionSouris);
 
 
                 for(Snake snake : modele.getAllSnake()){
@@ -156,8 +155,8 @@ public class GameController {
                 }
                 //ajout de maj pour tous
 
-                double xSnake = modele.getSerpentJoueur().getHeadPositionX();
-                double ySnake = modele.getSerpentJoueur().getHeadPositionY();
+                double xSnake = modele.getMainSnake().getHeadPositionX();
+                double ySnake = modele.getMainSnake().getHeadPositionY();
 
                 // if (!modele.getCarre3x3().getCentre().getRect().contains(xSnake, ySnake)) {     // on pourra preciser par la suite avec oval
                 //     Rectangle2D center = modele.getCarre3x3().getCentre().getRect();
@@ -212,9 +211,9 @@ public class GameController {
             // else if(ySnake>gameView.getView().SCREENHEIGHT) newY = 0;
             // else newY = ySnake;
 
-            // modele.getSerpentJoueur().resetPositionMap(newX,newY);
-            // xSnake = modele.getSerpentJoueur().getHeadPositionX();
-            // ySnake = modele.getSerpentJoueur().getHeadPositionY();
+            // modele.getMainSnake().resetPositionMap(newX,newY);
+            // xSnake = modele.getMainSnake().getHeadPositionX();
+            // ySnake = modele.getMainSnake().getHeadPositionY();
 
             // modele.getAllSnake().stream()
             // .map(snake -> modele.checkCollision(snake)) // renvoie un Optional<Snake>

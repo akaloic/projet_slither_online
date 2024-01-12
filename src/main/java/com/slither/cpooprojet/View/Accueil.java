@@ -24,6 +24,7 @@ public class Accueil extends StackPane {
         start.setStyle("-fx-background-color: #DCDCDC; -fx-text-fill: #ffffff; -fx-font-size: 20px;");
         start.setTranslateY(100);
         start.setOnMouseClicked(e -> {
+            // parent.modeOnline(); si tu veux voir ce que j'ai fait
             parent.showGameView();
         });
 
