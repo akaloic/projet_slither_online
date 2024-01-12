@@ -38,8 +38,26 @@ public sealed class Snake implements Decalage permits SnakeIA {
         return segments;
     }
 
-    public static Snake cree_joueur_serpent() {
-        return new Snake();
+    static class SnakeBuilder{
+        private Snake snake;
+        public SnakeBuilder(){
+            snake = new Snake();
+        }
+        // public SnakeBuilder setVitesse(double vitesse){
+        //     Snake.vitesse = vitesse;
+        //     return this;
+        // }
+        // public SnakeBuilder setCouleur(Color couleur){
+        //     Snake.couleur = couleur;
+        //     return this;
+        // }
+
+
+        public Snake build(){
+            return snake;
+        }
+
+
     }
 
     public void addNewPart() {

@@ -22,7 +22,7 @@ public class Modele {
 
     public Modele() {
         this.foodList = generateFoods();
-        this.serpentJoueur = Snake.cree_joueur_serpent();
+        this.serpentJoueur = new Snake.SnakeBuilder().build();
         this.IAsnake = generateIAsnake();
         this.allSnake = allSnake();
         this.carre3x3 = new Carre3x3();
