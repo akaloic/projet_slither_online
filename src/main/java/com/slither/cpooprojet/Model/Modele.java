@@ -2,6 +2,7 @@ package com.slither.cpooprojet.Model;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.HashMap;
 
 import com.slither.cpooprojet.Model.Carre3x3.Field;
 import com.slither.cpooprojet.View.View;
@@ -11,7 +12,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Circle;
 
 public class Modele {
-    private Snake serpentJoueur;
+    private HashMap<Integer, Snake> snakes;
+    private Snake mainSnake;
     private ArrayList<SnakeIA> IAsnake;
     private ArrayList<Snake> allSnake;
     private ArrayList<Food> foodList;
@@ -22,20 +24,25 @@ public class Modele {
 
     public Modele() {
         this.foodList = generateFoods();
-        this.serpentJoueur = Snake.cree_joueur_serpent();
+        this.snakes = initSnakes();
+        this.mainSnake = snakes.get(0);
         this.IAsnake = generateIAsnake();
         this.allSnake = allSnake();
         this.carre3x3 = new Carre3x3();
-
         this.objetJeu = init();
     }
 
     // ---------------------- METHODES POUR CONSTRUCTEUR
+    private HashMap<Integer, Snake> initSnakes() {
+        HashMap<Integer, Snake> snakes = new HashMap<Integer, Snake>();
+        snakes.put(0, Snake.cree_joueur_serpent(0));
+        return snakes;
+    }
 
     private ArrayList<Snake> allSnake() {
         ArrayList<Snake> allSnake = new ArrayList<Snake>();
         allSnake.addAll(IAsnake);
-        allSnake.add(serpentJoueur);
+        allSnake.add(mainSnake);
         return allSnake;
     }
 
@@ -50,7 +57,7 @@ public class Modele {
     private ArrayList<SnakeIA> generateIAsnake() {
         ArrayList<SnakeIA> IAsnake = new ArrayList<SnakeIA>();
         for (int i = 0; i < 3; i++) {
-            IAsnake.add(SnakeIA.cree_ia_serpent());
+            IAsnake.add(SnakeIA.cree_ia_serpent(-1));
         }
         return IAsnake;
     }
@@ -70,9 +77,9 @@ public class Modele {
     }
 
     public void teleportationHeadPlayer(Point2D position) {
-        serpentJoueur.teleportation(position);
-        updateAllExeptFields(position.getX() - serpentJoueur.getHeadPositionX(),
-                position.getY() - serpentJoueur.getHeadPositionY());
+        mainSnake.teleportation(position);
+        updateAllExeptFields(position.getX() - mainSnake.getHeadPositionX(),
+                position.getY() - mainSnake.getHeadPositionY());
     }
 
     public void teleportationHeadIA(Point2D position, SnakeIA snake) {
@@ -91,14 +98,14 @@ public class Modele {
 
 
     // public void setPositionifOutofBands() {
-    // if (getSerpentJoueur().getHeadPositionX() > View.SCREENWIDTH) {
-    // getSerpentJoueur().getSegments().get(0).setX(0);
-    // } else if (getSerpentJoueur().getHeadPositionX() < 0) {
-    // getSerpentJoueur().getSegments().get(0).setX(View.SCREENWIDTH);
-    // } else if (getSerpentJoueur().getHeadPositionY() > View.SCREENWIDTH) {
-    // getSerpentJoueur().getSegments().get(0).setY(0);
-    // } else if (getSerpentJoueur().getHeadPositionY() < 0) {
-    // getSerpentJoueur().getSegments().get(0).setY(View.SCREENHEIGHT);
+    // if (getmainSnake().getHeadPositionX() > View.SCREENWIDTH) {
+    // getmainSnake().getSegments().get(0).setX(0);
+    // } else if (getmainSnake().getHeadPositionX() < 0) {
+    // getmainSnake().getSegments().get(0).setX(View.SCREENWIDTH);
+    // } else if (getmainSnake().getHeadPositionY() > View.SCREENWIDTH) {
+    // getmainSnake().getSegments().get(0).setY(0);
+    // } else if (getmainSnake().getHeadPositionY() < 0) {
+    // getmainSnake().getSegments().get(0).setY(View.SCREENHEIGHT);
     // }
     // }
 
@@ -106,9 +113,9 @@ public class Modele {
     // IAsnake.forEach(snake -> {
     // if (snake.getSegments().size() > 1) {
     // Rectangle2D zone = snake.getZone();
-    // if (player_in_zone(zone, serpentJoueur)) {
-    // double fuirX = snake.getHeadPositionX() - serpentJoueur.getHeadPositionX();
-    // double fuirY = snake.getHeadPositionY() - serpentJoueur.getHeadPositionY();
+    // if (player_in_zone(zone, mainSnake)) {
+    // double fuirX = snake.getHeadPositionX() - mainSnake.getHeadPositionX();
+    // double fuirY = snake.getHeadPositionY() - mainSnake.getHeadPositionY();
     // snake.setHeadPosition(new Point2D(snake.getHeadPositionX() + fuirX,
     // snake.getHeadPositionY() + fuirY));
     // snake.acceleration();
@@ -132,7 +139,7 @@ public class Modele {
     // }
 
     public void updateIA() {
-        IAsnake.forEach(snakeia -> snakeia.updateSnakeBehaviour(snakeia, serpentJoueur, foodList));
+        IAsnake.forEach(snakeia -> snakeia.updateSnakeBehaviour(snakeia, mainSnake, foodList));
         majObjetJeu();
     }
 
@@ -260,14 +267,14 @@ public class Modele {
     }
 
     public void add_snake_ia() {
-        IAsnake.add(SnakeIA.cree_ia_serpent());
+        IAsnake.add(SnakeIA.cree_ia_serpent(-1));
         allSnake.add(IAsnake.get(IAsnake.size() - 1));
         majObjetJeu();
     }
 
     // ---------------------- GETTERS / SETTERS ---------------------- //
-    public Snake getSerpentJoueur() {
-        return serpentJoueur;
+    public Snake getMainSnake() {
+        return mainSnake;
     }
 
     public ArrayList<Food> getFoodList() {
