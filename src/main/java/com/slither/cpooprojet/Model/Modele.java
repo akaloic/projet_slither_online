@@ -284,9 +284,11 @@ public class Modele {
     }
 
     public void add_snake_ia() {
-        IAsnake.add(SnakeIA.cree_ia_serpent(-1));
-        allSnake.add(IAsnake.get(IAsnake.size() - 1));
-        majObjetJeu();
+        if (IAsnake.size() < 7){
+            IAsnake.add(SnakeIA.cree_ia_serpent(-1));
+            allSnake.add(IAsnake.get(IAsnake.size() - 1));
+            majObjetJeu();
+        }
     }
 
     // ---------------------- GETTERS / SETTERS ---------------------- //

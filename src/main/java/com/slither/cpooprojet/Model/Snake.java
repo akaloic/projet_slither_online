@@ -103,22 +103,82 @@ public sealed class Snake implements Decalage permits SnakeIA {
         decallement(distanceX, distanceY);
     }
 
-    public void setHeadPosition(Point2D position) {
-        SnakePart head = getHead();
+    // public void setHeadPosition(Point2D position) {
+    //     SnakePart head = getHead();
 
-        double distanceX = position.getX() - head.getX();
-        double distanceY = position.getY() - head.getY();
+    //     double distanceX = position.getX() - head.getX();
+    //     double distanceY = position.getY() - head.getY();
 
+    //     double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+    //     double movementX = distanceX / distance;
+    //     double movementY = distanceY / distance;
+
+    //     head.setX(head.getX() + (movementX * vitesse));
+    //     head.setY(head.getY() + (movementY * vitesse));
+
+    //     majCercle();
+    //     setBody();
+    // }
+
+    // private void setBody() {
+    //     double gap = SnakePart.SNAKEPART_GAP;
+
+    //     for (int i = 1; i < segments.size(); i++) {
+    //         SnakePart current = segments.get(i);
+    //         SnakePart prev = segments.get(i - 1);
+
+    //         double distanceX = prev.getX() - current.getX();
+    //         double distanceY = prev.getY() - current.getY();
+
+    //         double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+    //         if (distance > gap) {
+    //             double movementX = distanceX / distance;
+    //             double movementY = distanceY / distance;
+
+    //             current.setX(current.getX() + movementX * (distance - gap));
+    //             current.setY(current.getY() + movementY * (distance - gap));
+    //         }
+    //     }
+    // }
+    public void setHeadPosition(Point2D newPosition) {
+        // Obtenir la tête et l'ancienne position de la tête
+        SnakePart head = segments.get(0);
+        double oldHeadX = head.getX();
+        double oldHeadY = head.getY();
+
+        // Mettre à jour la position de la tête
+        double distanceX = newPosition.getX() - head.getX();
+        double distanceY = newPosition.getY() - head.getY();
         double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-        double movementX = distanceX / distance;
-        double movementY = distanceY / distance;
 
-        head.setX(head.getX() + (movementX * vitesse));
-        head.setY(head.getY() + (movementY * vitesse));
+        if (distance > 0) {
+            double movementX = (distanceX / distance) * vitesse;
+            double movementY = (distanceY / distance) * vitesse;
+            head.setX(head.getX() + movementX);
+            head.setY(head.getY() + movementY);
+        }
 
-        majCercle();
-        setBody();
+        // Mettre à jour la position des autres segments
+        for (int i = segments.size() - 1; i > 0; i--) {
+            SnakePart current = segments.get(i);
+            SnakePart prev = segments.get(i - 1);
+
+            distanceX = prev.getX() - current.getX();
+            distanceY = prev.getY() - current.getY();
+            distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+            double gap = SnakePart.SNAKEPART_GAP;
+            if (distance > gap) {
+                double movementX = (distanceX / distance) * (distance - gap);
+                double movementY = (distanceY / distance) * (distance - gap);
+                current.setX(current.getX() + movementX);
+                current.setY(current.getY() + movementY);
+            }
+        }
     }
+    
+    
 
     private void setBody() {
         double gap = SnakePart.SNAKEPART_GAP;
