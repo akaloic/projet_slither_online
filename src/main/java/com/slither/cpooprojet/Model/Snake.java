@@ -47,7 +47,7 @@ public sealed class Snake implements Decalage permits SnakeIA {
     static class SnakeBuilder{
         private Snake snake;
         public SnakeBuilder(){
-            snake = new Snake(0);
+            snake = new Snake(0);   // tu modifieras plus tard ca
         }
         // public SnakeBuilder setVitesse(double vitesse){
         //     Snake.vitesse = vitesse;
