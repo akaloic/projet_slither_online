@@ -50,8 +50,7 @@ public sealed class Snake implements Decalage permits SnakeIA {
             snake = new Snake(0);   // tu modifieras plus tard ca
         }
         public SnakeBuilder setVitesse(double vitesse){
-            if(vitesse>0 && vitesse<11) snake.vitesse = vitesse;
-            else snake.vitesse = 2;
+            snake.vitesse = vitesse;
             return this;
         }
         public SnakeBuilder setCouleur(Color couleur){
@@ -59,7 +58,7 @@ public sealed class Snake implements Decalage permits SnakeIA {
             return this;
         }
         public SnakeBuilder setSkin(Image skin){
-            snake.skin = new Image("file:src/main/resources/slither/Skin serpent/" + (int) (Math.random() * 12) + ".png");
+            snake.skin = skin;
             return this;
         }
 
@@ -70,6 +69,8 @@ public sealed class Snake implements Decalage permits SnakeIA {
 
         public Snake build(){
             if(snake.skin == null) snake.skin = new Image("file:src/main/resources/slither/Skin serpent/" + (int) (Math.random() * 12) + ".png");
+            if(snake.couleur == null) snake.couleur = new Color(Math.random(), Math.random(), Math.random(), 0.5 + Math.random() * 0.5);
+            if(snake.vitesse <1 || snake.vitesse > 10) snake.vitesse = 2;
             return snake;
         }
 

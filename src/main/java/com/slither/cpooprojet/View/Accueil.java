@@ -28,22 +28,34 @@ public class Accueil extends StackPane {
     public Accueil(View parent) {
         this.parent = parent;
         this.snakeBuild = new SnakeBuilder();
+
+        ImageView background = new ImageView(new Image("file:src/main/resources/slither/background.jpg"));
+        background.setFitHeight(View.SCREENHEIGHT/View.MULTIPLIER);
+        background.setFitWidth(View.SCREENWIDTH/View.MULTIPLIER);
+        this.getChildren().add(background);
+
         Text titre = new Text("Slither");
         titre.setFont(Font.font("Verdana", FontWeight.BOLD, 100));
         titre.setFill(Color.WHITE);
         titre.setStroke(Color.BLACK);
         titre.setStrokeWidth(2);
-        titre.setTranslateY(-100);
+        titre.setTranslateY(-400);
 
         Button start = new Button("Start");
         start.setStyle("-fx-background-color: #DCDCDC; -fx-text-fill: #ffffff; -fx-font-size: 20px;");
-        start.setTranslateY(100);
+        start.setTranslateY(400);
+        start.setTranslateX(600);
         start.setOnMouseClicked(e -> {
             // parent.modeOnline(); si tu veux voir ce que j'ai fait
             parent.showGameView();
         });
 
+
         Slider sliderVitesse = new Slider(0, 10, 2);
+        sliderVitesse.setShowTickLabels(true);
+        sliderVitesse.setMajorTickUnit(1);
+        sliderVitesse.setTranslateY(200);
+        sliderVitesse.setPrefWidth(15);
         sliderVitesse.valueProperty().addListener((observable, oldValue, newValue) -> {
             snakeBuild.setVitesse(newValue.doubleValue());
         });
@@ -61,7 +73,7 @@ public class Accueil extends StackPane {
         ComboBox<Image> comboBox = new ComboBox<Image>(list);
         comboBox.setTranslateY(270);
 
-        comboBox.setCellFactory(param -> new ListCell<Image>() {
+        comboBox.setCellFactory(param -> new ListCell<Image>() {        //permet de remplir la comboBox avec des images
             private final ImageView imageView = new ImageView();
 
             protected void updateItem(Image item, boolean empty) {
@@ -71,48 +83,36 @@ public class Accueil extends StackPane {
                     setGraphic(null);
                 } else {
                     imageView.setImage(item);
-                    imageView.setFitWidth(50); // Ajustez la largeur selon vos besoins
-                    imageView.setFitHeight(50); // Ajustez la hauteur selon vos besoins
+                    imageView.setFitWidth(50);
+                    imageView.setFitHeight(50);
                     setGraphic(imageView);
                 }
             }
         });
 
-
         comboBox.setOnAction(e -> {
             this.getChildren().remove(imageTete);
+            System.out.println(comboBox.getValue());
             snakeBuild.setSkin(comboBox.getValue());
             imageTete.setImage(comboBox.getValue());
             this.getChildren().add(imageTete);
         });
 
-
-
-        // Slider sliderTete = new Slider(0, 12, 0);
-        // sliderTete.valueProperty().addListener((observable, oldValue, newValue) -> {
-        //     this.getChildren().remove(imageTete);
-        //     snakeBuild.setSkin(new Image("file:src/main/resources/slither/Skin serpent/"+newValue.intValue()+".png"));
-        //     imageTete.setImage(new Image("file:src/main/resources/slither/Skin serpent/"+newValue.intValue()+".png"));
-        //     this.getChildren().add(imageTete);
-        // });
-
-
-
-
-        // ColorPicker colorPicker = new ColorPicker(Color.GREEN); // Couleur par défaut
-        // colorPicker.setOnAction(e -> {
-        //     //snakeBuild.setCouleur(colorPicker.getValue());
-        // });
-
-
         CheckBox mode = new CheckBox("Mode");
+        mode.setTranslateY(50);
         mode.setOnAction(e -> {
             if(mode.isSelected()) snakeBuild.setChieldMode(true);
             else snakeBuild.setChieldMode(false);
         });
-        mode.setTranslateY(50);
 
-        this.getChildren().addAll(titre, start,sliderVitesse,mode, imageTete, comboBox/*,sliderTete , colorPicker*/);
+        ColorPicker colorPicker = new ColorPicker(Color.GREEN); // Couleur par défaut
+        colorPicker.setOnAction(e -> {
+            snakeBuild.setCouleur(colorPicker.getValue());
+        });
+
+
+
+        this.getChildren().addAll(titre, start,sliderVitesse,mode, imageTete, comboBox, colorPicker);
     }
 
     public Snake getSnake() {
