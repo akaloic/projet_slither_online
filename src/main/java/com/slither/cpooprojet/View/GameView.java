@@ -18,18 +18,21 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.effect.ColorAdjust;
 
 public class GameView extends StackPane {
     private View parent;
     private GraphicsContext graphicsContext;
     private Canvas canvas;
     private Modele modele;
+    private Image shield;
 
     public GameView(View parent, Modele modele) {
         this.canvas = new Canvas(View.SCREENWIDTH, View.SCREENHEIGHT);
         this.graphicsContext = canvas.getGraphicsContext2D();
         this.modele = modele;
         this.parent = parent;
+        this.shield = (modele.getMainSnake().isChieldMode()) ? new Image("file:src/main/resources/shield.png") : null;
 
         canvas.setFocusTraversable(true);
         canvas.requestFocus();
@@ -119,9 +122,8 @@ public class GameView extends StackPane {
                 SnakePart.SNAKEPARTSIZE, SnakePart.SNAKEPARTSIZE);
 
         if(serpent.isChieldMode()){
-            graphicsContext.setFill(Color.RED);
-            graphicsContext.fillRect(serpent.getHeadPositionX()+transpositionX, serpent.getHeadPositionY()+transpositionY, SnakePart.SNAKEPARTSIZE,
-                    SnakePart.SNAKEPARTSIZE);
+            graphicsContext.drawImage(shield, serpent.getHeadPositionX()+transpositionX, serpent.getHeadPositionY()+transpositionY,
+                    SnakePart.SNAKEPARTSIZE, SnakePart.SNAKEPARTSIZE);
         }
 
         graphicsContext.restore();

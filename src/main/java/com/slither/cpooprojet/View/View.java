@@ -23,6 +23,7 @@ public class View extends StackPane {
     }
 
     public static View create(Stage stage) {
+        stage.setResizable(true);
         return new View(stage);
     }
 

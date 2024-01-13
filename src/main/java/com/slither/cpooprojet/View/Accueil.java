@@ -40,15 +40,21 @@ public class Accueil extends StackPane {
         titre.setStrokeWidth(2);
         titre.setTranslateY(-400);
 
-        Button start = new Button("Start");
+        Button start = new Button("Start offline");
         start.setStyle("-fx-background-color: #DCDCDC; -fx-text-fill: #ffffff; -fx-font-size: 20px;");
         start.setTranslateY(400);
         start.setTranslateX(600);
         start.setOnMouseClicked(e -> {
-            // parent.chooseCreateOrJoin();
             parent.showGameView();
         });
 
+        Button startOnline = new Button("Start online");
+        startOnline.setStyle("-fx-background-color: #DCDCDC; -fx-text-fill: #ffffff; -fx-font-size: 20px;");
+        startOnline.setTranslateY(400);
+        startOnline.setTranslateX(-600);
+        startOnline.setOnMouseClicked(e -> {
+            parent.chooseCreateOrJoin();
+        });
 
         Slider sliderVitesse = new Slider(0, 10, 2);
         sliderVitesse.setShowTickLabels(true);
@@ -91,7 +97,6 @@ public class Accueil extends StackPane {
 
         comboBox.setOnAction(e -> {
             this.getChildren().remove(imageTete);
-            System.out.println(comboBox.getValue());
             snakeBuild.setSkin(comboBox.getValue());
             imageTete.setImage(comboBox.getValue());
             this.getChildren().add(imageTete);
@@ -111,7 +116,7 @@ public class Accueil extends StackPane {
 
 
 
-        this.getChildren().addAll(titre, start,sliderVitesse,mode, imageTete, comboBox, colorPicker);
+        this.getChildren().addAll(titre,startOnline ,start,sliderVitesse,mode, imageTete, comboBox, colorPicker);
     }
 
     public Snake getSnake() {
