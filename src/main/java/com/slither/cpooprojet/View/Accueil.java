@@ -7,7 +7,6 @@ import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
-import javafx.scene.layout.VBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,8 +29,8 @@ public class Accueil extends StackPane {
         this.snakeBuild = new SnakeBuilder();
 
         ImageView background = new ImageView(new Image("file:src/main/resources/slither/background.jpg"));
-        background.setFitHeight(View.SCREENHEIGHT/View.MULTIPLIER);
-        background.setFitWidth(View.SCREENWIDTH/View.MULTIPLIER);
+        background.setFitHeight(View.SCREENHEIGHT / View.MULTIPLIER);
+        background.setFitWidth(View.SCREENWIDTH / View.MULTIPLIER);
         this.getChildren().add(background);
 
         Text titre = new Text("Slither");
@@ -46,7 +45,7 @@ public class Accueil extends StackPane {
         start.setTranslateY(400);
         start.setTranslateX(600);
         start.setOnMouseClicked(e -> {
-            // parent.modeOnline(); si tu veux voir ce que j'ai fait
+            // parent.chooseCreateOrJoin();
             parent.showGameView();
         });
 

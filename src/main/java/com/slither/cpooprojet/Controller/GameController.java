@@ -17,20 +17,25 @@ import javafx.util.Duration;
 import java.util.Optional;
 
 public class GameController {
+    private final double RETIRE_INTERVAL = 0.5;
+
     private Modele modele;
     private GameView gameView;
+    private Client client;
+    
     private AnimationTimer gameLoop;
     private Point2D positionSouris;
     private boolean jeuFinis = false;
     private boolean spacePressed = false;
     private boolean pause = false;
     private double lastUpdateTime = 0;
-    private final double RETIRE_INTERVAL = 0.5;
     private Timeline timeline;
 
-    public GameController(Modele modele, GameView gameView) {
+    public GameController(Modele modele, GameView gameView, Client client) {
         this.modele = modele;
         this.gameView = gameView;
+        this.client = client;
+
         this.positionSouris = null;
 
         gameLoop = new AnimationTimer() {
@@ -116,7 +121,8 @@ public class GameController {
                     spacePressed = false;
                 }
 
-                if (spacePressed && (currentTime - lastUpdateTime) > RETIRE_INTERVAL) {
+                if (spacePressed && (currentTime - lastUpdateTime) > RETIRE_INTERVAL) { // on retire une partie du
+                                                                                      // serpent toutes les 0.5 secondes si on maintient l'accélération activée
                     modele.getMainSnake().retirePart();
                     lastUpdateTime = currentTime;
                 }
@@ -257,7 +263,9 @@ public class GameController {
 
             gameView.setModele(modele);
             gameView.draw();
-        } else {
+
+            if (client != null) client.sendModele(modele);
+        } else {    // on ferme ici le jeu
             gameLoop.stop();
             gameView.showAccueil();
         }
