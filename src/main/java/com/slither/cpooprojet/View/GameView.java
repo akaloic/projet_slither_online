@@ -118,6 +118,12 @@ public class GameView extends StackPane {
         graphicsContext.drawImage(skin, serpent.getHeadPositionX()+transpositionX, serpent.getHeadPositionY()+transpositionY,
                 SnakePart.SNAKEPARTSIZE, SnakePart.SNAKEPARTSIZE);
 
+        if(serpent.isChieldMode()){
+            graphicsContext.setFill(Color.RED);
+            graphicsContext.fillRect(serpent.getHeadPositionX()+transpositionX, serpent.getHeadPositionY()+transpositionY, SnakePart.SNAKEPARTSIZE,
+                    SnakePart.SNAKEPARTSIZE);
+        }
+
         graphicsContext.restore();
     }
 

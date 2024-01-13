@@ -19,16 +19,16 @@ public sealed class Snake implements Decalage permits SnakeIA {
     protected boolean acceleration = false;
     protected Rectangle2D zone;
     protected int id;
+    protected boolean isChieldMode = false;
 
     protected Snake(int id) {
         this.segments = init();
         this.vitesse = 2;
         this.couleur = new Color(Math.random(), Math.random(), Math.random(), 0.5 + Math.random() * 0.5);
-        this.skin = new Image(
-                "file:src/main/resources/slither/Skin serpent/" + (int) (Math.random() * 12) + ".png");
         this.zone = new Rectangle2D(getHeadPositionX() - 100, getHeadPositionY() - 100, 200, 200);
         this.id = (id == -1) ? -1 : id;
         this.isIA = (id == -1) ? true : false;
+        if(isIA) this.skin = new Image("file:src/main/resources/slither/Skin serpent/" + (int) (Math.random() * 12) + ".png");
     }
 
     protected ArrayList<SnakePart> init() {
@@ -58,9 +58,18 @@ public sealed class Snake implements Decalage permits SnakeIA {
             snake.couleur = couleur;
             return this;
         }
+        public SnakeBuilder setSkin(Image skin){
+            snake.skin = new Image("file:src/main/resources/slither/Skin serpent/" + (int) (Math.random() * 12) + ".png");
+            return this;
+        }
 
+        public SnakeBuilder setChieldMode(boolean isChieldMode){
+            snake.isChieldMode = isChieldMode;
+            return this;
+        }
 
         public Snake build(){
+            if(snake.skin == null) snake.skin = new Image("file:src/main/resources/slither/Skin serpent/" + (int) (Math.random() * 12) + ".png");
             return snake;
         }
 
@@ -254,6 +263,14 @@ public sealed class Snake implements Decalage permits SnakeIA {
 
     public Rectangle2D getZone() {
         return zone;
+    }
+
+    public boolean isChieldMode() {
+        return isChieldMode;
+    }
+
+    public void setChieldMode(boolean isChieldMode) {
+        this.isChieldMode = isChieldMode;
     }
     // ------------------------------------------------------ //
 }

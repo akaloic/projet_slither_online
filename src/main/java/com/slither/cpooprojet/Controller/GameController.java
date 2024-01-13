@@ -10,6 +10,9 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.input.*;
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 import java.util.Optional;
 
@@ -23,6 +26,7 @@ public class GameController {
     private boolean pause = false;
     private double lastUpdateTime = 0;
     private final double RETIRE_INTERVAL = 0.5;
+    private Timeline timeline;
 
     public GameController(Modele modele, GameView gameView) {
         this.modele = modele;
@@ -36,6 +40,8 @@ public class GameController {
             }
         };
         gameLoop.start();
+
+        timeline = new Timeline(new KeyFrame(Duration.seconds(5)));
 
         gameView.getCanvas().addEventHandler(MouseEvent.MOUSE_MOVED, this::handleMouseMoved);
         gameView.getCanvas().setOnKeyPressed(event -> {
@@ -129,7 +135,7 @@ public class GameController {
                     double xSnake = snake.getHeadPositionX();
                     double ySnake = snake.getHeadPositionY();
                     
-                    if (!modele.getCarre3x3().getCentre().getRect().contains(xSnake, ySnake)) {     // on pourra preciser par la suite avec oval
+                    if (!modele.getCarre3x3().getCentre().getRect().contains(xSnake, ySnake)) {
                         Rectangle2D center = modele.getCarre3x3().getCentre().getRect();
                         Point2D newPoint = null;
     
@@ -241,7 +247,10 @@ public class GameController {
                         modele.getAllSnake().remove(snake.get());
                         modele.add_snake_ia();
                     } else {
-                        jeuFinis = true; // serpent du joueuer
+                        if(modele.getMainSnake().isChieldMode()){
+                            timeline.play();
+                            modele.getMainSnake().setChieldMode(false);
+                        }else if(!timeline.getStatus().equals(Timeline.Status.RUNNING)) jeuFinis = true;
                     }
                 }
             }
