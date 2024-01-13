@@ -193,12 +193,10 @@ public class OnlineView extends StackPane {
                 int port = Integer.parseInt(ret);
                 Thread serverThread = new Thread(() -> {
                     try {
-                        System.err.println("Serveur lancé");
                         Server server = new Server(port);
                         server.start();
                         Platform.runLater(() -> {
                             parent.launchOnline("localhost", port);
-                            System.err.println("Client lancé");
                         });
                     } catch (BindException ex) {
                         for (TextField portField : portFields) {
