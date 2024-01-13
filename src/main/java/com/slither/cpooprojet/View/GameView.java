@@ -46,8 +46,6 @@ public class GameView extends StackPane {
     public void draw() {
         graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        //drawAllSnake();
-        //drawFood();
         for(int i=-1; i<2; i++){
             double transpositionX = i*View.SCREENWIDTH;
             for(int j=-1; j<2; j++){

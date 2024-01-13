@@ -22,10 +22,10 @@ public class Modele {
     private static double posYTotal;
     private Carre3x3 carre3x3;
 
-    public Modele() {
+    public Modele(Snake joueurCreer) {
         this.foodList = generateFoods();
+        this.mainSnake = joueurCreer;
         this.snakes = initSnakes();
-        this.mainSnake = snakes.get(0);
         this.IAsnake = generateIAsnake();
         this.allSnake = allSnake();
         this.carre3x3 = new Carre3x3();
@@ -35,7 +35,7 @@ public class Modele {
     // ---------------------- METHODES POUR CONSTRUCTEUR
     private HashMap<Integer, Snake> initSnakes() {
         HashMap<Integer, Snake> snakes = new HashMap<Integer, Snake>();
-        snakes.put(0, new Snake.SnakeBuilder().build());
+        snakes.put(0,this.mainSnake);
         return snakes;
     }
 

@@ -25,7 +25,7 @@ public class GameController {
     private final double RETIRE_INTERVAL = 0.5;
 
     public GameController(Modele modele, GameView gameView) {
-        this.modele = new Modele();
+        this.modele = modele;
         this.gameView = gameView;
         this.positionSouris = null;
 

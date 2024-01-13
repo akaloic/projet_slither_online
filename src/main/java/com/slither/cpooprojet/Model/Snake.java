@@ -13,8 +13,8 @@ import javafx.scene.image.Image;
 public sealed class Snake implements Decalage permits SnakeIA {
     protected ArrayList<SnakePart> segments;
     protected double vitesse;
-    protected final Color couleur;
-    protected final Image skin;
+    protected Color couleur;
+    protected Image skin;
     protected boolean isIA;
     protected boolean acceleration = false;
     protected Rectangle2D zone;
@@ -44,19 +44,20 @@ public sealed class Snake implements Decalage permits SnakeIA {
         return new Snake(id);
     }
 
-    static class SnakeBuilder{
+    public static class SnakeBuilder{
         private Snake snake;
         public SnakeBuilder(){
             snake = new Snake(0);   // tu modifieras plus tard ca
         }
-        // public SnakeBuilder setVitesse(double vitesse){
-        //     Snake.vitesse = vitesse;
-        //     return this;
-        // }
-        // public SnakeBuilder setCouleur(Color couleur){
-        //     Snake.couleur = couleur;
-        //     return this;
-        // }
+        public SnakeBuilder setVitesse(double vitesse){
+            if(vitesse>0 && vitesse<11) snake.vitesse = vitesse;
+            else snake.vitesse = 2;
+            return this;
+        }
+        public SnakeBuilder setCouleur(Color couleur){
+            snake.couleur = couleur;
+            return this;
+        }
 
 
         public Snake build(){
@@ -141,44 +142,23 @@ public sealed class Snake implements Decalage permits SnakeIA {
     //         }
     //     }
     // }
-    public void setHeadPosition(Point2D newPosition) {
-        // Obtenir la tête et l'ancienne position de la tête
-        SnakePart head = segments.get(0);
-        double oldHeadX = head.getX();
-        double oldHeadY = head.getY();
+    
+    public void setHeadPosition(Point2D position) {
+        SnakePart head = getHead();
 
-        // Mettre à jour la position de la tête
-        double distanceX = newPosition.getX() - head.getX();
-        double distanceY = newPosition.getY() - head.getY();
+        double distanceX = position.getX() - head.getX();
+        double distanceY = position.getY() - head.getY();
+
         double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+        double movementX = distanceX / distance;
+        double movementY = distanceY / distance;
 
-        if (distance > 0) {
-            double movementX = (distanceX / distance) * vitesse;
-            double movementY = (distanceY / distance) * vitesse;
-            head.setX(head.getX() + movementX);
-            head.setY(head.getY() + movementY);
-        }
+        head.setX(head.getX() + (movementX * vitesse));
+        head.setY(head.getY() + (movementY * vitesse));
 
-        // Mettre à jour la position des autres segments
-        for (int i = segments.size() - 1; i > 0; i--) {
-            SnakePart current = segments.get(i);
-            SnakePart prev = segments.get(i - 1);
-
-            distanceX = prev.getX() - current.getX();
-            distanceY = prev.getY() - current.getY();
-            distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-
-            double gap = SnakePart.SNAKEPART_GAP;
-            if (distance > gap) {
-                double movementX = (distanceX / distance) * (distance - gap);
-                double movementY = (distanceY / distance) * (distance - gap);
-                current.setX(current.getX() + movementX);
-                current.setY(current.getY() + movementY);
-            }
-        }
+        majCercle();
+        setBody();
     }
-    
-    
 
     private void setBody() {
         double gap = SnakePart.SNAKEPART_GAP;
