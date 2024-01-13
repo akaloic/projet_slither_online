@@ -1,6 +1,7 @@
-package com.slither.cpooprojet.Model;
+package com.slither.cpooprojet.Controller;
 
 import com.google.gson.Gson;
+import com.slither.cpooprojet.Model.Modele;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,10 +28,10 @@ public class Server {
         while (running) {
             try {
                 Socket clientSocket = serverSocket.accept();    // accept est bloquant, il attend qu'un client se connecte
+                new Thread(new ClientHandler(this, clientSocket)).start();    // créer un thread pour gérer le client
+
                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);    // nous permet d'envoyer des messages au client
                 clients.put(clientSocket, out); // ajouter le client et son flux de sortie à la liste des clients
-
-                new Thread(new ClientHandler(this, clientSocket)).start();    // créer un thread pour gérer le client
             } catch (IOException e) {
                 e.printStackTrace();
             }

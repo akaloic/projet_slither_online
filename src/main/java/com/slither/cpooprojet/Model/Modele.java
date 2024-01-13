@@ -42,7 +42,7 @@ public class Modele {
     private ArrayList<Snake> allSnake() {
         ArrayList<Snake> allSnake = new ArrayList<Snake>();
         allSnake.addAll(IAsnake);
-        allSnake.add(mainSnake);
+        allSnake.addAll(snakes.values());
         return allSnake;
     }
 
@@ -147,6 +147,12 @@ public class Modele {
         objetJeu.forEach(element -> {
             element.decallement(xGap, yGap);
         });
+    }
+
+    public void ajouter_snake() {
+        snakes.put(snakes.size(), new Snake.SnakeBuilder().build());
+        allSnake.add(snakes.get(snakes.size() - 1));
+        majObjetJeu();
     }
 
     /**

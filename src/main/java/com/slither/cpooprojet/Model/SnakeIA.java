@@ -8,7 +8,6 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 
 public non-sealed class SnakeIA extends Snake {
-    private Rectangle2D zone;
     private double directionX;
     private double directionY;
 
