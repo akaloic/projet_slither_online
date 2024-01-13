@@ -45,8 +45,8 @@ public class Accueil extends StackPane {
         start.setTranslateY(400);
         start.setTranslateX(600);
         start.setOnMouseClicked(e -> {
-            // parent.chooseCreateOrJoin();
-            parent.showGameView();
+            parent.chooseCreateOrJoin();
+            // parent.showGameView();
         });
 
 

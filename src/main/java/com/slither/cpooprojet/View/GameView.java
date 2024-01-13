@@ -38,11 +38,6 @@ public class GameView extends StackPane {
         this.getChildren().add(canvas);
     }
 
-    // private void addBackground() {
-    // Image image = new Image("file:src/main/resources/slither/background.jpg");
-    // graphicsContext.drawImage(image, 0, 0, View.SCREENWIDTH, View.SCREENHEIGHT);
-    // }
-
     public void draw() {
         graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 

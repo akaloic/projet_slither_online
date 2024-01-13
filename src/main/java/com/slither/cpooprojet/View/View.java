@@ -4,7 +4,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.scene.paint.Color;
 
 import com.slither.cpooprojet.Controller.Client;
 import com.slither.cpooprojet.Controller.GameController;
