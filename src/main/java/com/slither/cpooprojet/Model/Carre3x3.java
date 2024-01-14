@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import javafx.geometry.Rectangle2D;
 
-public class Carre3x3 {
+public class Carre3x3 {     //classe qui permet de generer 8 terrain autour du terrain central
     private final ArrayList<Field> fields;
     public static final Rectangle2D TOTALFIELD = new Rectangle2D(-View.SCREENWIDTH, -View.SCREENHEIGHT, View.SCREENWIDTH * 3, View.SCREENHEIGHT * 3);
     public Carre3x3() {
@@ -67,22 +67,11 @@ public class Carre3x3 {
         return null;
     }
 
-    /**
-     * 0 : (0, 0)
-     * 1 : (1, 0)
-     * 2 : (2, 0)
-     * 3 : (0, 1)
-     * 4 : (1, 1) -> centre
-     * 5 : (2, 1)
-     * 6 : (0, 2)
-     * 7 : (1, 2)
-     * 8 : (2, 2)
-     */
     public ArrayList<Field> getFields() {
         return fields;
     }
 
-    public Field getCentre() {
+    public Field getCentre() {      //centre du carré
         return fields.get(4);
     }
 }

@@ -22,7 +22,7 @@ public sealed class Snake implements Decalage permits SnakeIA {
     protected boolean isChieldMode = false;
 
     protected Snake(int id) {
-        this.segments = init();
+        this.segments = init();     //initialise le serpent
         this.vitesse = 2;
         this.couleur = new Color(Math.random(), Math.random(), Math.random(), 0.5 + Math.random() * 0.5);
         this.zone = new Rectangle2D(getHeadPositionX() - 100, getHeadPositionY() - 100, 200, 200);
@@ -31,7 +31,7 @@ public sealed class Snake implements Decalage permits SnakeIA {
         if(isIA) this.skin = new Image("file:src/main/resources/slither/Skin serpent/" + (int) (Math.random() * 12) + ".png");
     }
 
-    protected ArrayList<SnakePart> init() {
+    protected ArrayList<SnakePart> init(){
         segments = new ArrayList<SnakePart>();
         segments.add(new SnakePart(View.SCREENWIDTH / 2, View.SCREENHEIGHT / 2));
         for (int i = 0; i < 10; i++) {
@@ -39,11 +39,8 @@ public sealed class Snake implements Decalage permits SnakeIA {
         }
         return segments;
     }
-
-    public static Snake cree_joueur_serpent(int id) {
-        return new Snake(id);
-    }
-
+    
+    //Builder pour le serpent
     public static class SnakeBuilder{
         private Snake snake;
         public SnakeBuilder(){
@@ -75,85 +72,52 @@ public sealed class Snake implements Decalage permits SnakeIA {
         }
 
 
+    }  
+
+    //lorsque l'on veut reprendre la partie avec un autre serpent
+    public void set(Snake snake){
+        this.vitesse = snake.vitesse;
+        this.couleur = snake.couleur;
+        this.skin = snake.skin;
+        this.isChieldMode = snake.isChieldMode;
     }
-
     
-
-    public void addNewPart() {
+    public void addNewPart(){
         segments.add(
                 new SnakePart(segments.get(segments.size() - 1).getX() - 10,
                         segments.get(segments.size() - 1).getY() - 10));
     }
 
-    public void acceleration() {
+    public void acceleration(){
         if (!acceleration && segments.size() > 1) {
             vitesse *= 6;
             acceleration = true;
         }
     }
 
-    public void deceleration() {
+    public void deceleration(){
         if (acceleration) {
             vitesse /= 6;
             acceleration = false;
         }
     }
 
-    private void majCercle() {
-        segments.forEach(part -> {
+    private void majCercle(){
+        segments.forEach(part ->{
             part.setCercle(new Circle(part.getX() + SnakePart.SNAKEPARTSIZE / 2,
                     part.getY() + SnakePart.SNAKEPARTSIZE / 2, SnakePart.SNAKEPARTSIZE / 2));
         });
     }
 
-    public void teleportation(Point2D position) {
+    public void teleportation(Point2D position){            //teleporte la tete du serpent au point position
         SnakePart head = getHead();
         double distanceX = position.getX() - head.getX();
         double distanceY = position.getY() - head.getY();
 
         decallement(distanceX, distanceY);
     }
-
-    // public void setHeadPosition(Point2D position) {
-    //     SnakePart head = getHead();
-
-    //     double distanceX = position.getX() - head.getX();
-    //     double distanceY = position.getY() - head.getY();
-
-    //     double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-    //     double movementX = distanceX / distance;
-    //     double movementY = distanceY / distance;
-
-    //     head.setX(head.getX() + (movementX * vitesse));
-    //     head.setY(head.getY() + (movementY * vitesse));
-
-    //     majCercle();
-    //     setBody();
-    // }
-
-    // private void setBody() {
-    //     double gap = SnakePart.SNAKEPART_GAP;
-
-    //     for (int i = 1; i < segments.size(); i++) {
-    //         SnakePart current = segments.get(i);
-    //         SnakePart prev = segments.get(i - 1);
-
-    //         double distanceX = prev.getX() - current.getX();
-    //         double distanceY = prev.getY() - current.getY();
-
-    //         double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-
-    //         if (distance > gap) {
-    //             double movementX = distanceX / distance;
-    //             double movementY = distanceY / distance;
-
-    //             current.setX(current.getX() + movementX * (distance - gap));
-    //             current.setY(current.getY() + movementY * (distance - gap));
-    //         }
-    //     }
-    // }
     
-    public void setHeadPosition(Point2D position) {
+    public void setHeadPosition(Point2D position){          //fonction principale dans la gestion de la direction du serpent
         SnakePart head = getHead();
 
         double distanceX = position.getX() - head.getX();
@@ -170,7 +134,7 @@ public sealed class Snake implements Decalage permits SnakeIA {
         setBody();
     }
 
-    private void setBody() {
+    private void setBody() {        //fonction qui permet de gerer le corps du serpent, les parties suivent la tete
         double gap = SnakePart.SNAKEPART_GAP;
 
         for (int i = 1; i < segments.size(); i++) {
@@ -191,13 +155,9 @@ public sealed class Snake implements Decalage permits SnakeIA {
             }
         }
     }
-    
-    public void resetPositionMap(double newX,double newY){
-        setHeadPosition(new Point2D(newX,newY));
-    }
 
     @Override
-    public void decallement(double x, double y) {
+    public void decallement(double x, double y) {       //decale le serpent en fonction de x et y
         for (SnakePart part : segments) {
             part.setX(part.getX() + x);
             part.setY(part.getY() + y);

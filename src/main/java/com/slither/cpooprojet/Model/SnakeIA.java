@@ -32,11 +32,6 @@ public non-sealed class SnakeIA extends Snake {
         return segments;
     }
 
-    /**
-     * @brief setHeadPosition, met à jour la position de la tête du serpent et en
-     *        même temps la zone de recherche/ détection
-     */
-    @Override
     public void setHeadPosition(Point2D position) {
         super.setHeadPosition(position);
         zone = new Rectangle2D(getHeadPositionX() - 100, getHeadPositionY() - 100, 200, 200);
@@ -46,7 +41,7 @@ public non-sealed class SnakeIA extends Snake {
         return new SnakeIA(id);
     }
 
-    private void moveSnakeAwayFromPlayer(SnakeIA snake, Snake serpentJoueur) {
+    private void moveSnakeAwayFromPlayer(SnakeIA snake, Snake serpentJoueur) {      //fait fuir le serpent du joueur
         double fuirX = snake.getHeadPositionX() - serpentJoueur.getHeadPositionX();
         double fuirY = snake.getHeadPositionY() - serpentJoueur.getHeadPositionY();
         snake.setHeadPosition(new Point2D(snake.getHeadPositionX() + fuirX, snake.getHeadPositionY() + fuirY));
@@ -58,19 +53,16 @@ public non-sealed class SnakeIA extends Snake {
      * - si, il y a de la nourriture dans la zone du serpent, le serpent se dirige
      * vers la nourriture
      * - sinon, le serpent se déplace aléatoirement
-     * 
-     * @brief updateSnakeBehaviour, met à jour le comportement d'un serpent IA
-     * @param snake
      */
     public void updateSnakeBehaviour(SnakeIA snake, Snake serpentJoueur, ArrayList<Food> foodList) {
         if (snake.getSegments().size() > 1) {
             Rectangle2D zone = snake.getZone();
-            if (zone.contains(serpentJoueur.getHeadPositionX(), serpentJoueur.getHeadPositionY())) {
-                moveSnakeAwayFromPlayer(snake, serpentJoueur);
-                snake.acceleration();
+            if (zone.contains(serpentJoueur.getHeadPositionX(), serpentJoueur.getHeadPositionY())) {    //si le joueur est dans la zone du serpent
+                moveSnakeAwayFromPlayer(snake, serpentJoueur);      //le serpent fuit le joueur
+                snake.acceleration();       //le serpent accelere
             } else {
                 snake.deceleration();
-                moveSnakeTowardPointOrRandomly(snake, zone, foodList);
+                moveSnakeTowardPointOrRandomly(snake, zone, foodList);      //le serpent se dirige vers la nourriture ou se deplace aleatoirement
             }
         } else {
             setRandomHeadPosition(snake);
@@ -89,7 +81,6 @@ public non-sealed class SnakeIA extends Snake {
             directionY = -directionY; 
             y = snake.getHeadPositionY() + directionY;
         }
-        
         snake.setHeadPosition(new Point2D(x, y));
     }
 
@@ -105,12 +96,9 @@ public non-sealed class SnakeIA extends Snake {
             setRandomHeadPosition(snake);
         }
     }
-
-    /**
-     * @brief closer_in_zone, renvoie le fodd le plus proche dans la zone donnée
-     * @param zone de recherche
-     * @return le food le plus proche dans la zone donnée
-     */
+    
+    //closer_in_zone, renvoie le fodd le plus proche dans la zone donnée
+    
     private Point2D closer_in_zone(Rectangle2D zone, ArrayList<Food> foodList) {
         Point2D closer = null;
         double distance = zone.getMaxX() - zone.getMinX() + zone.getMaxY() - zone.getMinY();

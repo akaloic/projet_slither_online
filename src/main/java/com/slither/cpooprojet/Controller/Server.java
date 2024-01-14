@@ -56,9 +56,7 @@ public class Server {
     }
 }
 
-/**
- * classe interne pour gérer les clients
- */
+//classe interne pour gérer les clients
 class ClientHandler implements Runnable {
     private Server server;
     private Socket socket;

@@ -18,10 +18,10 @@ public class Client {
     private Modele modele;
 
     private Client(String serverAddress, int serverPort, Modele modele) throws IOException {
-        this.socket = new Socket(serverAddress, serverPort);
+        this.socket = new Socket(serverAddress, serverPort);    // Connexion au serveur
 
-        this.out = new PrintWriter(socket.getOutputStream(), true);
-        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.out = new PrintWriter(socket.getOutputStream(), true);                   // Flux d'écriture
+        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));       // Flux de lecture
 
         this.gson = new Gson();
 
@@ -35,12 +35,12 @@ public class Client {
         return instance;
     }
 
-    public void sendModele(Modele modele) {
+    public void sendModele(Modele modele) {         //envoi du modele au serveur
         String json = gson.toJson(modele);
         out.println(json);
     }
 
-    private Modele readModele(){
+    private Modele readModele(){                //lecture du modele du serveur
         try {
             String json = in.readLine();
             return gson.fromJson(json, Modele.class);
@@ -50,7 +50,7 @@ public class Client {
         return null;
     }
 
-    public void start() {
+    public void start() {               //lancement du thread de lecture du modele
         new Thread(() -> {
             while (true) {
                 Modele newModele = readModele();
@@ -61,7 +61,7 @@ public class Client {
         }).start();
     }
 
-    public void close() throws IOException {
+    public void close() throws IOException {        //fermeture de la connexion
         in.close();
         out.close();
         socket.close();

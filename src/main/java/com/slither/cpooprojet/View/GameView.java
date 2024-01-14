@@ -32,7 +32,7 @@ public class GameView extends StackPane {
         this.graphicsContext = canvas.getGraphicsContext2D();
         this.modele = modele;
         this.parent = parent;
-        this.shield = (modele.getMainSnake().isChieldMode()) ? new Image("file:src/main/resources/shield.png") : null;
+        this.shield = (modele.getMainSnake().isChieldMode()) ? new Image("file:src/main/resources/shield.png") : null;  //permet d'afficher le bouclier
 
         canvas.setFocusTraversable(true);
         canvas.requestFocus();
@@ -41,7 +41,7 @@ public class GameView extends StackPane {
         this.getChildren().add(canvas);
     }
 
-    public void draw() {
+    public void draw() {            //dessine le jeu qui est affiché à l'écran avec IsInVue
         graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         for(int i=-1; i<2; i++){
@@ -51,43 +51,17 @@ public class GameView extends StackPane {
                 if(isInVue(transpositionX, transpositionY)){
                     drawAllSnake(transpositionX, transpositionY);
                     drawFood(transpositionX, transpositionY);
-                }else if(i==0 && j==0){
+                }else if(i==0 && j==0){                     //si on est dans le carré du joueur
                     drawAllSnake(transpositionX, transpositionY);
                     drawFood(transpositionX, transpositionY);
                 }
             }
         }
-        //drawField(modele.getSerpentJoueur().getHeadPositionX(), modele.getSerpentJoueur().getHeadPositionY());
     }
 
-    private void drawField(double x, double y) {
-        ArrayList<Field> field_list = modele.getCarre3x3().getFields();
-
-        for (Field field : field_list) {
-            boolean in_vision = field.getRect().intersects(x - View.SCREENWIDTH / 2, y - View.SCREENHEIGHT / 2,
-                    View.SCREENWIDTH, View.SCREENHEIGHT);
-
-            if (in_vision) {
-                Rectangle2D rect = field.getRect();
-                graphicsContext.setFill(new Color(1, 1, 1, 0));
-                graphicsContext.fillRect(rect.getMinX(), rect.getMinY(), View.SCREENWIDTH, View.SCREENHEIGHT);
-                graphicsContext.setStroke(Color.BLACK);
-                graphicsContext.setLineWidth(2);
-                graphicsContext.strokeRect(rect.getMinX(), rect.getMinY(), View.SCREENWIDTH, View.SCREENHEIGHT);
-            }
-        }
-    }
-
-    private void drawAllSnake(double transpositionX, double transpositionY) {
+    private void drawAllSnake(double transpositionX, double transpositionY) {           //dessine tous les serpents
         ArrayList<Snake> allSnake = modele.getAllSnake();
         for (int i = 0; i < allSnake.size(); i++) {
-            // if (allSnake.get(i) instanceof SnakeIA) {
-            // SnakeIA snakeIA = (SnakeIA) allSnake.get(i);
-            // graphicsContext.setFill(Color.BLUE);
-            // graphicsContext.fillRect(snakeIA.getZone().getMinX(),
-            // snakeIA.getZone().getMinY(), snakeIA.getZone().getWidth(),
-            // snakeIA.getZone().getHeight());
-            // }
             drawSnake(allSnake.get(i), transpositionX, transpositionY);
         }
     }
@@ -95,13 +69,11 @@ public class GameView extends StackPane {
     private void drawSnake(Snake serpent,double transpositionX, double transpositionY) {
         Image skin = serpent.getSkin();
 
-        // addBackground();
-
         for (int i = 1; i < serpent.getTaille(); i++) {
             graphicsContext.setFill(serpent.getCouleur());
             graphicsContext.fillOval(serpent.getSegments().get(i).getX()+transpositionX, serpent.getSegments().get(i).getY()+transpositionY,
                     SnakePart.SNAKEPARTSIZE, SnakePart.SNAKEPARTSIZE);
-        }
+        }           //dessine le corps du serpent
 
         graphicsContext.save();
         graphicsContext.beginPath();
@@ -111,20 +83,20 @@ public class GameView extends StackPane {
                 SnakePart.SNAKEPARTSIZE / 2,
                 0, 360);
         graphicsContext.closePath();
-        graphicsContext.clip();
+        graphicsContext.clip();     //permet de ne pas dessiner la tête du serpent en dehors du cercle
 
         graphicsContext.drawImage(skin, serpent.getHeadPositionX()+transpositionX, serpent.getHeadPositionY()+transpositionY,
-                SnakePart.SNAKEPARTSIZE, SnakePart.SNAKEPARTSIZE);
+                SnakePart.SNAKEPARTSIZE, SnakePart.SNAKEPARTSIZE);      //dessine la tête du serpent
 
         if(serpent.isChieldMode()){
             graphicsContext.drawImage(shield, serpent.getHeadPositionX()+transpositionX, serpent.getHeadPositionY()+transpositionY,
-                    SnakePart.SNAKEPARTSIZE, SnakePart.SNAKEPARTSIZE);
+                    SnakePart.SNAKEPARTSIZE, SnakePart.SNAKEPARTSIZE);      //dessine le bouclier du serpent
         }
 
         graphicsContext.restore();
     }
 
-    private void drawFood(double transpositionX, double transpositionY) {
+    private void drawFood(double transpositionX, double transpositionY) {       //dessine la nourriture
         modele.update_food_tab_food();
         ArrayList<Food> foodList = modele.getFoodList();
         for (int i = 0; i < foodList.size(); i++) {
@@ -133,21 +105,15 @@ public class GameView extends StackPane {
         }
     }
 
-    public void deadSnake(Snake snake) {
-        graphicsContext.setFill(Color.RED);
-        graphicsContext.fillRect(snake.getHeadPositionX(), snake.getHeadPositionY(), SnakePart.SNAKEPARTSIZE,
-                SnakePart.SNAKEPARTSIZE);
-    }
-
     public void showAccueil() {
         parent.showAccueil();
     }
 
-    private boolean isInVue(double x, double y){
+    private boolean isInVue(double x, double y){        //determiner si le rectangle x,y est affiché à l'écran
         return !modele.getCarre3x3().getCentre().getRect().intersects(x+1, y+1, View.SCREENWIDTH, View.SCREENHEIGHT);
     }
 
-    public void ajtPause() {
+    public void ajtPause() {            //ajoute le menu pause
         StackPane pausePanel = new StackPane();
         pausePanel.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5); -fx-padding: 50;");
 

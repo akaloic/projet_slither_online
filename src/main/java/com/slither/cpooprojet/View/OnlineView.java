@@ -61,7 +61,7 @@ public class OnlineView extends StackPane {
         this.getChildren().add(vBox);
     }
 
-    private void generateJoinView() {
+    private void generateJoinView() {       //permet de rejoindre un serveur
         this.getChildren().clear();
 
         VBox vBox = new VBox();
@@ -84,7 +84,7 @@ public class OnlineView extends StackPane {
         HBox portFieldBox = new HBox(5);
         portFieldBox.setAlignment(javafx.geometry.Pos.CENTER);
 
-        TextField[] portFields = new TextField[4];
+        TextField[] portFields = new TextField[4];          //4 champs de texte pour le port
         for (int i = 0; i < portFields.length; i++) {
             TextField portField = new TextField();
             portField.setMaxWidth(50);
@@ -130,7 +130,7 @@ public class OnlineView extends StackPane {
             } else {
                 try {
                     int port = Integer.parseInt(ret);
-                    parent.launchOnline(ip, port);
+                    parent.launchOnline(ip, port);      //lance le jeu en ligne
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -142,7 +142,7 @@ public class OnlineView extends StackPane {
         this.getChildren().add(vBox);
     }
 
-    private void generateServerView() {
+    private void generateServerView(){     //permet de créer un serveur
         this.getChildren().clear();
 
         VBox vBox = new VBox();
@@ -198,7 +198,7 @@ public class OnlineView extends StackPane {
                 portFields[3].setPromptText("T");
             } else {
                 int port = Integer.parseInt(ret);
-                Thread serverThread = new Thread(() -> {
+                Thread serverThread = new Thread(() -> {            //lance le serveur dans un thread
                     try {
                         Server server = new Server(port);
 

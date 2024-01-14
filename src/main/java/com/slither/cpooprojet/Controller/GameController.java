@@ -17,7 +17,7 @@ import javafx.util.Duration;
 import java.util.Optional;
 
 public class GameController {
-    private final double RETIRE_INTERVAL = 0.5;
+    private final double RETIRE_INTERVAL = 0.5;         //intervalle de temps entre chaque retrait de partie du serpent
 
     private Modele modele;
     private GameView gameView;
@@ -29,7 +29,7 @@ public class GameController {
     private boolean spacePressed = false;
     private boolean pause = false;
     private double lastUpdateTime = 0;
-    private Timeline timeline;
+    private Timeline timeline;                      //timeline pour le bouclier, permet de rendre invulnérable le joueur pendant 5 secondes
 
     public GameController(Modele modele, GameView gameView, Client client) {
         this.modele = modele;
@@ -46,23 +46,23 @@ public class GameController {
         };
         gameLoop.start();
 
-        timeline = new Timeline(new KeyFrame(Duration.seconds(5)));
+        timeline = new Timeline(new KeyFrame(Duration.seconds(5)));             //initialisation de la timeline
 
-        gameView.getCanvas().addEventHandler(MouseEvent.MOUSE_MOVED, this::handleMouseMoved);
+        gameView.getCanvas().addEventHandler(MouseEvent.MOUSE_MOVED, this::handleMouseMoved);   //ajout des eventHandlers
         gameView.getCanvas().setOnKeyPressed(event -> {
             switch (event.getCode()) {
                 case SPACE:
-                    if (!spacePressed) {
+                    if (!spacePressed) {                //si on appuie sur espace et que l'accélération n'est pas activée
                         acceleration();
                     }
                     break;
                 case P:
-                    if (!pause) {
+                    if (!pause) {                       //si on appuie sur P et que le jeu n'est pas en pause
                         gameLoop.stop();
                         gameView.ajtPause();
                         pause = true;
                     } else {
-                        gameLoop.start();
+                        gameLoop.start();                   //si on appuie sur P et que le jeu est en pause
                         gameView.retirePause();
                         pause = false;
                     }
@@ -74,7 +74,7 @@ public class GameController {
         gameView.getCanvas().setOnKeyReleased(event -> {
             switch (event.getCode()) {
                 case SPACE:
-                    if (spacePressed) {
+                    if (spacePressed) {             //si on relache espace et que l'accélération est activée
                         deceleration();
                         spacePressed = false;
                     } else {
@@ -88,42 +88,39 @@ public class GameController {
     }
 
     public Point2D getPositionSouris() {
-        return new Point2D(positionSouris.getX(), positionSouris.getY());
+        return new Point2D(positionSouris.getX(), positionSouris.getY());       //retourne la position de la souris
     }
 
     private void handleMouseMoved(MouseEvent event) {
-        positionSouris = new Point2D(event.getX(), event.getY());
+        positionSouris = new Point2D(event.getX(), event.getY());           //met à jour la position de la souris
     }
 
-    private void acceleration() { // pour le joueur, ici c'est à faire manuellemnt mais pour l'IA c'est
-                                  // automatique
+    private void acceleration() {           //accélération du serpent
         if (modele.getMainSnake().getSegments().size() > 1) {
             modele.getMainSnake().acceleration();
             spacePressed = true;
         }
     }
 
-    private void deceleration() { // pour le joueur, ici c'est à faire manuellemnt mais pour l'IA c'est
-                                  // automatique
+    private void deceleration() {           //décélération du serpent
         if (spacePressed) {
             modele.getMainSnake().deceleration();
             spacePressed = false;
         }
     }
 
-    public void updateGame(double currentTime) {
-        if (!jeuFinis) {
-            modele.updateIA();
+    public void updateGame(double currentTime) {            //mise à jour du jeu
+        if (!jeuFinis) {                                    //si le jeu n'est pas finis
+            modele.updateIA();                            //mise à jour des IA
 
-            if (positionSouris != null) { // -> potentiel Optionnel<Point2D>
-                if (modele.getMainSnake().getSegments().size() <= 1) {
+            if (positionSouris != null) {
+                if (modele.getMainSnake().getSegments().size() <= 1) {      //si le serpent n'a qu'une partie
                     deceleration();
                     spacePressed = false;
                 }
 
-                if (spacePressed && (currentTime - lastUpdateTime) > RETIRE_INTERVAL) { // on retire une partie du
-                                                                                      // serpent toutes les 0.5 secondes si on maintient l'accélération activée
-                    modele.getMainSnake().retirePart();
+                if (spacePressed && (currentTime - lastUpdateTime) > RETIRE_INTERVAL) { // on retire une partie du                                                                                   
+                    modele.getMainSnake().retirePart();                                 // serpent toutes les 0.5 secondes si on maintient l'accélération activée
                     lastUpdateTime = currentTime;
                 }
 
@@ -134,18 +131,18 @@ public class GameController {
                     }
                 });
                 
-                modele.getMainSnake().setHeadPosition(positionSouris);
+                modele.getMainSnake().setHeadPosition(positionSouris);              //met à jour la position de la tête du serpent
 
 
                 for(Snake snake : modele.getAllSnake()){
                     double xSnake = snake.getHeadPositionX();
                     double ySnake = snake.getHeadPositionY();
                     
-                    if (!modele.getCarre3x3().getCentre().getRect().contains(xSnake, ySnake)) {
+                    if (!modele.getCarre3x3().getCentre().getRect().contains(xSnake, ySnake)) {     //si la tête du serpent sort de la zone de jeu
                         Rectangle2D center = modele.getCarre3x3().getCentre().getRect();
                         Point2D newPoint = null;
     
-                        if (xSnake < center.getMinX()) {
+                        if (xSnake < center.getMinX()) {    //ajustement de la position de l'autre côté de la zone de jeu
                             newPoint = new Point2D(center.getMaxX(), ySnake);
                         } else if (xSnake > center.getMaxX()) {
                             newPoint = new Point2D(center.getMinX(), ySnake);
@@ -158,116 +155,51 @@ public class GameController {
                         }
                         if (newPoint != null) {
                             if(snake instanceof SnakeIA){
-                                modele.teleportationHeadIA(newPoint, (SnakeIA) snake);
+                                modele.teleportationHeadIA(newPoint, (SnakeIA) snake);      //on téléporte la tête du serpent si c'est une IA
                             }else{
-                                modele.teleportationHeadPlayer(newPoint);
+                                modele.teleportationHeadPlayer(newPoint);                //si c'est le joueur
                             }
                         }
                     }
                 }
-                //ajout de maj pour tous
 
-                double xSnake = modele.getMainSnake().getHeadPositionX();
+                double xSnake = modele.getMainSnake().getHeadPositionX();   //on récupère la position de la tête du serpent
                 double ySnake = modele.getMainSnake().getHeadPositionY();
 
-                // if (!modele.getCarre3x3().getCentre().getRect().contains(xSnake, ySnake)) {     // on pourra preciser par la suite avec oval
-                //     Rectangle2D center = modele.getCarre3x3().getCentre().getRect();
-                //     Point2D newPoint = null;
-
-                //     if (xSnake < center.getMinX()) {
-                //         newPoint = new Point2D(center.getMaxX(), ySnake);
-                //     } else if (xSnake > center.getMaxX()) {
-                //         newPoint = new Point2D(center.getMinX(), ySnake);
-                //     }
-                    
-                //     if (ySnake < center.getMinY()) {
-                //         newPoint = new Point2D(xSnake, center.getMaxY());
-                //     } else if (ySnake > center.getMaxY()) {
-                //         newPoint = new Point2D(xSnake, center.getMinY());
-                //     }
-
-                //     if (newPoint != null) {
-                //         modele.teleportationHeadPlayer(newPoint);
-                //     }
-                // }
-
-                double xGap; // modifie le déplacement plus ou moins fort entre chaque update en X
-                double yGap; // modifie le déplacement plus ou moins fort entre chaque update en Y
+                double xGap;
+                double yGap;
 
                 xGap = View.SCREENWIDTH / 2 - xSnake;
                 yGap = View.SCREENHEIGHT / 2 - ySnake;
 
-                modele.updateObjetJeu(xGap, yGap);
+                modele.updateObjetJeu(xGap, yGap);          //on met à jour les objets du jeu en fonction du deplacement du serpent
 
             }
 
-            // modele.getAllSnake().forEach(snake -> {
-            // if(modele.checkCollision(snake) != null){
-            // if (snake instanceof SnakeIA) {
-            // modele.replace_snake_by_food(snake);
-            // modele.getAllSnake().remove(snake);
-            // modele.add_snake_ia();
-            // } else {
-            // jeuFinis = true; // sinon c'est le serpent du joueur, donc le jeu est fini
-            // }
-            // }
-            // });
-
-            // double newX;
-            // double newY;
-            // if(xSnake<0) newX = gameView.getView().SCREENWIDTH;
-            // else if(xSnake>gameView.getView().SCREENWIDTH) newX = 0;
-            // else newX = xSnake;
-
-            // if(ySnake<0) newY = gameView.getView().SCREENHEIGHT;
-            // else if(ySnake>gameView.getView().SCREENHEIGHT) newY = 0;
-            // else newY = ySnake;
-
-            // modele.getMainSnake().resetPositionMap(newX,newY);
-            // xSnake = modele.getMainSnake().getHeadPositionX();
-            // ySnake = modele.getMainSnake().getHeadPositionY();
-
-            // modele.getAllSnake().stream()
-            // .map(snake -> modele.checkCollision(snake)) // renvoie un Optional<Snake>
-            // indiquant si le serpent donné est en collision
-            // .filter(Optional::isPresent) // renvoie un stream avec les serpents en
-            // collision
-            // .map(Optional::get) // renvoie un stream avec les serpents en collision en
-            // convertissant l'Optional<Snake> en Snake
-            // .forEach(snake -> { // pour chaque serpent en collision
-            // if (snake instanceof SnakeIA) { // si c'est un serpent IA :
-            // modele.replace_snake_by_food(snake); // on le remplace par de la nourriture
-            // modele.getAllSnake().remove(snake); // on le supprime de la liste des
-            // serpents
-            // modele.add_snake_ia(); // on ajoute un nouveau serpent IA
-            // } else {
-            // jeuFinis = true; // sinon c'est le serpent du joueur, donc le jeu est fini
-            // }
-            // });
-
-            for (int i = 0; i < modele.getAllSnake().size(); i++) {
+            for (int i = 0; i < modele.getAllSnake().size(); i++) {             //on vérifie les collisions
                 Optional<Snake> snake = modele.checkCollision(modele.getAllSnake().get(i));
                 if (snake.isPresent()) {
-                    if (snake.get() instanceof SnakeIA) {
-                        modele.replace_snake_by_food(snake.get());
-                        modele.getAllSnake().remove(snake.get());
-                        modele.add_snake_ia();
+                    if (snake.get() instanceof SnakeIA) {               //cas pour une IA
+                        modele.replace_snake_by_food(snake.get());      //on remplace le serpent par de la nourriture
+                        modele.getAllSnake().remove(snake.get());       //on supprime le serpent de la liste des serpents
+                        modele.add_snake_ia();                        //on ajoute une nouvelle IA
                     } else {
-                        if(modele.getMainSnake().isChieldMode()){
-                            timeline.play();
-                            modele.getMainSnake().setChieldMode(false);
-                        }else if(!timeline.getStatus().equals(Timeline.Status.RUNNING)) jeuFinis = true;
+                        if(modele.getMainSnake().isChieldMode()){       //si le joueur est en mode bouclier
+                            timeline.play();                        //on lance la timeline de 5 secondes
+                            modele.getMainSnake().setChieldMode(false);         //et on retire le bouclier
+                        }else if(!timeline.getStatus().equals(Timeline.Status.RUNNING)) jeuFinis = true;        //sinon le jeu est finis si le temps du bouclier est écoulé
                     }
                 }
             }
 
-            gameView.setModele(modele);
-            gameView.draw();
+            gameView.setModele(modele);                 //on met à jour la vue
+            gameView.draw();                        //on dessine la vue
 
-            if (client != null) client.sendModele(modele);
-        } else {    // on ferme ici le jeu
-            gameLoop.stop();
-            gameView.showAccueil();
+            if (client != null) client.sendModele(modele);      //si on est en mode en ligne on envoie le modele au serveur
+        } else {                                        //si le jeu est finis
+            gameView.getView().setNvlpartie();          //on ne peut plus reprendre la partie
+            gameLoop.stop();                            //on arrête la boucle de jeu
+            gameView.showAccueil();             //on affiche l'accueil
         }
     }
 }
