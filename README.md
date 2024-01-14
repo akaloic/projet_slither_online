@@ -8,6 +8,8 @@ afin de tester le programme, il faut se placer à la racine du projet et lancer 
 ```bash
 ./gradlew test
 ```
+Problème rencontré : 
+    Les differents tests qui on besoin d'une initialisation d'un Snake ne fonctionne pas. La classe ne trouve pas comment initialiser le Snake. Nous avons preferé ne pas supprimer les tests et laissé tel quel.
 
 # Exécution
 
