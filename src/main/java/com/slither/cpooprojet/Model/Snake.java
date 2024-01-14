@@ -9,7 +9,7 @@ import com.slither.cpooprojet.View.View;
 import java.util.ArrayList;
 import java.util.List;
 
-public sealed class Snake implements Decalage permits SnakeIA {
+public sealed class Snake extends Decalage permits SnakeIA {
     protected ArrayList<SnakePart> segments;
     protected double vitesse;
     protected Couleur couleur;

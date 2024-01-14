@@ -2,7 +2,7 @@ package com.slither.cpooprojet.Model.SerializableObject;
 
 import com.slither.cpooprojet.Model.Decalage;
 
-public non-sealed class Rectangle implements Decalage {
+public non-sealed class Rectangle extends Decalage {
     double x;
     double y;
     double width;

@@ -3,7 +3,7 @@ package com.slither.cpooprojet.Model;
 import com.slither.cpooprojet.Model.SerializableObject.Couleur;
 import com.slither.cpooprojet.View.View;
 
-public non-sealed class Food implements Decalage {
+public non-sealed class Food extends Decalage {
     public static final double FOODSIZE = View.SCREENHEIGHT / (50*View.MULTIPLIER);
 
     private double x;
