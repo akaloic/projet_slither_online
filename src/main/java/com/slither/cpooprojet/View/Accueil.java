@@ -75,32 +75,32 @@ public class Accueil extends StackPane {
         this.imageTete.setFitWidth(100);
         this.imageTete.setTranslateY(150);
 
-        ComboBox<Image> comboBox = new ComboBox<Image>(list);
-        comboBox.setTranslateY(270);
+        // ComboBox<Image> comboBox = new ComboBox<Image>(list);
+        // comboBox.setTranslateY(270);
 
-        comboBox.setCellFactory(param -> new ListCell<Image>() {        //permet de remplir la comboBox avec des images
-            private final ImageView imageView = new ImageView();
+        // comboBox.setCellFactory(param -> new ListCell<Image>() {        //permet de remplir la comboBox avec des images
+        //     private final ImageView imageView = new ImageView();
 
-            protected void updateItem(Image item, boolean empty) {
-                super.updateItem(item, empty);
+        //     protected void updateItem(Image item, boolean empty) {
+        //         super.updateItem(item, empty);
 
-                if (empty || item == null) {
-                    setGraphic(null);
-                } else {
-                    imageView.setImage(item);
-                    imageView.setFitWidth(50);
-                    imageView.setFitHeight(50);
-                    setGraphic(imageView);
-                }
-            }
-        });
+        //         if (empty || item == null) {
+        //             setGraphic(null);
+        //         } else {
+        //             imageView.setImage(item);
+        //             imageView.setFitWidth(50);
+        //             imageView.setFitHeight(50);
+        //             setGraphic(imageView);
+        //         }
+        //     }
+        // });
 
-        comboBox.setOnAction(e -> {
-            this.getChildren().remove(imageTete);
-            snakeBuild.setSkin(comboBox.getValue());
-            imageTete.setImage(comboBox.getValue());
-            this.getChildren().add(imageTete);
-        });
+        // comboBox.setOnAction(e -> {
+        //     this.getChildren().remove(imageTete);
+        //     snakeBuild.setSkin(comboBox.getValue());
+        //     imageTete.setImage(comboBox.getValue());
+        //     this.getChildren().add(imageTete);
+        // });
 
         CheckBox mode = new CheckBox("Mode");
         mode.setTranslateY(50);
@@ -109,14 +109,15 @@ public class Accueil extends StackPane {
             else snakeBuild.setChieldMode(false);
         });
 
-        ColorPicker colorPicker = new ColorPicker(Color.GREEN); // Couleur par défaut
-        colorPicker.setOnAction(e -> {
-            snakeBuild.setCouleur(colorPicker.getValue());
-        });
+        // ColorPicker colorPicker = new ColorPicker(Color.GREEN); // Couleur par défaut
+        // colorPicker.setOnAction(e -> {
+        //     snakeBuild.setCouleur(colorPicker.getValue());
+        // });
 
 
 
-        this.getChildren().addAll(titre,startOnline ,start,sliderVitesse,mode, imageTete, comboBox, colorPicker);
+        this.getChildren().addAll(titre,startOnline ,start,sliderVitesse,mode, imageTete);
+        // this.getChildren().addAll(titre,startOnline ,start, comboBox, sliderVitesse,mode, imageTete, colorPicker);
     }
 
     public Snake getSnake() {

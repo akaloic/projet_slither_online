@@ -6,10 +6,8 @@ import com.slither.cpooprojet.Model.Food;
 import com.slither.cpooprojet.Model.Modele;
 import com.slither.cpooprojet.Model.Snake;
 import com.slither.cpooprojet.Model.SnakePart;
-import com.slither.cpooprojet.Model.Carre3x3.Field;
+import com.slither.cpooprojet.Model.SerializableObject.Rectangle;
 
-import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -18,21 +16,18 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.effect.ColorAdjust;
 
 public class GameView extends StackPane {
     private View parent;
     private GraphicsContext graphicsContext;
     private Canvas canvas;
     private Modele modele;
-    private Image shield;
 
     public GameView(View parent, Modele modele) {
         this.canvas = new Canvas(View.SCREENWIDTH, View.SCREENHEIGHT);
         this.graphicsContext = canvas.getGraphicsContext2D();
         this.modele = modele;
         this.parent = parent;
-        this.shield = (modele.getMainSnake().isChieldMode()) ? new Image("file:src/main/resources/shield.png") : null;
 
         canvas.setFocusTraversable(true);
         canvas.requestFocus();
@@ -41,9 +36,16 @@ public class GameView extends StackPane {
         this.getChildren().add(canvas);
     }
 
+    // private void addBackground() {
+    // Image image = new Image("file:src/main/resources/slither/background.jpg");
+    // graphicsContext.drawImage(image, 0, 0, View.SCREENWIDTH, View.SCREENHEIGHT);
+    // }
+
     public void draw() {
         graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
+        //drawAllSnake();
+        //drawFood();
         for(int i=-1; i<2; i++){
             double transpositionX = i*View.SCREENWIDTH;
             for(int j=-1; j<2; j++){
@@ -61,14 +63,13 @@ public class GameView extends StackPane {
     }
 
     private void drawField(double x, double y) {
-        ArrayList<Field> field_list = modele.getCarre3x3().getFields();
+        ArrayList<Rectangle> field_list = modele.getCarre3x3().getFields();
 
-        for (Field field : field_list) {
-            boolean in_vision = field.getRect().intersects(x - View.SCREENWIDTH / 2, y - View.SCREENHEIGHT / 2,
-                    View.SCREENWIDTH, View.SCREENHEIGHT);
+        for (Rectangle field : field_list) {
+            boolean in_vision = field.getRectangle().intersects(new Rectangle(x - View.SCREENWIDTH / 2, y - View.SCREENHEIGHT / 2, View.SCREENWIDTH, View.SCREENHEIGHT));
 
             if (in_vision) {
-                Rectangle2D rect = field.getRect();
+                Rectangle rect = field.getRectangle();
                 graphicsContext.setFill(new Color(1, 1, 1, 0));
                 graphicsContext.fillRect(rect.getMinX(), rect.getMinY(), View.SCREENWIDTH, View.SCREENHEIGHT);
                 graphicsContext.setStroke(Color.BLACK);
@@ -93,12 +94,14 @@ public class GameView extends StackPane {
     }
 
     private void drawSnake(Snake serpent,double transpositionX, double transpositionY) {
-        Image skin = serpent.getSkin();
+        Image skin = new Image(serpent.getSkin());
 
         // addBackground();
 
         for (int i = 1; i < serpent.getTaille(); i++) {
-            graphicsContext.setFill(serpent.getCouleur());
+            Color couleur = new Color(serpent.getCouleur().getRed(), serpent.getCouleur().getGreen(),
+                    serpent.getCouleur().getBlue(), serpent.getCouleur().getOpacity());
+            graphicsContext.setFill(couleur);
             graphicsContext.fillOval(serpent.getSegments().get(i).getX()+transpositionX, serpent.getSegments().get(i).getY()+transpositionY,
                     SnakePart.SNAKEPARTSIZE, SnakePart.SNAKEPARTSIZE);
         }
@@ -116,11 +119,6 @@ public class GameView extends StackPane {
         graphicsContext.drawImage(skin, serpent.getHeadPositionX()+transpositionX, serpent.getHeadPositionY()+transpositionY,
                 SnakePart.SNAKEPARTSIZE, SnakePart.SNAKEPARTSIZE);
 
-        if(serpent.isChieldMode()){
-            graphicsContext.drawImage(shield, serpent.getHeadPositionX()+transpositionX, serpent.getHeadPositionY()+transpositionY,
-                    SnakePart.SNAKEPARTSIZE, SnakePart.SNAKEPARTSIZE);
-        }
-
         graphicsContext.restore();
     }
 
@@ -128,7 +126,9 @@ public class GameView extends StackPane {
         modele.update_food_tab_food();
         ArrayList<Food> foodList = modele.getFoodList();
         for (int i = 0; i < foodList.size(); i++) {
-            graphicsContext.setFill(foodList.get(i).getCouleur());
+            Color couleur = new Color(foodList.get(i).getCouleur().getRed(), foodList.get(i).getCouleur().getGreen(),
+                    foodList.get(i).getCouleur().getBlue(), foodList.get(i).getCouleur().getOpacity());
+            graphicsContext.setFill(couleur);
             graphicsContext.fillOval(foodList.get(i).getX()+transpositionX, foodList.get(i).getY()+transpositionY, Food.FOODSIZE, Food.FOODSIZE);
         }
     }
@@ -144,7 +144,7 @@ public class GameView extends StackPane {
     }
 
     private boolean isInVue(double x, double y){
-        return !modele.getCarre3x3().getCentre().getRect().intersects(x+1, y+1, View.SCREENWIDTH, View.SCREENHEIGHT);
+        return !modele.getCarre3x3().getCentre().getRectangle().intersects(new Rectangle(x + 1, y + 1, View.SCREENWIDTH, View.SCREENHEIGHT));
     }
 
     public void ajtPause() {
@@ -152,7 +152,7 @@ public class GameView extends StackPane {
         pausePanel.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5); -fx-padding: 50;");
 
         VBox box = new VBox(10);
-        box.setAlignment(Pos.CENTER);
+        box.setAlignment(javafx.geometry.Pos.CENTER);
         box.setStyle(
                 "-fx-background-color: white; -fx-padding: 20; -fx-border-color: black; -fx-border-width: 2;");
         box.setMaxWidth(300);

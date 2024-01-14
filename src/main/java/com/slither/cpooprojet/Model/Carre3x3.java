@@ -1,56 +1,38 @@
 package com.slither.cpooprojet.Model;
 
+import com.slither.cpooprojet.Model.SerializableObject.Rectangle;
 import com.slither.cpooprojet.View.View;
 
 import java.util.ArrayList;
 
-import javafx.geometry.Rectangle2D;
-
 public class Carre3x3 {
-    private final ArrayList<Field> fields;
-    public static final Rectangle2D TOTALFIELD = new Rectangle2D(-View.SCREENWIDTH, -View.SCREENHEIGHT, View.SCREENWIDTH * 3, View.SCREENHEIGHT * 3);
+    private final ArrayList<Rectangle> fields;
+    public static final Rectangle TOTALFIELD = new Rectangle(-View.SCREENWIDTH, -View.SCREENHEIGHT, View.SCREENWIDTH * 3, View.SCREENHEIGHT * 3);
     public Carre3x3() {
-        fields = new ArrayList<Field>();
+        fields = new ArrayList<Rectangle>();
 
-        this.fields.add(new Field(new Rectangle2D(-View.SCREENWIDTH, -View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)));    // (0, 0)
-        this.fields.add(new Field(new Rectangle2D(0, -View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)));    // (1, 0)
-        this.fields.add(new Field(new Rectangle2D(View.SCREENWIDTH, -View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)));   // (2, 0)
-        this.fields.add(new Field(new Rectangle2D(-View.SCREENWIDTH, 0, View.SCREENWIDTH, View.SCREENHEIGHT)));   // (0, 1)
-        this.fields.add(new Field(new Rectangle2D(0, 0, View.SCREENWIDTH, View.SCREENHEIGHT)));  // (1, 1) -> centre
-        this.fields.add(new Field(new Rectangle2D(View.SCREENWIDTH, 0, View.SCREENWIDTH, View.SCREENHEIGHT)));  // (2, 1)
-        this.fields.add(new Field(new Rectangle2D(-View.SCREENWIDTH, View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT))); // (0, 2)
-        this.fields.add(new Field(new Rectangle2D(0, View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)));  // (1, 2)
-        this.fields.add(new Field(new Rectangle2D(View.SCREENWIDTH, View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)));  // (2, 2)
+        this.fields.add(new Rectangle(-View.SCREENWIDTH, -View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT));    // (0, 0)
+        this.fields.add(new Rectangle(0, -View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT));    // (1, 0)
+        this.fields.add(new Rectangle(View.SCREENWIDTH, -View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT));   // (2, 0)
+        this.fields.add(new Rectangle(-View.SCREENWIDTH, 0, View.SCREENWIDTH, View.SCREENHEIGHT));   // (0, 1)
+        this.fields.add(new Rectangle(0, 0, View.SCREENWIDTH, View.SCREENHEIGHT));  // (1, 1) -> centre
+        this.fields.add(new Rectangle(View.SCREENWIDTH, 0, View.SCREENWIDTH, View.SCREENHEIGHT));  // (2, 1)
+        this.fields.add(new Rectangle(-View.SCREENWIDTH, View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT)); // (0, 2)
+        this.fields.add(new Rectangle(0, View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT));  // (1, 2)
+        this.fields.add(new Rectangle(View.SCREENWIDTH, View.SCREENHEIGHT, View.SCREENWIDTH, View.SCREENHEIGHT));  // (2, 2)
 
-    }
-
-    public non-sealed class Field implements Decalage {
-        private Rectangle2D rect;
-
-        public Field(Rectangle2D rect) {
-            this.rect = rect;
-        }
-
-        @Override
-        public void decallement(double x, double y) {
-            this.rect = new Rectangle2D(rect.getMinX() + x, rect.getMinY() + y, View.SCREENWIDTH, View.SCREENHEIGHT);
-        }
-
-        public Rectangle2D getRect() {
-            return rect;
-        }
     }
 
 
     /**
      * @return  Les autres terrains se situant dans le champ de vision de la position exacte du serpent
      */
-    public ArrayList<Field> otherFields(double x, double y) {
-        ArrayList<Field> otherFields = new ArrayList<Field>();
+    public ArrayList<Rectangle> otherFields(double x, double y) {
+        ArrayList<Rectangle> otherFields = new ArrayList<Rectangle>();
 
-        Rectangle2D champDeVision = new Rectangle2D(x - View.SCREENWIDTH / 2, y - View.SCREENHEIGHT / 2, View.SCREENWIDTH, View.SCREENHEIGHT);
-        for(Field field : fields) {
-            if(champDeVision.intersects(field.getRect())) {
+        Rectangle champDeVision = new Rectangle(x - View.SCREENWIDTH / 2, y - View.SCREENHEIGHT / 2, View.SCREENWIDTH, View.SCREENHEIGHT);
+        for(Rectangle field : fields) {
+            if(champDeVision.intersects(field.getRectangle())) {
                 otherFields.add(field);
             }
         }
@@ -58,9 +40,9 @@ public class Carre3x3 {
         return otherFields;
     }
 
-    public Field getField(double x, double y) {
-        for(Field field : fields) {
-            if(field.getRect().contains(x, y)) {
+    public Rectangle getField(double x, double y) {
+        for(Rectangle field : fields) {
+            if(field.getRectangle().contains(x, y)) {
                 return field;
             }
         }
@@ -78,11 +60,11 @@ public class Carre3x3 {
      * 7 : (1, 2)
      * 8 : (2, 2)
      */
-    public ArrayList<Field> getFields() {
+    public ArrayList<Rectangle> getFields() {
         return fields;
     }
 
-    public Field getCentre() {
+    public Rectangle getCentre() {
         return fields.get(4);
     }
 }

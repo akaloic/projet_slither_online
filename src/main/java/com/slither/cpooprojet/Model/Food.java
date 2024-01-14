@@ -1,7 +1,6 @@
 package com.slither.cpooprojet.Model;
 
-import javafx.scene.paint.Color;
-
+import com.slither.cpooprojet.Model.SerializableObject.Couleur;
 import com.slither.cpooprojet.View.View;
 
 public non-sealed class Food implements Decalage {
@@ -9,23 +8,17 @@ public non-sealed class Food implements Decalage {
 
     private double x;
     private double y;
-    private final Color couleur;
+    private final Couleur couleur;
 
     public Food(double x, double y) {
         this.x = x;
         this.y = y;
-        this.couleur = new Color(Math.random(), Math.random(), Math.random(), 0.5 + Math.random() * 0.5);
+        this.couleur = new Couleur(Math.random(), Math.random(), Math.random(), 0.5 + Math.random() * 0.5);
     }
 
     public void reposition() {
         this.x = Math.random() * View.SCREENWIDTH;
         this.y = Math.random() * View.SCREENHEIGHT;
-    }
-
-    @Override
-    public void decallement(double x, double y) {
-        this.x += x;
-        this.y += y;
     }
 
     // ----------------- GETTERS / SETTERS ----------------- //
@@ -37,9 +30,15 @@ public non-sealed class Food implements Decalage {
         return this.y;
     }
 
-    public Color getCouleur() {
+    public Couleur getCouleur() {
         return this.couleur;
     }
     // ----------------------------------------------------- //
+
+    @Override
+    public void decallement(double x, double y) {
+        this.x += x;
+        this.y += y;
+    }
 
 }

@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.HashMap;
 
-import com.slither.cpooprojet.Model.Carre3x3.Field;
+import com.slither.cpooprojet.Model.SerializableObject.Cercle;
+import com.slither.cpooprojet.Model.SerializableObject.Position;
+import com.slither.cpooprojet.Model.SerializableObject.Rectangle;
 import com.slither.cpooprojet.View.View;
-
-import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.shape.Circle;
 
 public class Modele {
     private HashMap<Integer, Snake> snakes;
@@ -76,13 +74,13 @@ public class Modele {
         objetJeu = init();
     }
 
-    public void teleportationHeadPlayer(Point2D position) {
+    public void teleportationHeadPlayer(Position position) {
         mainSnake.teleportation(position);
         updateAllExeptFields(position.getX() - mainSnake.getHeadPositionX(),
                 position.getY() - mainSnake.getHeadPositionY());
     }
 
-    public void teleportationHeadIA(Point2D position, SnakeIA snake) {
+    public void teleportationHeadIA(Position position, SnakeIA snake) {
         snake.teleportation(position);
         snake.decallement(position.getX() - snake.getHeadPositionX(),
                 position.getY() - snake.getHeadPositionY());
@@ -90,7 +88,7 @@ public class Modele {
 
     private void updateAllExeptFields(double xGap, double yGap) {
         objetJeu.forEach(element -> {
-            if (!(element instanceof Field)) {
+            if (!(element instanceof Rectangle)) {
                 element.decallement(xGap, yGap);
             }
         });
@@ -112,26 +110,26 @@ public class Modele {
     // public void updateIA() {
     // IAsnake.forEach(snake -> {
     // if (snake.getSegments().size() > 1) {
-    // Rectangle2D zone = snake.getZone();
+    // Rectangle zone = snake.getZone();
     // if (player_in_zone(zone, mainSnake)) {
     // double fuirX = snake.getHeadPositionX() - mainSnake.getHeadPositionX();
     // double fuirY = snake.getHeadPositionY() - mainSnake.getHeadPositionY();
-    // snake.setHeadPosition(new Point2D(snake.getHeadPositionX() + fuirX,
+    // snake.setHeadPosition(new Position(snake.getHeadPositionX() + fuirX,
     // snake.getHeadPositionY() + fuirY));
     // snake.acceleration();
     // } else {
     // snake.deceleration();
-    // Point2D point = closer_in_zone(zone);
+    // Position point = closer_in_zone(zone);
     // if (point != null) {
     // snake.setHeadPosition(point);
     // ;
     // } else {
-    // snake.setHeadPosition(new Point2D(snake.getHeadPositionX() + 5,
+    // snake.setHeadPosition(new Position(snake.getHeadPositionX() + 5,
     // snake.getHeadPositionY() + 5));
     // }
     // }
     // } else {
-    // snake.setHeadPosition(new Point2D(Math.random() * View.SCREENWIDTH,
+    // snake.setHeadPosition(new Position(Math.random() * View.SCREENWIDTH,
     // Math.random() * View.SCREENHEIGHT));
     // }
     // });
@@ -166,9 +164,9 @@ public class Modele {
      */
     private void update_food_tab_food_i(Snake snake) {
         for (int i = 0; i < foodList.size(); i++) {
-            Point2D foodPoint = new Point2D(foodList.get(i).getX(), foodList.get(i).getY());
-            Circle foodCircle = new Circle(foodPoint.getX(), foodPoint.getY(), Food.FOODSIZE / 2);
-            if (snake.getHead().getCercle().intersects(foodCircle.getBoundsInLocal())) {
+            Position foodPoint = new Position(foodList.get(i).getX(), foodList.get(i).getY());
+            Cercle foodCercle = new Cercle(foodPoint.getX(), foodPoint.getY(), Food.FOODSIZE / 2);
+            if (snake.getHead().getCercle().intersects(foodCercle)) {
                 foodList.get(i).reposition();
                 snake.addNewPart();
             }
@@ -193,38 +191,38 @@ public class Modele {
      * @return le serpent en collision avec snake, sinon rien
      */
     public Optional<Snake> checkCollision(Snake snake) {
-        Circle headCircle = snake.getHead().getCercle();
+        Cercle headCercle = snake.getHead().getCercle();
     
         return allSnake.stream()
                        .filter(snakeX -> snake != snakeX && isCloseEnough(snake, snakeX, snakeX.getZone()))
                        .flatMap(snakeX -> snakeX.getSegments().stream())
-                       .filter(part -> headCircle.intersects(part.getCercle().getBoundsInLocal()))
+                       .filter(part -> headCercle.intersects(part.getCercle()))
                        .findFirst()
                        .map(part -> snake);
     }
 
-    private boolean isCloseEnough(Snake snake, Snake otherSnake, Rectangle2D zone) {
+    private boolean isCloseEnough(Snake snake, Snake otherSnake, Rectangle zone) {
         double minX = Double.MAX_VALUE;
         double minY = Double.MAX_VALUE;
         double maxX = Double.MIN_VALUE;
         double maxY = Double.MIN_VALUE;
 
         for (SnakePart part : otherSnake.getSegments()) {
-            Circle partCircle = part.getCercle();
-            minX = Math.min(minX, partCircle.getCenterX() - partCircle.getRadius());
-            minY = Math.min(minY, partCircle.getCenterY() - partCircle.getRadius());
-            maxX = Math.max(maxX, partCircle.getCenterX() + partCircle.getRadius());
-            maxY = Math.max(maxY, partCircle.getCenterY() + partCircle.getRadius());
+            Cercle partCercle = part.getCercle();
+            minX = Math.min(minX, partCercle.getX() - partCercle.getRadius());
+            minY = Math.min(minY, partCercle.getY() - partCercle.getRadius());
+            maxX = Math.max(maxX, partCercle.getX() + partCercle.getRadius());
+            maxY = Math.max(maxY, partCercle.getY() + partCercle.getRadius());
         }
 
-        Rectangle2D otherSnakeBoundingBox = new Rectangle2D(minX, minY, maxX - minX, maxY - minY);
+        Rectangle otherSnakeBoundingBox = new Rectangle(minX, minY, maxX - minX, maxY - minY);
 
         // Vérifier si les bounding boxes s'intersectent
         return zone.intersects(otherSnakeBoundingBox);
     }
 
     // public Snake checkCollision(Snake snake) {
-    // Circle headCircle = snake.getHead().getCercle();
+    // Cercle headCercle = snake.getHead().getCercle();
 
     // for (int i = 0; i < allSnake.size(); i++) {
     // Snake snakeX = allSnake.get(i);
@@ -232,7 +230,7 @@ public class Modele {
     // if (snake != snakeX) {
     // if (isCloseEnough(snake, snakeX)) {
     // for (SnakePart part : snakeX.getSegments()) {
-    // if (headCircle.intersects(part.getCercle().getBoundsInLocal())) {
+    // if (headCercle.intersects(part.getCercle().getBoundsInLocal())) {
     // return snake;
     // }
     // }

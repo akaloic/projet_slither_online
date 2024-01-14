@@ -1,34 +1,33 @@
 package com.slither.cpooprojet.Model;
 
+import com.slither.cpooprojet.Model.SerializableObject.Cercle;
+import com.slither.cpooprojet.Model.SerializableObject.Position;
+import com.slither.cpooprojet.Model.SerializableObject.Rectangle;
+import com.slither.cpooprojet.Model.SerializableObject.Couleur;
 import com.slither.cpooprojet.View.View;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.image.Image;
 
 public sealed class Snake implements Decalage permits SnakeIA {
     protected ArrayList<SnakePart> segments;
     protected double vitesse;
-    protected Color couleur;
-    protected Image skin;
+    protected Couleur couleur;
+    protected String skin;
     protected boolean isIA;
     protected boolean acceleration = false;
-    protected Rectangle2D zone;
+    protected Rectangle zone;
     protected int id;
     protected boolean isChieldMode = false;
 
     protected Snake(int id) {
         this.segments = init();
         this.vitesse = 2;
-        this.couleur = new Color(Math.random(), Math.random(), Math.random(), 0.5 + Math.random() * 0.5);
-        this.zone = new Rectangle2D(getHeadPositionX() - 100, getHeadPositionY() - 100, 200, 200);
+        this.couleur = new Couleur(Math.random(), Math.random(), Math.random(), 0.5 + Math.random() * 0.5);
+        this.zone = new Rectangle(getHeadPositionX() - 100, getHeadPositionY() - 100, 200, 200);
         this.id = (id == -1) ? -1 : id;
         this.isIA = (id == -1) ? true : false;
-        if(isIA) this.skin = new Image("file:src/main/resources/slither/Skin serpent/" + (int) (Math.random() * 12) + ".png");
+        if(isIA) this.skin = "file:src/main/resources/slither/Skin serpent/" + (int) (Math.random() * 12) + ".png";
     }
 
     protected ArrayList<SnakePart> init() {
@@ -53,11 +52,11 @@ public sealed class Snake implements Decalage permits SnakeIA {
             snake.vitesse = vitesse;
             return this;
         }
-        public SnakeBuilder setCouleur(Color couleur){
+        public SnakeBuilder setCouleur(Couleur couleur){
             snake.couleur = couleur;
             return this;
         }
-        public SnakeBuilder setSkin(Image skin){
+        public SnakeBuilder setSkin(String skin){
             snake.skin = skin;
             return this;
         }
@@ -68,13 +67,11 @@ public sealed class Snake implements Decalage permits SnakeIA {
         }
 
         public Snake build(){
-            if(snake.skin == null) snake.skin = new Image("file:src/main/resources/slither/Skin serpent/" + (int) (Math.random() * 12) + ".png");
-            if(snake.couleur == null) snake.couleur = new Color(Math.random(), Math.random(), Math.random(), 0.5 + Math.random() * 0.5);
+            if(snake.skin == null) snake.skin = "file:src/main/resources/slither/Skin serpent/" + (int) (Math.random() * 12) + ".png";
+            if(snake.couleur == null) snake.couleur = new Couleur(Math.random(), Math.random(), Math.random(), 0.5 + Math.random() * 0.5);
             if(snake.vitesse <1 || snake.vitesse > 10) snake.vitesse = 2;
             return snake;
         }
-
-
     }
 
     
@@ -101,12 +98,12 @@ public sealed class Snake implements Decalage permits SnakeIA {
 
     private void majCercle() {
         segments.forEach(part -> {
-            part.setCercle(new Circle(part.getX() + SnakePart.SNAKEPARTSIZE / 2,
+            part.setCercle(new Cercle(part.getX() + SnakePart.SNAKEPARTSIZE / 2,
                     part.getY() + SnakePart.SNAKEPARTSIZE / 2, SnakePart.SNAKEPARTSIZE / 2));
         });
     }
 
-    public void teleportation(Point2D position) {
+    public void teleportation(Position position) {
         SnakePart head = getHead();
         double distanceX = position.getX() - head.getX();
         double distanceY = position.getY() - head.getY();
@@ -114,7 +111,7 @@ public sealed class Snake implements Decalage permits SnakeIA {
         decallement(distanceX, distanceY);
     }
 
-    // public void setHeadPosition(Point2D position) {
+    // public void setHeadPosition(Position position) {
     //     SnakePart head = getHead();
 
     //     double distanceX = position.getX() - head.getX();
@@ -153,7 +150,7 @@ public sealed class Snake implements Decalage permits SnakeIA {
     //     }
     // }
     
-    public void setHeadPosition(Point2D position) {
+    public void setHeadPosition(Position position) {
         SnakePart head = getHead();
 
         double distanceX = position.getX() - head.getX();
@@ -193,7 +190,7 @@ public sealed class Snake implements Decalage permits SnakeIA {
     }
     
     public void resetPositionMap(double newX,double newY){
-        setHeadPosition(new Point2D(newX,newY));
+        setHeadPosition(new Position(newX,newY));
     }
 
     @Override
@@ -234,12 +231,12 @@ public sealed class Snake implements Decalage permits SnakeIA {
         return id;
     }
 
-    public Image getSkin() {
+    public String getSkin() {
         return skin;
     }
 
-    public Color getCouleur() {
-        return new Color(couleur.getRed(), couleur.getGreen(), couleur.getBlue(), couleur.getOpacity());
+    public Couleur getCouleur() {
+        return new Couleur(couleur.getRed(), couleur.getGreen(), couleur.getBlue(), couleur.getOpacity());
     }
 
     public double getHeadPositionX() {
@@ -262,7 +259,7 @@ public sealed class Snake implements Decalage permits SnakeIA {
         this.vitesse = vitesse;
     }
 
-    public Rectangle2D getZone() {
+    public Rectangle getZone() {
         return zone;
     }
 

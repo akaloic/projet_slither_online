@@ -1,11 +1,10 @@
 package com.slither.cpooprojet.Model;
 
+import com.slither.cpooprojet.Model.SerializableObject.Position;
+import com.slither.cpooprojet.Model.SerializableObject.Rectangle;
 import com.slither.cpooprojet.View.View;
 
 import java.util.ArrayList;
-
-import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 
 public non-sealed class SnakeIA extends Snake {
     private double directionX;
@@ -17,7 +16,7 @@ public non-sealed class SnakeIA extends Snake {
         this.isIA = true;
         this.directionX = initDirection();
         this.directionY = initDirection();
-        this.zone = new Rectangle2D(getHeadPositionX() - View.SCREENWIDTH / 2,
+        this.zone = new Rectangle(getHeadPositionX() - View.SCREENWIDTH / 2,
                 getHeadPositionY() - View.SCREENHEIGHT / 2, View.SCREENWIDTH, View.SCREENHEIGHT);
     }
 
@@ -37,9 +36,9 @@ public non-sealed class SnakeIA extends Snake {
      *        même temps la zone de recherche/ détection
      */
     @Override
-    public void setHeadPosition(Point2D position) {
+    public void setHeadPosition(Position position) {
         super.setHeadPosition(position);
-        zone = new Rectangle2D(getHeadPositionX() - 100, getHeadPositionY() - 100, 200, 200);
+        zone = new Rectangle(getHeadPositionX() - 100, getHeadPositionY() - 100, 200, 200);
     }
 
     public static SnakeIA cree_ia_serpent(int id) {
@@ -49,7 +48,8 @@ public non-sealed class SnakeIA extends Snake {
     private void moveSnakeAwayFromPlayer(SnakeIA snake, Snake serpentJoueur) {
         double fuirX = snake.getHeadPositionX() - serpentJoueur.getHeadPositionX();
         double fuirY = snake.getHeadPositionY() - serpentJoueur.getHeadPositionY();
-        snake.setHeadPosition(new Point2D(snake.getHeadPositionX() + fuirX, snake.getHeadPositionY() + fuirY));
+        
+        snake.setHeadPosition(new Position(snake.getHeadPositionX() + fuirX, snake.getHeadPositionY() + fuirY));
     }
 
     /**
@@ -64,13 +64,13 @@ public non-sealed class SnakeIA extends Snake {
      */
     public void updateSnakeBehaviour(SnakeIA snake, Snake serpentJoueur, ArrayList<Food> foodList) {
         if (snake.getSegments().size() > 1) {
-            Rectangle2D zone = snake.getZone();
+            Rectangle zone = snake.getZone();
             if (zone.contains(serpentJoueur.getHeadPositionX(), serpentJoueur.getHeadPositionY())) {
                 moveSnakeAwayFromPlayer(snake, serpentJoueur);
                 snake.acceleration();
             } else {
                 snake.deceleration();
-                moveSnakeTowardPointOrRandomly(snake, zone, foodList);
+                moveSnakeTowardPositionOrRandomly(snake, zone, foodList);
             }
         } else {
             setRandomHeadPosition(snake);
@@ -90,17 +90,17 @@ public non-sealed class SnakeIA extends Snake {
             y = snake.getHeadPositionY() + directionY;
         }
         
-        snake.setHeadPosition(new Point2D(x, y));
+        snake.setHeadPosition(new Position(x, y));
     }
 
     private double initDirection(){
         return Math.random() * 2 - 1;
     }
 
-    private void moveSnakeTowardPointOrRandomly(Snake snake, Rectangle2D zone, ArrayList<Food> foodList) {
-        Point2D point = closer_in_zone(zone, foodList);
-        if (point != null) {
-            snake.setHeadPosition(point);
+    private void moveSnakeTowardPositionOrRandomly(Snake snake, Rectangle zone, ArrayList<Food> foodList) {
+        Position Position = closer_in_zone(zone, foodList);
+        if (Position != null) {
+            snake.setHeadPosition(Position);
         } else {
             setRandomHeadPosition(snake);
         }
@@ -111,17 +111,17 @@ public non-sealed class SnakeIA extends Snake {
      * @param zone de recherche
      * @return le food le plus proche dans la zone donnée
      */
-    private Point2D closer_in_zone(Rectangle2D zone, ArrayList<Food> foodList) {
-        Point2D closer = null;
+    private Position closer_in_zone(Rectangle zone, ArrayList<Food> foodList) {
+        Position closer = null;
         double distance = zone.getMaxX() - zone.getMinX() + zone.getMaxY() - zone.getMinY();
 
         for (int i = 0; i < foodList.size(); i++) {
-            Point2D foodPoint = new Point2D(foodList.get(i).getX(), foodList.get(i).getY());
-            if (zone.contains(foodPoint)) {
-                double currentDistance = foodPoint.distance(zone.getMinX(), zone.getMinY());
+            Position foodPosition = new Position(foodList.get(i).getX(), foodList.get(i).getY());
+            if (zone.contains(foodPosition)) {
+                double currentDistance = foodPosition.distance(zone.getMinX(), zone.getMinY());
 
                 if (closer == null || currentDistance < distance) {
-                    closer = foodPoint;
+                    closer = foodPosition;
                     distance = currentDistance;
                 }
             }
@@ -130,7 +130,7 @@ public non-sealed class SnakeIA extends Snake {
     }
 
     // ----------------- GETTERS / SETTERS ----------------- //
-    public Rectangle2D getZone() {
+    public Rectangle getZone() {
         return zone;
     }
     // ----------------------------------------------------- //

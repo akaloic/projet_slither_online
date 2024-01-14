@@ -2,7 +2,8 @@ module com.slither.cpooprojet {
     requires javafx.controls;
     requires javafx.fxml;
     requires com.google.gson;
-
+    
+    opens com.slither.cpooprojet.Model.SerializableObject to com.google.gson;
     opens com.slither.cpooprojet.Model to com.google.gson;
     opens com.slither.cpooprojet to javafx.fxml;
     exports com.slither.cpooprojet;

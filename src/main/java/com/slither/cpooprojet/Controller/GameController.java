@@ -2,12 +2,12 @@ package com.slither.cpooprojet.Controller;
 
 import com.slither.cpooprojet.Model.Modele;
 import com.slither.cpooprojet.Model.SnakeIA;
+import com.slither.cpooprojet.Model.SerializableObject.Position;
+import com.slither.cpooprojet.Model.SerializableObject.Rectangle;
 import com.slither.cpooprojet.Model.Snake;
 import com.slither.cpooprojet.View.GameView;
 import com.slither.cpooprojet.View.View;
 
-import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.input.*;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -24,7 +24,7 @@ public class GameController {
     private Client client;
     
     private AnimationTimer gameLoop;
-    private Point2D positionSouris;
+    private Position positionSouris;
     private boolean jeuFinis = false;
     private boolean spacePressed = false;
     private boolean pause = false;
@@ -87,12 +87,12 @@ public class GameController {
         });
     }
 
-    public Point2D getPositionSouris() {
-        return new Point2D(positionSouris.getX(), positionSouris.getY());
+    public Position getPositionSouris() {
+        return new Position(positionSouris.getX(), positionSouris.getY());
     }
 
     private void handleMouseMoved(MouseEvent event) {
-        positionSouris = new Point2D(event.getX(), event.getY());
+        positionSouris = new Position(event.getX(), event.getY());
     }
 
     private void acceleration() { // pour le joueur, ici c'est à faire manuellemnt mais pour l'IA c'est
@@ -115,7 +115,7 @@ public class GameController {
         if (!jeuFinis) {
             modele.updateIA();
 
-            if (positionSouris != null) { // -> potentiel Optionnel<Point2D>
+            if (positionSouris != null) { // -> potentiel Optionnel<Position>
                 if (modele.getMainSnake().getSegments().size() <= 1) {
                     deceleration();
                     spacePressed = false;
@@ -141,20 +141,20 @@ public class GameController {
                     double xSnake = snake.getHeadPositionX();
                     double ySnake = snake.getHeadPositionY();
                     
-                    if (!modele.getCarre3x3().getCentre().getRect().contains(xSnake, ySnake)) {
-                        Rectangle2D center = modele.getCarre3x3().getCentre().getRect();
-                        Point2D newPoint = null;
+                    if (!modele.getCarre3x3().getCentre().getRectangle().contains(xSnake, ySnake)) {
+                        Rectangle center = modele.getCarre3x3().getCentre().getRectangle();
+                        Position newPoint = null;
     
                         if (xSnake < center.getMinX()) {
-                            newPoint = new Point2D(center.getMaxX(), ySnake);
+                            newPoint = new Position(center.getMaxX(), ySnake);
                         } else if (xSnake > center.getMaxX()) {
-                            newPoint = new Point2D(center.getMinX(), ySnake);
+                            newPoint = new Position(center.getMinX(), ySnake);
                         }
                         
                         if (ySnake < center.getMinY()) {
-                            newPoint = new Point2D(xSnake, center.getMaxY());
+                            newPoint = new Position(xSnake, center.getMaxY());
                         } else if (ySnake > center.getMaxY()) {
-                            newPoint = new Point2D(xSnake, center.getMinY());
+                            newPoint = new Position(xSnake, center.getMinY());
                         }
                         if (newPoint != null) {
                             if(snake instanceof SnakeIA){
@@ -170,20 +170,20 @@ public class GameController {
                 double xSnake = modele.getMainSnake().getHeadPositionX();
                 double ySnake = modele.getMainSnake().getHeadPositionY();
 
-                // if (!modele.getCarre3x3().getCentre().getRect().contains(xSnake, ySnake)) {     // on pourra preciser par la suite avec oval
-                //     Rectangle2D center = modele.getCarre3x3().getCentre().getRect();
-                //     Point2D newPoint = null;
+                // if (!modele.getCarre3x3().getCentre().getRectangle().contains(xSnake, ySnake)) {     // on pourra preciser par la suite avec oval
+                //     Rectangle center = modele.getCarre3x3().getCentre().getRectangle();
+                //     Position newPoint = null;
 
                 //     if (xSnake < center.getMinX()) {
-                //         newPoint = new Point2D(center.getMaxX(), ySnake);
+                //         newPoint = new Position(center.getMaxX(), ySnake);
                 //     } else if (xSnake > center.getMaxX()) {
-                //         newPoint = new Point2D(center.getMinX(), ySnake);
+                //         newPoint = new Position(center.getMinX(), ySnake);
                 //     }
                     
                 //     if (ySnake < center.getMinY()) {
-                //         newPoint = new Point2D(xSnake, center.getMaxY());
+                //         newPoint = new Position(xSnake, center.getMaxY());
                 //     } else if (ySnake > center.getMaxY()) {
-                //         newPoint = new Point2D(xSnake, center.getMinY());
+                //         newPoint = new Position(xSnake, center.getMinY());
                 //     }
 
                 //     if (newPoint != null) {

@@ -6,6 +6,7 @@ import java.net.BindException;
 import com.slither.cpooprojet.Controller.Server;
 
 import javafx.application.Platform;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -20,6 +21,7 @@ public class OnlineView extends StackPane {
     private View parent;
     private Text indication;
     private Button back;
+    private Rectangle2D background;
 
     public OnlineView(View parent) {
         this.parent = parent;
@@ -59,6 +61,7 @@ public class OnlineView extends StackPane {
         vBox.getChildren().addAll(indication, back, creat, join);
 
         this.getChildren().add(vBox);
+        this.setStyle("-fx-background-color: black;");
     }
 
     private void generateJoinView() {
@@ -140,6 +143,7 @@ public class OnlineView extends StackPane {
         vBox.getChildren().addAll(indication, ipField, portFieldBox, submitButton, back);
 
         this.getChildren().add(vBox);
+        this.setStyle("-fx-background-color: darkgray;");
     }
 
     private void generateServerView() {
@@ -208,11 +212,13 @@ public class OnlineView extends StackPane {
                         portFields[1].setPromptText("O");
                         portFields[2].setPromptText("K");
                         portFields[3].setPromptText("");
-
-                        server.start();
+                        
                         Platform.runLater(() -> {
+                            System.err.println("Server started");
                             parent.launchOnline("localhost", port);
                         });
+
+                        server.start();
                     } catch (BindException ex) {
                         for (TextField portField : portFields) {
                             portField.clear();
@@ -234,5 +240,6 @@ public class OnlineView extends StackPane {
         vBox.getChildren().addAll(indication, portFieldBox, submitButton, back);
 
         this.getChildren().add(vBox);
+        this.setStyle("-fx-background-color: darkgray;");
     }
 }
