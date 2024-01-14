@@ -211,6 +211,10 @@ public class Modele {
                        .map(part -> snake);
     }
 
+    public void setMainSnake(int id){
+        this.mainSnake = snakes.get(id);
+    }
+
     private boolean isCloseEnough(Snake snake, Snake otherSnake, Rectangle zone) {
         double minX = Double.MAX_VALUE;
         double minY = Double.MAX_VALUE;
@@ -344,6 +348,10 @@ public class Modele {
 
     public Carre3x3 getCarre3x3() {
         return carre3x3;
+    }
+
+    public int getNbPlayers() {
+        return snakes.size();
     }
     // -------------------------------------------------------------- //
 

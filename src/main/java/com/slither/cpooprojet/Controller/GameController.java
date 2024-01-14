@@ -264,7 +264,7 @@ public class GameController {
             gameView.setModele(modele);
             gameView.draw();
 
-            if (client != null) client.sendModele(modele);
+            // if (client != null) client.sen
         } else {    // on ferme ici le jeu
             gameLoop.stop();
             gameView.showAccueil();

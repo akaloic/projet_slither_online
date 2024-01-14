@@ -45,20 +45,38 @@ public class View extends StackPane {
         new GameController(modele, gameView, null); // ici on passe null car on est en local
     }
     
-    public void launchOnline(String ip, int port){
+    public void launchOnline(String ip, int port, int id){
         Modele modele = new Modele(snake);
         GameView gameView = new GameView(this, modele);
 
         stage.setScene(new Scene(gameView, Screen.getPrimary().getBounds().getWidth(),
                 Screen.getPrimary().getBounds().getHeight()));
 
-        try{ 
-            Client client = Client.getInstance(ip, port, modele);
-            client.start();
-            new GameController(modele, gameView, client);
-        } catch (Exception e){
-            e.printStackTrace();
+        if (id == -1){
+            try{
+                Client client = Client.getInstance(ip, port, modele, id);
+                client.requestClientID();
+                client.start();
+                new GameController(modele, gameView, client);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        } else {
+            try{
+                Client client = Client.getInstance(ip, port, modele, id);
+                client.start();
+                new GameController(modele, gameView, client);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
+        // try{
+        //     Client client = Client.getInstance(ip, port, modele);
+        //     client.start();
+        //     new GameController(modele, gameView, client);
+        // } catch (Exception e){
+        //     e.printStackTrace();
+        // }
     }
     
     public void chooseCreateOrJoin(){

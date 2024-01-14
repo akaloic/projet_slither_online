@@ -133,7 +133,7 @@ public class OnlineView extends StackPane {
             } else {
                 try {
                     int port = Integer.parseInt(ret);
-                    parent.launchOnline(ip, port);
+                    parent.launchOnline(ip, port, -1);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -214,7 +214,8 @@ public class OnlineView extends StackPane {
                         portFields[3].setPromptText("");
                         
                         Platform.runLater(() -> {
-                            parent.launchOnline("localhost", port);
+                            parent.launchOnline("localhost", port, 0);
+                            // parent.launchOnline("localhost", port, server.getModele().getSnakes().size());
                         });
 
                         server.start();
