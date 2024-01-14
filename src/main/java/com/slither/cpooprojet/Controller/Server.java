@@ -16,12 +16,14 @@ public class Server {
     protected ConcurrentHashMap<Socket, PrintWriter> clients;
     protected Gson gson;
     private boolean running;
+    private Modele modele;
 
     public Server(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
         this.clients = new ConcurrentHashMap<>();
         this.gson = new Gson();
         this.running = true;
+        this.modele = new Modele();
     }
 
     public void start() {
@@ -72,7 +74,7 @@ class ClientHandler implements Runnable {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {   // nous permet de lire les messages envoyés par le client
             String inputLine;
             while ((inputLine = in.readLine()) != null) {   // in.readLine() est bloquant, il attend qu'un message soit envoyé par le client
-                Modele modele = server.gson.fromJson(inputLine, Modele.class);
+                Modele modele = server.gson.fromJson(inputLine, Modele.class);  // convertir le message en objet Modele
                 server.sendToAllClient(modele); // Diffuser l'objet Modele mis à jour
             }
         } catch (IOException e) {

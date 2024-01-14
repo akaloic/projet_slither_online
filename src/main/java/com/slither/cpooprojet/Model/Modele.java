@@ -29,6 +29,16 @@ public class Modele {
         this.carre3x3 = new Carre3x3();
         this.objetJeu = init();
     }
+    
+    public Modele() {
+        this.foodList = generateFoods();
+        this.snakes = initSnakes();
+        this.mainSnake = snakes.get(0);
+        this.IAsnake = generateIAsnake();
+        this.allSnake = allSnake();
+        this.carre3x3 = new Carre3x3();
+        this.objetJeu = init();
+    }
 
     // ---------------------- METHODES POUR CONSTRUCTEUR
     private HashMap<Integer, Snake> initSnakes() {

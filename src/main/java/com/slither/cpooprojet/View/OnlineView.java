@@ -214,7 +214,6 @@ public class OnlineView extends StackPane {
                         portFields[3].setPromptText("");
                         
                         Platform.runLater(() -> {
-                            System.err.println("Server started");
                             parent.launchOnline("localhost", port);
                         });
 
