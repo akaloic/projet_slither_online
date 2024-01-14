@@ -55,7 +55,6 @@ public class View extends StackPane {
         try{ 
             Client client = Client.getInstance(ip, port, modele);
             client.start();
-            // System.err.println("Client lancé");
             new GameController(modele, gameView, client);
         } catch (Exception e){
             e.printStackTrace();
