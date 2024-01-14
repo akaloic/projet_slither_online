@@ -70,8 +70,6 @@ public sealed class Snake implements Decalage permits SnakeIA {
             if(snake.vitesse <1 || snake.vitesse > 10) snake.vitesse = 2;
             return snake;
         }
-
-
     }  
 
     //lorsque l'on veut reprendre la partie avec un autre serpent

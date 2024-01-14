@@ -155,6 +155,12 @@ public class Modele {
         return zone.intersects(otherSnakeBoundingBox);
     }
 
+    public void addSnake(Snake snake) {
+        snakes.put(snakes.size(), snake);
+        allSnake.add(snake);
+        majObjetJeu();
+    }
+
     public void replace_snake_by_food(Snake snake) {        //remplace le serpent par de la nourriture
         for (int i = 0; i < snake.getTaille(); i++) {
             int x = (int) snake.getSegments().get(i).getX();
@@ -196,6 +202,10 @@ public class Modele {
 
     public ArrayList<Snake> getAllSnake() {
         return allSnake;
+    }
+
+    public HashMap<Integer, Snake> getSnakes() {
+        return snakes;
     }
 
     public ArrayList<Decalage> getObjetJeu() {
